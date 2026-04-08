@@ -13,25 +13,25 @@ const Table = ({
   error = null
 }) => {
   return (
-    <div className="w-full bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-      <div className="overflow-x-auto min-w-[500px]">
-        <table className="w-full text-left border-collapse">
+    <div className="w-full h-full bg-white flex flex-col overflow-hidden">
+      <div className="overflow-x-auto w-full flex-grow">
+        <table className="w-full text-left border-collapse whitespace-nowrap min-w-full">
           <thead>
-            <tr className="bg-gray-50/80 uppercase text-[11px] font-semibold text-gray-500 tracking-wider h-11 border-b border-gray-100">
+            <tr className="bg-blue-50/60 uppercase text-xs sm:text-[13px] font-bold text-blue-900/80 tracking-wider h-14 border-b border-blue-100/60">
               {columns.map((col, index) => (
                 <th 
                   key={index} 
-                  className={`px-6 py-3 whitespace-nowrap ${col.sortable ? 'cursor-pointer hover:bg-gray-100/50 transition-colors duration-200 select-none' : ''}`}
+                  className={`px-4 sm:px-6 py-3 sm:py-4 ${col.sortable ? 'cursor-pointer hover:bg-blue-100/50 transition-colors duration-200 select-none' : ''}`}
                   onClick={() => col.sortable && onSort && onSort(col.accessor)}
                 >
                   <div className="flex items-center gap-1.5">
                     {col.header}
                     {col.sortable && (
-                      <span className="text-gray-400">
+                      <span className="text-blue-400">
                         {sortColumn === col.accessor ? (
-                          sortDirection === 'asc' ? <ArrowUp className="w-3 h-3 text-blue-600" /> : <ArrowDown className="w-3 h-3 text-blue-600" />
+                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-blue-600" /> : <ArrowDown className="w-3.5 h-3.5 text-blue-600" />
                         ) : (
-                          <ArrowUpDown className="w-3 h-3 opacity-0 group-hover:opacity-50 transition-opacity duration-200" />
+                          <ArrowUpDown className="w-3.5 h-3.5 opacity-0 group-hover:opacity-50 transition-opacity duration-200" />
                         )}
                       </span>
                     )}
@@ -40,7 +40,7 @@ const Table = ({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-blue-50/50">
             {loading ? (
               [...Array(5)].map((_, i) => (
                 <tr key={`skeleton-${i}`} className="h-14 bg-white transition-colors duration-150">
@@ -74,8 +74,8 @@ const Table = ({
                 <tr 
                   key={rowIndex} 
                   className={`
-                    transition-colors duration-150 h-14 bg-white
-                    ${onRowClick ? 'hover:bg-gray-50/80 cursor-pointer' : 'hover:bg-gray-50/50'}
+                    transition-all duration-200 h-14 sm:h-16 bg-white
+                    ${onRowClick ? 'hover:bg-blue-50/40 cursor-pointer' : 'hover:bg-blue-50/20'}
                   `}
                   onClick={(e) => {
                     // Prevent row click if an action button inside is clicked
@@ -87,7 +87,7 @@ const Table = ({
                   {columns.map((col, colIndex) => (
                     <td 
                       key={colIndex} 
-                      className={`px-6 py-3 text-[13px] text-gray-700 whitespace-nowrap font-medium ${col.align === 'right' ? 'text-right tracking-tight' : 'text-left'}`}
+                      className={`px-4 sm:px-6 py-4 sm:py-5 text-sm sm:text-base text-slate-700 whitespace-nowrap font-medium ${col.align === 'right' ? 'text-right tracking-tight' : 'text-left'}`}
                     >
                       {col.render ? col.render(row) : row[col.accessor]}
                     </td>

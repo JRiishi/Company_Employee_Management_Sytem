@@ -107,9 +107,9 @@ const EmployeePerformance = () => {
       </section>
 
       {/* SECTION 4 - Main Performance Chart */}
-      <section className="w-full h-[400px]">
+      <section className="w-full">
         {loading ? (
-          <Card className="w-full h-full flex flex-col justify-start border-gray-100 overflow-hidden bg-white px-6 py-5">
+          <Card className="w-full h-[420px] flex flex-col justify-start border-gray-100 overflow-hidden bg-white px-6 py-5">
              <div className="flex justify-between items-center mb-6">
                 <div className="h-5 bg-gray-200/50 rounded w-32 animate-pulse" />
                 <div className="h-5 bg-gray-100 rounded w-8 animate-pulse" />
@@ -118,7 +118,7 @@ const EmployeePerformance = () => {
              </div>
           </Card>
         ) : error ? (
-          <Card className="w-full h-full flex flex-col justify-center items-center border-red-100 bg-red-50/30 overflow-hidden px-6 py-5">
+          <Card className="w-full h-[420px] flex flex-col justify-center items-center border-red-100 bg-red-50/30 overflow-hidden px-6 py-5">
              <AlertCircle className="w-8 h-8 text-red-400 mb-3" />
              <div className="text-[14px] font-medium text-red-600 tracking-tight">Unable to load performance data</div>
              <div className="text-[13px] text-red-500/80 mt-1">Please verify your connection and try again.</div>
@@ -129,8 +129,8 @@ const EmployeePerformance = () => {
       </section>
 
       {/* SECTION 5 - Performance Breakdown */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-        <Card className="p-6">
+      <section className="grid grid-cols-1 gap-8 w-full">
+        <Card className="p-6 w-full">
           <h3 className="text-[15px] font-semibold text-gray-900 tracking-tight mb-4">Core Strengths</h3>
           <ul className="space-y-4">
             <li className="flex items-start gap-3">
@@ -150,7 +150,7 @@ const EmployeePerformance = () => {
           </ul>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-6 w-full">
           <h3 className="text-[15px] font-semibold text-gray-900 tracking-tight mb-4">Growth Areas</h3>
           <ul className="space-y-4">
             <li className="flex items-start gap-3">

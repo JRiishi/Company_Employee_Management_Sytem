@@ -21,7 +21,7 @@ const PerformanceChart = ({ data }) => {
   };
 
   return (
-    <Card className="flex flex-col h-full overflow-hidden">
+    <Card hoverable className="flex flex-col h-[420px] w-full overflow-hidden">
       <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-white shrink-0">
         <div>
           <h3 className="text-[15px] font-semibold text-gray-900 tracking-tight">Performance Score</h3>

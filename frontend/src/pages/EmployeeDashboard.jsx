@@ -46,7 +46,7 @@ const EmployeeDashboard = () => {
         
         <StatsGrid stats={formattedStats} loading={loading} />
         
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start w-full">
+        <div className="flex flex-col gap-8 w-full">
            <ChartSection performanceData={performanceData} loading={loading} />
            <TableSection tasks={tasks} loading={loading} />
         </div>

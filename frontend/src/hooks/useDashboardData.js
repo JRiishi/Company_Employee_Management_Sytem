@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import api from '../services/api';
+import { useState, useEffect, useCallback } from 'react';
+import { fetchDashboard } from '../services/api';
 
 export const useDashboardData = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -8,36 +8,41 @@ export const useDashboardData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const [dashRes, tasksRes, perfRes] = await Promise.all([
-          api.get('/employee/dashboard'),
-          api.get('/tasks/recent'),
-          api.get('/performance/history'),
-        ]);
+  const fetchAllData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const userStr = localStorage.getItem('nexus_user');
+      if (!userStr) throw new Error("Not logged in");
+      const user = JSON.parse(userStr);
+      const empId = user.id;
 
-        // Vite SPA fallback returns HTML as a string for unhandled routes during dev.
-        // We throw a manual error to gracefully trigger the UI's disconnected state.
-        if (typeof dashRes.data === 'string' || typeof tasksRes.data === 'string') {
-          throw new Error('Backend disconnected (received HTML SPA fallback)');
-        }
+      const res = await fetchDashboard(empId);
+      if (!res.success) throw new Error(res.message);
+      
+      const payload = res.data;
+      
+      setDashboardData({
+        tasks_completed: payload?.tasks?.completed || 0,
+        pending_tasks: payload?.tasks?.pending || 0,
+        performance_score: payload?.performance?.score || 0,
+        salary_this_month: payload?.salary?.current || 0,
+        insight: payload?.insights || ''
+      });
 
-        setDashboardData(dashRes.data);
-        setTasks(tasksRes.data);
-        setPerformanceData(perfRes.data);
-      } catch (err) {
-        console.error("API Fetch Error:", err.message || err);
-        setError("Unable to load data. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAllData();
+      setTasks([]);
+      setPerformanceData([]);
+    } catch (err) {
+      console.error('Error fetching dashboard:', err);
+      setError(err.message || 'Failed to securely load your dashboard context. Please login again.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { dashboardData, tasks, performanceData, loading, error };
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
+
+  return { dashboardData, tasks, performanceData, loading, error, refreshData: fetchAllData };
 };

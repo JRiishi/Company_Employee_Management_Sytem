@@ -83,7 +83,7 @@ const EmployeeSalary = () => {
       {/* ERROR STATE */}
       {error && !loading && (
         <div className="w-full flex justify-center py-6">
-          <Card className="max-w-md w-full flex flex-col justify-center items-center border-red-100 bg-red-50/30 overflow-hidden px-6 py-5">
+          <Card className="w-full flex flex-col justify-center items-center border-red-100 bg-red-50/30 overflow-hidden px-6 py-5">
              <AlertCircle className="w-8 h-8 text-red-400 mb-3" />
              <div className="text-[14px] font-medium text-red-600 tracking-tight">{error}</div>
              <div className="text-[13px] text-red-500 mt-1">Please verify your connection</div>
