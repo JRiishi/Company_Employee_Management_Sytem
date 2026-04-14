@@ -131,7 +131,7 @@ const EmployeeLeave = ({ empId, empName }) => {
 
       {/* Leave Stats */}
       {leaveData && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Total Leaves */}
           <motion.div whileHover={{ translateY: -4 }}>
             <Card className="border-blue-200 bg-blue-50 h-40 flex flex-col justify-center">
@@ -143,13 +143,53 @@ const EmployeeLeave = ({ empId, empName }) => {
             </Card>
           </motion.div>
 
-          {/* Total Days */}
+          {/* Approved Leave Days */}
           <motion.div whileHover={{ translateY: -4 }}>
             <Card className="border-green-200 bg-green-50 h-40 flex flex-col justify-center">
               <div className="text-center">
-                <p className="text-gray-600 text-sm font-medium mb-2">Total Days Off</p>
-                <p className="text-4xl font-bold text-green-700">{leaveData.total_days || 0}</p>
-                <p className="text-xs text-gray-500 mt-2">Days used</p>
+                <p className="text-gray-600 text-sm font-medium mb-2">Approved Leave Days</p>
+                <p className="text-4xl font-bold text-green-700">
+                  {leaveData.leaves
+                    ? leaveData.leaves
+                        .filter((l) => l.status === "Approved")
+                        .reduce((sum, l) => sum + l.duration, 0)
+                    : 0}
+                </p>
+                <p className="text-xs text-gray-500 mt-2">Days approved</p>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Pending Leave Days */}
+          <motion.div whileHover={{ translateY: -4 }}>
+            <Card className="border-yellow-200 bg-yellow-50 h-40 flex flex-col justify-center">
+              <div className="text-center">
+                <p className="text-gray-600 text-sm font-medium mb-2">Pending Leave Days</p>
+                <p className="text-4xl font-bold text-yellow-700">
+                  {leaveData.leaves
+                    ? leaveData.leaves
+                        .filter((l) => l.status === "Pending")
+                        .reduce((sum, l) => sum + l.duration, 0)
+                    : 0}
+                </p>
+                <p className="text-xs text-gray-500 mt-2">Days pending</p>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Rejected Leave Days */}
+          <motion.div whileHover={{ translateY: -4 }}>
+            <Card className="border-red-200 bg-red-50 h-40 flex flex-col justify-center">
+              <div className="text-center">
+                <p className="text-gray-600 text-sm font-medium mb-2">Rejected Leave Days</p>
+                <p className="text-4xl font-bold text-red-700">
+                  {leaveData.leaves
+                    ? leaveData.leaves
+                        .filter((l) => l.status === "Rejected")
+                        .reduce((sum, l) => sum + l.duration, 0)
+                    : 0}
+                </p>
+                <p className="text-xs text-gray-500 mt-2">Days rejected</p>
               </div>
             </Card>
           </motion.div>
