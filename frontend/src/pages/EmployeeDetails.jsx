@@ -49,7 +49,10 @@ const EmployeeDetails = () => {
 
   const fetchEmployeeTasks = async () => {
     try {
-      const response = await api.get(`/tasks/employee/${empId}`);
+      // Fetch only current week tasks for overview
+      const response = await api.get(`/tasks/employee/${empId}`, {
+        params: { filter: "week" },
+      });
       if (response.success && response.data) {
         // Extract tasks array from new API format
         const tasksArray = Array.isArray(response.data) ? response.data : response.data?.tasks || [];
