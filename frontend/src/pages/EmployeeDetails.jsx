@@ -22,7 +22,6 @@ const EmployeeDetails = () => {
   const navigate = useNavigate();
   const [employee, setEmployee] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [leaveBalance, setLeaveBalance] = useState(20); // Default annual leaves
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("overview"); // overview, tasks, or leave
@@ -30,7 +29,6 @@ const EmployeeDetails = () => {
   useEffect(() => {
     fetchEmployeeDetails();
     fetchEmployeeTasks();
-    fetchLeaveBalance();
   }, [empId]);
 
   const fetchEmployeeDetails = async () => {
@@ -64,25 +62,6 @@ const EmployeeDetails = () => {
     } catch (err) {
       console.error("Error fetching tasks:", err);
       setTasks([]);
-    }
-  };
-
-  const fetchLeaveBalance = async () => {
-    try {
-      // Fetch yearly leave data to calculate balance
-      const response = await api.get(`/leaves/employee/${empId}`, {
-        params: { filter: "year" },
-      });
-      if (response.success && response.data) {
-        // Total annual leaves - days used = balance
-        const totalDaysUsed = response.data.total_days || 0;
-        const annualLeaves = 20; // Standard annual leaves
-        const balance = Math.max(0, annualLeaves - totalDaysUsed);
-        setLeaveBalance(balance);
-      }
-    } catch (err) {
-      console.error("Error fetching leave balance:", err);
-      setLeaveBalance(20); // Default if error
     }
   };
 
@@ -377,25 +356,15 @@ const EmployeeDetails = () => {
         </h2>
 
         <Card className="border-gray-200 bg-white">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm text-gray-600 mb-2 font-medium">
-                Joining Date
-              </p>
-              <p className="text-lg font-semibold text-gray-900">
-                {employee.joining_date
-                  ? new Date(employee.joining_date).toLocaleDateString()
-                  : "N/A"}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 mb-2 font-medium">
-                Leave Balance
-              </p>
-              <p className="text-lg font-semibold text-gray-900">
-                {leaveBalance} days
-              </p>
-            </div>
+          <div>
+            <p className="text-sm text-gray-600 mb-2 font-medium">
+              Joining Date
+            </p>
+            <p className="text-lg font-semibold text-gray-900">
+              {employee.joining_date
+                ? new Date(employee.joining_date).toLocaleDateString()
+                : "N/A"}
+            </p>
           </div>
         </Card>
       </motion.div>
