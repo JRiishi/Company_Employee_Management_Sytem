@@ -49,62 +49,81 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
     else:
         start_date = now - timedelta(days=30)
 
-    # Mock data with diverse statuses and dates - filtered by period
+    # Mock data with diverse statuses and dates - employee-specific
     def get_mock_tasks():
-        # All possible tasks across different time periods
-        all_tasks = [
-            # Week tasks (0-7 days ago) - 2 tasks
-            {
-                "task_id": 1,
-                "Title": "Complete Project Documentation",
-                "status": "completed",
-                "created_at": (now - timedelta(days=5)).strftime("%Y-%m-%d"),
-                "due_date": (now - timedelta(days=2)).strftime("%Y-%m-%d"),
-                "completed_at": (now - timedelta(days=1)).strftime("%Y-%m-%d"),
-            },
-            {
-                "task_id": 2,
-                "Title": "Code Review - Authentication Module",
-                "status": "in_progress",
-                "created_at": (now - timedelta(days=2)).strftime("%Y-%m-%d"),
-                "due_date": (now + timedelta(days=3)).strftime("%Y-%m-%d"),
-                "completed_at": None,
-            },
-            # Month tasks (7-30 days ago) - additional 2 tasks
-            {
-                "task_id": 3,
-                "Title": "API Integration with Payment Gateway",
-                "status": "pending",
-                "created_at": (now - timedelta(days=15)).strftime("%Y-%m-%d"),
-                "due_date": (now + timedelta(days=7)).strftime("%Y-%m-%d"),
-                "completed_at": None,
-            },
-            {
-                "task_id": 4,
-                "Title": "Bug Fix - Login Page UI",
-                "status": "completed",
-                "created_at": (now - timedelta(days=20)).strftime("%Y-%m-%d"),
-                "due_date": (now - timedelta(days=15)).strftime("%Y-%m-%d"),
-                "completed_at": (now - timedelta(days=14)).strftime("%Y-%m-%d"),
-            },
-            # Year tasks (30-365 days ago) - additional 2 tasks
-            {
-                "task_id": 5,
-                "Title": "Database Optimization",
-                "status": "in_progress",
-                "created_at": (now - timedelta(days=45)).strftime("%Y-%m-%d"),
-                "due_date": (now - timedelta(days=35)).strftime("%Y-%m-%d"),
-                "completed_at": None,
-            },
-            {
-                "task_id": 6,
-                "Title": "Frontend Performance Testing",
-                "status": "completed",
-                "created_at": (now - timedelta(days=90)).strftime("%Y-%m-%d"),
-                "due_date": (now - timedelta(days=85)).strftime("%Y-%m-%d"),
-                "completed_at": (now - timedelta(days=80)).strftime("%Y-%m-%d"),
-            },
-        ]
+        # Use emp_id as seed for deterministic randomness
+        random.seed(emp_id)
+
+        # Task templates for different employee types
+        task_templates = {
+            "engineering": [
+                "Code Review - Authentication Module",
+                "API Integration with Payment Gateway",
+                "Database Optimization",
+                "Frontend Performance Testing",
+                "Bug Fix - Login Page UI",
+                "Unit Test Coverage Improvement",
+            ],
+            "sales": [
+                "Client Follow-up Call",
+                "Sales Proposal Preparation",
+                "CRM Data Update",
+                "Pipeline Review Meeting",
+                "Demo Preparation",
+                "Contract Negotiation",
+            ],
+            "marketing": [
+                "Campaign Analysis Report",
+                "Social Media Content Creation",
+                "Email Newsletter Design",
+                "Market Research",
+                "Brand Audit",
+                "Conference Presentation",
+            ],
+            "hr": [
+                "Employee Onboarding",
+                "Performance Review Preparation",
+                "Policy Update Documentation",
+                "Training Session Planning",
+                "Recruitment Screening",
+                "Team Building Event Planning",
+            ],
+        }
+
+        # Select task templates based on emp_id
+        template_type = list(task_templates.keys())[(emp_id - 1) % len(task_templates)]
+        templates = task_templates[template_type]
+
+        # Generate 6 employee-specific tasks
+        all_tasks = []
+        statuses = ["completed", "in_progress", "pending"]
+
+        for i in range(6):
+            task_title = templates[i % len(templates)]
+            status = statuses[(emp_id + i) % len(statuses)]
+
+            if i < 2:  # Week tasks
+                days_ago = random.randint(1, 7)
+                due_offset = random.randint(-3, 3)
+            elif i < 4:  # Month tasks
+                days_ago = random.randint(8, 30)
+                due_offset = random.randint(-5, 5)
+            else:  # Year tasks
+                days_ago = random.randint(31, 200)
+                due_offset = random.randint(-10, 10)
+
+            created = now - timedelta(days=days_ago)
+            due = created + timedelta(days=random.randint(5, 20))
+
+            task = {
+                "task_id": emp_id * 100 + i + 1,
+                "Title": task_title,
+                "status": status,
+                "created_at": created.strftime("%Y-%m-%d"),
+                "due_date": due.strftime("%Y-%m-%d"),
+                "completed_at": (due - timedelta(days=random.randint(0, 3))).strftime("%Y-%m-%d") if status == "completed" else None,
+            }
+            all_tasks.append(task)
 
         # Filter tasks based on the time filter
         filtered_tasks = []
