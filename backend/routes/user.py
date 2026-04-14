@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from backend.db.connection import get_db_connection
-from backend.security import require_role
+from db.connection import get_db_connection
+from security import require_role
 import logging
 
 router = APIRouter()

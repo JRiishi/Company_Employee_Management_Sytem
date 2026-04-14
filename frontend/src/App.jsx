@@ -1,45 +1,44 @@
-import React from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React from "react";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Providers & Protectors
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './routes/ProtectedRoute';
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 // Public Pages
-import Login from './pages/Login';
-import SetPassword from './pages/SetPassword';
+import Login from "./pages/Login";
+import SetPassword from "./pages/SetPassword";
 
 // Layouts & Protected Pages
-import AppLayout from './components/Layout/AppLayout';
-import EmployeeDashboard from './pages/EmployeeDashboard';
-import EmployeeTasks from './pages/EmployeeTasks';
-import EmployeePerformance from './pages/EmployeePerformance';
-import EmployeeSalary from './pages/EmployeeSalary';
-import ManagerDashboard from './pages/ManagerDashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import Settings from './pages/Settings';
+import AppLayout from "./components/Layout/AppLayout";
+import EmployeeDashboard from "./pages/EmployeeDashboard";
+import EmployeeTasks from "./pages/EmployeeTasks";
+import EmployeePerformance from "./pages/EmployeePerformance";
+import EmployeeSalary from "./pages/EmployeeSalary";
+import ManagerDashboard from "./pages/ManagerDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import AllEmployees from "./pages/AllEmployees";
+import EmployeeDetails from "./pages/EmployeeDetails";
+import Settings from "./pages/Settings";
+import LeaveDashboard from "./components/LeaveDashboard/LeaveDashboard";
 
 // Admin / Manager placeholders
-
-
-
 
 function App() {
   return (
     <AuthProvider>
       <HashRouter>
         <Routes>
-          
           {/* Default entry point goes to login, Login handles logged-in redirects */}
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/set-password" element={<SetPassword />} />
 
           {/* ------------- EMPLOYEE NAMESPACE ------------- */}
-          <Route 
-            path="/employee" 
+          <Route
+            path="/employee"
             element={
-              <ProtectedRoute allowedRoles={['employee']}>
+              <ProtectedRoute allowedRoles={["employee"]}>
                 <AppLayout />
               </ProtectedRoute>
             }
@@ -53,10 +52,10 @@ function App() {
           </Route>
 
           {/* ------------- MANAGER NAMESPACE ------------- */}
-          <Route 
-            path="/manager" 
+          <Route
+            path="/manager"
             element={
-              <ProtectedRoute allowedRoles={['manager']}>
+              <ProtectedRoute allowedRoles={["manager"]}>
                 <AppLayout />
               </ProtectedRoute>
             }
@@ -67,23 +66,24 @@ function App() {
           </Route>
 
           {/* ------------- ADMIN NAMESPACE ------------- */}
-          <Route 
-            path="/admin" 
+          <Route
+            path="/admin"
             element={
-              <ProtectedRoute allowedRoles={['admin']}>
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <AppLayout />
               </ProtectedRoute>
             }
           >
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="employees" element={<AllEmployees />} />
+            <Route path="employee/:empId" element={<EmployeeDetails />} />
+            <Route path="leaves" element={<LeaveDashboard />} />
             <Route path="settings" element={<Settings />} />
           </Route>
 
-
           {/* Catch-all throws back to login */}
           <Route path="*" element={<Navigate to="/login" replace />} />
-
         </Routes>
       </HashRouter>
     </AuthProvider>

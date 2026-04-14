@@ -1,0 +1,101 @@
+
+> frontend@0.0.0 dev
+> vite
+
+
+  VITE v5.4.21  ready in 206 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+10:36:37 PM [vite] hmr update /src/pages/AllEmployees.jsx, /src/index.css
+10:38:26 PM [vite] hmr update /src/pages/AllEmployees.jsx, /src/index.css
+10:38:33 PM [vite] hmr update /src/pages/AllEmployees.jsx, /src/index.css
+10:39:55 PM [vite] hmr update /src/pages/AllEmployees.jsx, /src/index.css
+10:47:10 PM [vite] hmr update /src/pages/AllEmployees.jsx, /src/index.css
+10:47:15 PM [vite] hmr update /src/pages/AllEmployees.jsx, /src/index.css
+10:47:20 PM [vite] hmr update /src/pages/AllEmployees.jsx, /src/index.css
+10:47:37 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+10:47:53 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+10:49:18 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+11:02:47 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+11:02:56 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+11:03:12 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+11:03:12 PM [vite] Internal server error: /Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/src/pages/EmployeeDetails.jsx: Expected corresponding JSX closing tag for <>. (367:4)
+
+  365 |         </Card>
+  366 |       </motion.div>
+> 367 |     </div>
+      |     ^
+  368 |   );
+  369 | };
+  370 |
+  Plugin: vite:react-babel
+  File: /Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/src/pages/EmployeeDetails.jsx:367:4
+  365|          </Card>
+  366|        </motion.div>
+  367|      </div>
+     |      ^
+  368|    );
+  369|  };
+      at constructor (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:365:19)
+      at JSXParserMixin.raise (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:6599:19)
+      at JSXParserMixin.jsxParseElementAt (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4720:14)
+      at JSXParserMixin.jsxParseElement (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4749:17)
+      at JSXParserMixin.parseExprAtom (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4759:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11081:23)
+      at JSXParserMixin.parseUpdate (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at /Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at JSXParserMixin.allowInAnd (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:12426:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at JSXParserMixin.parseMaybeAssignAllowInOrVoidPattern (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:12493:17)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11675:28)
+      at JSXParserMixin.parseExprAtom (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11331:23)
+      at JSXParserMixin.parseExprAtom (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4764:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11081:23)
+      at JSXParserMixin.parseUpdate (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at /Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at JSXParserMixin.allowInAnd (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:12426:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at JSXParserMixin.parseConditional (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10891:30)
+      at JSXParserMixin.parseMaybeConditional (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10885:17)
+      at JSXParserMixin.parseMaybeAssign (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at JSXParserMixin.parseExpressionBase (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10784:23)
+      at /Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10780:39
+      at JSXParserMixin.allowInAnd (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:12426:12)
+      at JSXParserMixin.parseExpression (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10780:17)
+      at JSXParserMixin.jsxParseExpressionContainer (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4632:31)
+      at JSXParserMixin.jsxParseElementAt (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4711:36)
+      at JSXParserMixin.jsxParseElement (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4749:17)
+      at JSXParserMixin.parseExprAtom (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:4759:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11081:23)
+      at JSXParserMixin.parseUpdate (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at JSXParserMixin.parseExprOps (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at /Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at JSXParserMixin.allowInAnd (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:12426:12)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/ujjaldeep/Desktop/Company_Employee_Management_Sytem/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+11:03:29 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+11:04:10 PM [vite] hmr update /src/components/TaskDashboard/TaskDashboard.jsx, /src/index.css
+11:04:16 PM [vite] hmr update /src/components/TaskDashboard/TaskDashboard.jsx, /src/index.css
+11:13:32 PM [vite] hmr update /src/components/TaskDashboard/TaskDashboard.jsx, /src/index.css
+11:13:32 PM [vite] hmr update /src/components/TaskDashboard/TaskChart.jsx, /src/index.css
+11:33:53 PM [vite] hmr update /src/components/TaskDashboard/TaskDashboard.jsx, /src/index.css
+11:39:03 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+11:45:27 PM [vite] hmr update /src/pages/EmployeeDetails.jsx, /src/index.css
+11:45:48 PM [vite] hmr update /src/components/TaskDashboard/TaskDashboard.jsx, /src/index.css
+11:53:17 PM [vite] hmr update /src/components/Layout/Sidebar.jsx, /src/index.css
+11:53:27 PM [vite] hmr update /src/App.jsx, /src/index.css
+11:53:32 PM [vite] hmr update /src/App.jsx, /src/index.css

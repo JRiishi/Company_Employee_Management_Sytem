@@ -1,23 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Users, Activity, Settings, UserPlus, AlertCircle, CheckCircle } from 'lucide-react';
+import { Shield, Users, Activity, Settings, UserPlus, AlertCircle, CheckCircle, Trash2, Eye, MoreVertical, Loader } from 'lucide-react';
 import { useAdminData } from '../hooks/useAdminData';
-
-const Card = ({ children, className = '' }) => (
-  <div className={`bg-gray-800 rounded-xl border border-gray-700 p-6 ${className}`}>
-    {children}
-  </div>
-);
+import Card from '../components/Card/Card';
+import api from '../services/api';
 
 const AdminDashboard = () => {
   const { data, loading, error, createUser } = useAdminData();
+  const [employees, setEmployees] = useState([]);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showFireConfirm, setShowFireConfirm] = useState(false);
+  const [employeeToFire, setEmployeeToFire] = useState(null);
+  const [firingLoading, setFiringLoading] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', role: 'employee', department: '' });
   const [submitStatus, setSubmitStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [employeesLoading, setEmployeesLoading] = useState(true);
 
-  if (loading) return <div className="p-8 text-center text-gray-400 font-inter">Loading admin data...</div>;
-  if (error) return <div className="p-8 text-center text-red-400 font-inter">{error}</div>;
+  // Fetch all employees with details
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
 
+  const fetchEmployees = async () => {
+    try {
+      setEmployeesLoading(true);
+      const response = await api.get('/admin/employees');
+      if (response.success) {
+        setEmployees(response.data || []);
+        setFilteredEmployees(response.data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching employees:', err);
+    } finally {
+      setEmployeesLoading(false);
+    }
+  };
+
+  // Search filter
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = employees.filter(emp =>
+        emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        emp.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        emp.department?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredEmployees(filtered);
+    } else {
+      setFilteredEmployees(employees);
+    }
+  }, [searchTerm, employees]);
+
+  // Fetch employee details
+  const viewEmployeeDetails = async (empId) => {
+    try {
+      const response = await api.get(`/admin/employee/${empId}`);
+      if (response.success) {
+        setSelectedEmployee(response.data);
+      }
+    } catch (err) {
+      console.error('Error fetching employee details:', err);
+    }
+  };
+
+  // Fire employee
+  const handleFireEmployee = async () => {
+    if (!employeeToFire) return;
+    
+    try {
+      setFiringLoading(true);
+      const response = await api.post('/admin/fire-employee', {
+        emp_id: employeeToFire.emp_id,
+        reason: 'Terminated by admin'
+      });
+      
+      if (response.success) {
+        setSubmitStatus({ type: 'success', message: `${employeeToFire.name} has been terminated.` });
+        setShowFireConfirm(false);
+        setEmployeeToFire(null);
+        // Refresh employee list
+        fetchEmployees();
+      } else {
+        setSubmitStatus({ type: 'error', message: response.message || 'Failed to terminate employee' });
+      }
+    } catch (err) {
+      setSubmitStatus({ type: 'error', message: 'Error terminating employee' });
+    } finally {
+      setFiringLoading(false);
+    }
+  };
+
+  // Create new user
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -28,22 +103,24 @@ const AdminDashboard = () => {
     setSubmitStatus({ type: '', message: '' });
 
     if (!form.name || !form.email || !form.department) {
-       setSubmitStatus({ type: 'error', message: 'All fields are required.' });
-       setIsSubmitting(false);
-       return;
+      setSubmitStatus({ type: 'error', message: 'All fields are required.' });
+      setIsSubmitting(false);
+      return;
     }
 
     const result = await createUser(form);
-    
     if (result.success) {
-      setSubmitStatus({ type: 'success', message: 'Invite sent successfully!' });
+      setSubmitStatus({ type: 'success', message: 'User created successfully!' });
       setForm({ name: '', email: '', role: 'employee', department: '' });
+      fetchEmployees();
     } else {
       setSubmitStatus({ type: 'error', message: result.message });
     }
-    
     setIsSubmitting(false);
   };
+
+  if (loading) return <div className="p-8 text-center text-gray-400 font-inter">Loading admin data...</div>;
+  if (error) return <div className="p-8 text-center text-red-400 font-inter">{error}</div>;
 
   return (
     <div className="p-8 font-inter max-w-7xl mx-auto space-y-8 animate-fade-in text-gray-100">
@@ -54,13 +131,7 @@ const AdminDashboard = () => {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-200 bg-clip-text text-transparent mb-2">
             System Administration
           </h1>
-          <p className="text-gray-400">Manage users, security, and global settings</p>
-        </div>
-        <div className="flex space-x-4">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors border border-gray-700">
-            <Settings size={18} className="text-blue-400" />
-            <span>Settings</span>
-          </button>
+          <p className="text-gray-400">Manage employees, view details, and handle HR decisions</p>
         </div>
       </div>
 
@@ -72,155 +143,113 @@ const AdminDashboard = () => {
               <Users className="text-blue-400" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Total Users</p>
-              <h3 className="text-2xl font-bold">{data.stats?.total_users || 0}</h3>
+              <p className="text-sm text-gray-400">Total Employees</p>
+              <h3 className="text-2xl font-bold">{employees.length}</h3>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="hover:border-green-500/50 transition-colors">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-green-500/10 rounded-lg">
+              <Activity className="text-green-400" size={24} />
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Active Employees</p>
+              <h3 className="text-2xl font-bold">{employees.filter(e => e.status === 'active').length}</h3>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="hover:border-yellow-500/50 transition-colors">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-yellow-500/10 rounded-lg">
+              <AlertCircle className="text-yellow-400" size={24} />
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Inactive</p>
+              <h3 className="text-2xl font-bold">{employees.filter(e => e.status === 'inactive').length}</h3>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="hover:border-purple-500/50 transition-colors">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-purple-500/10 rounded-lg">
+              <Shield className="text-purple-400" size={24} />
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Admin Access</p>
+              <h3 className="text-2xl font-bold">2</h3>
             </div>
           </div>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: User Creation */}
-        <div className="lg:col-span-1 space-y-8">
-          <Card>
-            <div className="flex items-center space-x-2 mb-6">
-              <UserPlus className="text-blue-400" />
-              <h2 className="text-xl font-semibold">Create Employee</h2>
-            </div>
-            
-            {submitStatus.message && (
-              <div className={`mb-4 p-3 rounded-lg flex items-center space-x-2 text-sm ${
-                submitStatus.type === 'error' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-              }`}>
-                {submitStatus.type === 'error' ? <AlertCircle size={16} /> : <CheckCircle size={16} />}
-                <span>{submitStatus.message}</span>
-              </div>
-            )}
+      {/* Status Messages */}
+      {submitStatus.message && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`p-4 rounded-lg flex items-center space-x-3 ${
+            submitStatus.type === 'success'
+              ? 'bg-green-500/10 border border-green-500/50 text-green-400'
+              : 'bg-red-500/10 border border-red-500/50 text-red-400'
+          }`}
+        >
+          {submitStatus.type === 'success' ? (
+            <CheckCircle size={20} />
+          ) : (
+            <AlertCircle size={20} />
+          )}
+          <span>{submitStatus.message}</span>
+        </motion.div>
+      )}
 
-            <form onSubmit={handleCreateUser} className="space-y-4">
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">Full Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 text-gray-100"
-                  placeholder="John Doe"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 text-gray-100"
-                  placeholder="john@example.com"
-                />
-              </div>
 
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">Department</label>
-                <input
-                  type="text"
-                  name="department"
-                  value={form.department}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 text-gray-100"
-                  placeholder="Engineering"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">Role</label>
-                <select
-                  name="role"
-                  value={form.role}
-                  onChange={handleInputChange}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 text-gray-100 appearance-none"
-                >
-                  <option value="employee">Employee</option>
-                  <option value="manager">Manager</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-
+      {/* Fire Confirmation Modal */}
+      {showFireConfirm && employeeToFire && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowFireConfirm(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-gray-800 rounded-xl border border-red-500/50 p-6 max-w-md w-full space-y-4"
+          >
+            <h3 className="text-xl font-bold text-red-400 flex items-center space-x-2">
+              <AlertCircle size={24} />
+              <span>Confirm Termination</span>
+            </h3>
+            <p className="text-gray-300">
+              Are you sure you want to terminate <strong>{employeeToFire.name}</strong>? This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
               <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2 rounded-lg transition-colors flex justify-center items-center disabled:opacity-50"
+                onClick={() => {
+                  setShowFireConfirm(false);
+                  setEmployeeToFire(null);
+                }}
+                className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors font-semibold"
               >
-                {isSubmitting ? 'Sending...' : 'Send Invite'}
+                Cancel
               </button>
-            </form>
-          </Card>
-        </div>
-
-        {/* Right Column: User Management Table */}
-        <div className="lg:col-span-2 space-y-8">
-          <Card>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-2">
-                <Shield className="text-blue-400" />
-                <h2 className="text-xl font-semibold">User Directory</h2>
-              </div>
+              <button
+                onClick={handleFireEmployee}
+                disabled={firingLoading}
+                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-900 rounded-lg transition-colors font-semibold text-white flex items-center justify-center gap-2"
+              >
+                {firingLoading ? <Loader className="animate-spin" size={18} /> : <Trash2 size={18} />}
+                {firingLoading ? 'Terminating...' : 'Confirm Termination'}
+              </button>
             </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-gray-700 text-sm text-gray-400">
-                    <th className="pb-3 px-4 font-medium">Name</th>
-                    <th className="pb-3 px-4 font-medium">Role</th>
-                    <th className="pb-3 px-4 font-medium">Department</th>
-                    <th className="pb-3 px-4 font-medium text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.employees?.map((emp, i) => (
-                    <motion.tr 
-                      key={emp.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="border-b border-gray-700/50 hover:bg-gray-800/50 transition-colors"
-                    >
-                      <td className="py-4 px-4 flex items-center space-x-3">
-                        <div className="h-8 w-8 rounded-full bg-blue-500/20 flex flex-col items-center justify-center text-blue-400 font-medium">
-                          {emp.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="font-medium">{emp.name}</div>
-                          <div className="text-sm text-gray-500">{emp.email}</div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <span className={`px-2 py-1 rounded text-xs font-medium border ${
-                          emp.role === 'admin' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                          emp.role === 'manager' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                          'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                        }`}>
-                          {emp.role.toUpperCase()}
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-gray-300">{emp.department}</td>
-                      <td className="py-4 px-4 text-right">
-                        <button className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                          Edit
-                        </button>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };

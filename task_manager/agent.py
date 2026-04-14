@@ -13,7 +13,7 @@ def get_db():
     return mysql.connector.connect(
         host='localhost',
             user='root',
-            password='123456789',
+            password='12345678',
             database='DBMS_PROJECT',
             auth_plugin='mysql_native_password'
     )

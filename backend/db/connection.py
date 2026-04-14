@@ -11,8 +11,8 @@ def get_db_connection():
         connection = mysql.connector.connect(
             host=os.getenv("DB_HOST", "localhost"),
             user=os.getenv("DB_USER", "root"),
-            password=os.getenv("DB_PASS", "123456789"),
-            database=os.getenv("DB_NAME", "demo_1"),
+            password=os.getenv("DB_PASS", "12345678"),
+            database=os.getenv("DB_NAME", "DBMS_PROJECT"),
             port=int(os.getenv("DB_PORT", "3306")),
             auth_plugin='mysql_native_password'
         )

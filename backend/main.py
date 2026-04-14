@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv("backend/.env")
 
-from backend.routes import auth, admin, employee, manager, tasks, hr, user
+from routes import auth, admin, employee, manager, tasks, hr, user, leave
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
@@ -55,5 +55,6 @@ app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 app.include_router(employee.router, prefix="/api/employee", tags=["employee"])
 app.include_router(manager.router, prefix="/api/manager", tags=["manager"])
 app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
+app.include_router(leave.router, prefix="/api/leaves", tags=["leaves"])
 app.include_router(hr.router, prefix="/api/hr", tags=["hr"])
 app.include_router(user.router, prefix="/api/user", tags=["user"])
