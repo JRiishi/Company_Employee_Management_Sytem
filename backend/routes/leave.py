@@ -32,6 +32,46 @@ def get_employee_leaves(emp_id: int, filter: str = Query("month", regex="^(week|
     def get_mock_leaves():
         random.seed(emp_id)
 
+        # Reason templates per leave type
+        leave_reasons = {
+            "Sick Leave": [
+                "Medical appointment",
+                "Health recovery",
+                "Illness",
+                "Doctor visit",
+                "Medical emergency",
+                "Health check-up",
+                "Fever and flu"
+            ],
+            "Casual Leave": [
+                "Personal reasons",
+                "Family time",
+                "Personal work",
+                "Rest and relax",
+                "Personal errands",
+                "Day off",
+                "Personal commitment"
+            ],
+            "Vacation Leave": [
+                "Vacation",
+                "Travel",
+                "Holiday trip",
+                "Family vacation",
+                "Rest and recovery",
+                "Holiday break",
+                "Trip planning"
+            ],
+            "Paid Time Off (PTO)": [
+                "Personal time",
+                "Personal matters",
+                "Time off",
+                "Rest day",
+                "Personal time off",
+                "Flexible time",
+                "Work-life balance"
+            ]
+        }
+
         all_leaves = []
 
         # Generate 12-15 leave records across the year
@@ -50,6 +90,9 @@ def get_employee_leaves(emp_id: int, filter: str = Query("month", regex="^(week|
             duration = random.randint(1, 5)  # Leave duration 1-5 days
             end = start + timedelta(days=duration - 1)
 
+            # Select reason based on leave type
+            reason = random.choice(leave_reasons.get(leave_type, ["Personal reason"]))
+
             leave_record = {
                 "leave_id": emp_id * 1000 + i + 1,
                 "employee_id": emp_id,
@@ -58,18 +101,7 @@ def get_employee_leaves(emp_id: int, filter: str = Query("month", regex="^(week|
                 "end_date": end.strftime("%Y-%m-%d"),
                 "duration": duration,
                 "status": random.choice(["Approved", "Pending", "Rejected"]) if days_ago < 30 else "Approved",
-                "reason": random.choice([
-                    "Medical appointment",
-                    "Family time",
-                    "Vacation",
-                    "Personal reasons",
-                    "Health recovery",
-                    "Travel",
-                    "Sick",
-                    "Rest and relax",
-                    "Wedding",
-                    "Conference"
-                ])
+                "reason": reason
             }
             all_leaves.append(leave_record)
 

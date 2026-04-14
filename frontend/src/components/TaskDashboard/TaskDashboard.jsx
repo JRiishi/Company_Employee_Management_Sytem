@@ -217,15 +217,10 @@ const TaskDashboard = ({ empId, empName }) => {
 
       {/* Stats Cards - 4 Column Grid */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ staggerChildren: 0.1 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
       >
         {/* Total Tasks */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
@@ -242,8 +237,6 @@ const TaskDashboard = ({ empId, empName }) => {
 
         {/* Completed Tasks */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.05 }}
         >
@@ -266,8 +259,6 @@ const TaskDashboard = ({ empId, empName }) => {
 
         {/* Ongoing Tasks */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
         >
@@ -285,8 +276,6 @@ const TaskDashboard = ({ empId, empName }) => {
 
         {/* Pending Tasks */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.15 }}
         >

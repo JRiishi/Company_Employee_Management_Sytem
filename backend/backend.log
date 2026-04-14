@@ -218,3 +218,105 @@ INFO:     127.0.0.1:55825 - "OPTIONS /api/leaves/employee/46?filter=month HTTP/1
 INFO:     127.0.0.1:55826 - "OPTIONS /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
 INFO:     127.0.0.1:55825 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
 INFO:     127.0.0.1:55825 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55830 - "OPTIONS /api/leaves/employee/46?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55830 - "GET /api/leaves/employee/46?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55830 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55830 - "OPTIONS /api/leaves/employee/46?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55833 - "GET /api/leaves/employee/46?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55833 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55833 - "GET /api/leaves/employee/46?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55833 - "GET /api/leaves/employee/46?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55842 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55842 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55842 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55842 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55842 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55842 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55842 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55842 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55842 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55842 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55842 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55856 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55860 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55860 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55860 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55860 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55860 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55860 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55860 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55860 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55860 - "GET /api/leaves/employee/46?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55860 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55860 - "GET /api/leaves/employee/46?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55870 - "GET /api/leaves/employee/46?filter=year HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55870 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55870 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55870 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55870 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55870 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55870 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55870 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55870 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55870 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55882 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55882 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55882 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55882 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55882 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55882 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55882 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55882 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55882 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55893 - "GET /api/leaves/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:55893 - "GET /api/tasks/employee/46?filter=month HTTP/1.1" 200 OK
