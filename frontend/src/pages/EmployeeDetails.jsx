@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Card from "../components/Card/Card";
 import TaskDashboard from "../components/TaskDashboard/TaskDashboard";
+import EmployeeLeave from "../components/EmployeeLeave/EmployeeLeave";
 import api from "../services/api";
 
 const EmployeeDetails = () => {
@@ -23,7 +24,7 @@ const EmployeeDetails = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [activeTab, setActiveTab] = useState("overview"); // overview or tasks
+  const [activeTab, setActiveTab] = useState("overview"); // overview, tasks, or leave
 
   useEffect(() => {
     fetchEmployeeDetails();
@@ -149,6 +150,16 @@ const EmployeeDetails = () => {
           }`}
         >
           Tasks
+        </button>
+        <button
+          onClick={() => setActiveTab("leave")}
+          className={`px-6 py-3 font-semibold transition-all border-b-2 ${
+            activeTab === "leave"
+              ? "border-blue-600 text-blue-600"
+              : "border-transparent text-gray-600 hover:text-gray-900"
+          }`}
+        >
+          Leave
         </button>
       </div>
 
@@ -370,13 +381,21 @@ const EmployeeDetails = () => {
         </Card>
       </motion.div>
         </>
-      ) : (
+      ) : activeTab === "tasks" ? (
         /* Tasks Tab Content */
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <TaskDashboard empId={empId} empName={employee.name} />
+        </motion.div>
+      ) : (
+        /* Leave Tab Content */
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <EmployeeLeave empId={empId} empName={employee.name} />
         </motion.div>
       )}
     </div>

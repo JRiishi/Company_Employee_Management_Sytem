@@ -20,7 +20,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AllEmployees from "./pages/AllEmployees";
 import EmployeeDetails from "./pages/EmployeeDetails";
 import Settings from "./pages/Settings";
-import LeaveDashboard from "./components/LeaveDashboard/LeaveDashboard";
 
 // Admin / Manager placeholders
 
@@ -78,7 +77,6 @@ function App() {
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="employees" element={<AllEmployees />} />
             <Route path="employee/:empId" element={<EmployeeDetails />} />
-            <Route path="leaves" element={<LeaveDashboard />} />
             <Route path="settings" element={<Settings />} />
           </Route>
 

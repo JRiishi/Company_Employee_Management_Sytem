@@ -9,18 +9,22 @@ A comprehensive leave management system for tracking and managing employee leave
 ## 🎯 Features Implemented
 
 ### 1. **Leave Types**
+
 - ✅ Sick Leave - Medical/Health related absences
-- ✅ Casual Leave - Personal time off  
+- ✅ Casual Leave - Personal time off
 - ✅ Vacation Leave - Planned vacation periods
 - ✅ Paid Time Off (PTO) - General paid time off
 
 ### 2. **Time-Based Data**
+
 - ✅ Weekly data (last 7 days)
-- ✅ Monthly data (last 30 days)  
+- ✅ Monthly data (last 30 days)
 - ✅ Yearly data (last 365 days)
 
 ### 3. **Employee Data**
+
 Generated for 10 different employees with unique roles:
+
 1. **Rajesh Kumar** - Software Engineer
 2. **Priya Singh** - Product Manager
 3. **Arjun Patel** - Sales Manager
@@ -88,15 +92,18 @@ Generated for 10 different employees with unique roles:
 **Endpoint:** `GET /api/leaves/employee/{emp_id}`
 
 **Query Parameters:**
+
 - `filter`: "week" | "month" | "year" (default: "month")
 
 **Example:**
+
 ```bash
 curl "http://localhost:8000/api/leaves/employee/1?filter=month" \
   -H "Authorization: Bearer $TOKEN"
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -116,15 +123,18 @@ curl "http://localhost:8000/api/leaves/employee/1?filter=month" \
 **Endpoint:** `GET /api/leaves/summary`
 
 **Query Parameters:**
+
 - `filter`: "week" | "month" | "year" (default: "month")
 
 **Example:**
+
 ```bash
 curl "http://localhost:8000/api/leaves/summary?filter=month" \
   -H "Authorization: Bearer $TOKEN"
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -156,6 +166,7 @@ curl "http://localhost:8000/api/leaves/summary?filter=month" \
 **File:** `frontend/src/components/LeaveDashboard/LeaveDashboard.jsx`
 
 **Features:**
+
 - ✅ Time-based filtering (Week/Month/Year)
 - ✅ Comprehensive leave table showing all employees
 - ✅ Leave type breakdown by employee
@@ -166,6 +177,7 @@ curl "http://localhost:8000/api/leaves/summary?filter=month" \
 - ✅ Refresh functionality
 
 **Styling:**
+
 - Sick Leave: Red (bg-red-100 text-red-800)
 - Casual Leave: Blue (bg-blue-100 text-blue-800)
 - Vacation Leave: Green (bg-green-100 text-green-800)
@@ -185,27 +197,29 @@ curl "http://localhost:8000/api/leaves/summary?filter=month" \
 
 ### Table Columns
 
-| Column | Description |
-|--------|-------------|
-| Name | Employee full name |
-| Role | Employee designation |
-| Total Leaves | Number of leave records |
-| Total Days | Total leave days used |
-| Sick Leave | Count of sick leaves |
-| Casual Leave | Count of casual leaves |
+| Column         | Description              |
+| -------------- | ------------------------ |
+| Name           | Employee full name       |
+| Role           | Employee designation     |
+| Total Leaves   | Number of leave records  |
+| Total Days     | Total leave days used    |
+| Sick Leave     | Count of sick leaves     |
+| Casual Leave   | Count of casual leaves   |
 | Vacation Leave | Count of vacation leaves |
-| PTO | Count of paid time off |
+| PTO            | Count of paid time off   |
 
 ---
 
 ## 📈 Data Generation Details
 
 ### Leave Distribution
+
 - **Week:** 2 leave records (0-7 days ago)
 - **Month:** 4 leave records (0-30 days ago)
 - **Year:** 6+ leave records (0-365 days ago)
 
 ### Random Generation
+
 - Employee-specific deterministic seeding (uses emp_id)
 - Each employee gets different leave patterns
 - Leave types cycle: Sick → Casual → Vacation → PTO
@@ -236,16 +250,19 @@ Future              → Not included in mock data
 ## 📱 Responsive Design
 
 ### Desktop (> 1024px)
+
 - Full table with all columns visible
 - Horizontal scroll only on extreme cases
 - 4-column stat cards
 
 ### Tablet (768-1024px)
+
 - Table with horizontal scroll
 - All data visible but condensed
 - 2-column stat cards
 
 ### Mobile (< 768px)
+
 - Horizontal scrollable table
 - Stacked layout
 - Touch-friendly controls
@@ -298,16 +315,18 @@ Recent Leaves:
 **File:** `backend/routes/leave.py`
 
 **Key Functions:**
+
 - `get_employee_leaves()` - Fetch individual employee leaves
 - `get_mock_leaves()` - Generate employee-specific mock data
 - `calculate_stats()` - Compute leave statistics
 - `get_all_employees_leave_summary()` - Comprehensive summary
 
 **Leave Types Array:**
+
 ```python
 LEAVE_TYPES = [
     "Sick Leave",
-    "Casual Leave", 
+    "Casual Leave",
     "Vacation Leave",
     "Paid Time Off (PTO)"
 ]

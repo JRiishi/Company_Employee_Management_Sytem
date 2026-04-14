@@ -1,6 +1,7 @@
 # 📊 Complete Employee Data Summary
 
 ## Overview
+
 This document shows the complete data structure for all 10 employees with their Tasks and Leave information, organized by time periods (Weekly, Monthly, Yearly).
 
 ---
@@ -8,6 +9,7 @@ This document shows the complete data structure for all 10 employees with their 
 ## 👥 All Employees Data Structure
 
 ### Employee Format
+
 ```json
 {
   "employee_id": 1,
@@ -36,6 +38,7 @@ This document shows the complete data structure for all 10 employees with their 
 ## 📋 Complete Employee Roster
 
 ### 1. Rajesh Kumar - Software Engineer
+
 - **Email:** rajesh.kumar@company.com
 - **Department:** Engineering
 - **Performance:** 8.5/10
@@ -43,11 +46,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks (latest from last 7 days)
 - Month: 4 tasks (last 30 days)
 - Year: 6 tasks (all year)
 
 **Task Types:** Engineering/Development
+
 - Code Review - Authentication Module
 - API Integration with Payment Gateway
 - Database Optimization
@@ -56,11 +61,13 @@ This document shows the complete data structure for all 10 employees with their 
 - Unit Test Coverage Improvement
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
-- Month: 6 leave records  
+- Month: 6 leave records
 - Year: 12 leave records
 
 **Leave Breakdown (Monthly):**
+
 - Sick Leave: 2
 - Casual Leave: 2
 - Vacation Leave: 1
@@ -69,6 +76,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 2. Priya Singh - Product Manager
+
 - **Email:** priya.singh@company.com
 - **Department:** Product Management
 - **Performance:** 7.8/10
@@ -76,11 +84,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** Product Management
+
 - Define Product Requirements
 - Roadmap Planning
 - Stakeholder Meetings
@@ -89,6 +99,7 @@ This document shows the complete data structure for all 10 employees with their 
 - Release Planning
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records
 - Year: 12 leave records
@@ -96,6 +107,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 3. Arjun Patel - Sales Manager
+
 - **Email:** arjun.patel@company.com
 - **Department:** Sales
 - **Performance:** 9.1/10
@@ -103,11 +115,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** Sales
+
 - Client Follow-up Call
 - Sales Proposal Preparation
 - CRM Data Update
@@ -116,6 +130,7 @@ This document shows the complete data structure for all 10 employees with their 
 - Contract Negotiation
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (23 days total)
 - Year: 12 leave records
@@ -123,6 +138,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 4. Sneha Sharma - Marketing Head
+
 - **Email:** sneha.sharma@company.com
 - **Department:** Marketing
 - **Performance:** 8.2/10
@@ -130,11 +146,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** Marketing
+
 - Campaign Analysis Report
 - Social Media Content Creation
 - Email Newsletter Design
@@ -143,6 +161,7 @@ This document shows the complete data structure for all 10 employees with their 
 - Conference Presentation
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (18 days total)
 - Year: 12 leave records
@@ -150,6 +169,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 5. Vikram Verma - HR Manager
+
 - **Email:** vikram.verma@company.com
 - **Department:** HR
 - **Performance:** 7.5/10
@@ -157,11 +177,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** HR/People Operations
+
 - Employee Onboarding
 - Performance Review Preparation
 - Policy Update Documentation
@@ -170,6 +192,7 @@ This document shows the complete data structure for all 10 employees with their 
 - Team Building Event Planning
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (20 days total)
 - Year: 12 leave records
@@ -177,6 +200,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 6. Ananya Gupta - Senior Developer
+
 - **Email:** ananya.gupta@company.com
 - **Department:** Engineering
 - **Performance:** 9.3/10
@@ -184,11 +208,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** Engineering/Development (Senior Level)
+
 - Architecture Design Review
 - Code Quality Improvement
 - Senior Code Review
@@ -197,6 +223,7 @@ This document shows the complete data structure for all 10 employees with their 
 - System Optimization
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (22 days total)
 - Year: 12 leave records
@@ -204,6 +231,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 7. Rohan Reddy - Business Analyst
+
 - **Email:** rohan.reddy@company.com
 - **Department:** Operations
 - **Performance:** 8.0/10
@@ -211,11 +239,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** Business Analysis
+
 - Requirement Gathering
 - Process Documentation
 - Gap Analysis
@@ -224,6 +254,7 @@ This document shows the complete data structure for all 10 employees with their 
 - Dashboard Creation
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (13 days total)
 - Year: 12 leave records
@@ -231,6 +262,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 8. Divya Rao - UI/UX Designer
+
 - **Email:** divya.rao@company.com
 - **Department:** Design
 - **Performance:** 8.7/10
@@ -238,11 +270,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** Design/UX
+
 - Wireframe Creation
 - Prototype Development
 - User Testing
@@ -251,6 +285,7 @@ This document shows the complete data structure for all 10 employees with their 
 - User Research
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (16 days total)
 - Year: 12 leave records
@@ -258,6 +293,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 9. Amit Kulkarni - DevOps Engineer
+
 - **Email:** amit.kulkarni@company.com
 - **Department:** Engineering
 - **Performance:** 8.4/10
@@ -265,11 +301,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** DevOps/Infrastructure
+
 - CI/CD Pipeline Setup
 - Server Maintenance
 - Deployment Automation
@@ -278,6 +316,7 @@ This document shows the complete data structure for all 10 employees with their 
 - Cloud Infrastructure Management
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (16 days total)
 - Year: 12 leave records
@@ -285,6 +324,7 @@ This document shows the complete data structure for all 10 employees with their 
 ---
 
 ### 10. Neha Nair - QA Lead
+
 - **Email:** neha.nair@company.com
 - **Department:** Quality Assurance
 - **Performance:** 8.9/10
@@ -292,11 +332,13 @@ This document shows the complete data structure for all 10 employees with their 
 - **Status:** Active
 
 **Tasks (Filter Results):**
+
 - Week: 2 tasks
 - Month: 4 tasks
 - Year: 6 tasks
 
 **Task Types:** Quality Assurance
+
 - Test Case Development
 - Automation Test Suite
 - Bug Investigation
@@ -305,6 +347,7 @@ This document shows the complete data structure for all 10 employees with their 
 - Release Testing
 
 **Leaves (Filter Results):**
+
 - Week: 2 leave records
 - Month: 6 leave records (16 days total)
 - Year: 12 leave records
@@ -313,18 +356,19 @@ This document shows the complete data structure for all 10 employees with their 
 
 ## 📊 Leave Types Reference
 
-| Leave Type | Color Code | Use Case | Typical Duration |
-|-----------|-----------|----------|-----------------|
-| **Sick Leave** | 🔴 Red | Medical/Health issues | 1-3 days |
-| **Casual Leave** | 🔵 Blue | Personal reasons | 1-2 days |
-| **Vacation Leave** | 🟢 Green | Planned vacation | 3-7 days |
-| **PTO** | 🟣 Purple | Paid time off | 1-5 days |
+| Leave Type         | Color Code | Use Case              | Typical Duration |
+| ------------------ | ---------- | --------------------- | ---------------- |
+| **Sick Leave**     | 🔴 Red     | Medical/Health issues | 1-3 days         |
+| **Casual Leave**   | 🔵 Blue    | Personal reasons      | 1-2 days         |
+| **Vacation Leave** | 🟢 Green   | Planned vacation      | 3-7 days         |
+| **PTO**            | 🟣 Purple  | Paid time off         | 1-5 days         |
 
 ---
 
 ## ⏰ Time-Period Summary
 
 ### WEEKLY VIEW (Last 7 Days)
+
 ```
 Per Employee:
 - Tasks: 2 records
@@ -338,6 +382,7 @@ Organization Total (10 employees):
 ```
 
 ### MONTHLY VIEW (Last 30 Days)
+
 ```
 Per Employee:
 - Tasks: 4 records
@@ -352,6 +397,7 @@ Organization Total (10 employees):
 ```
 
 ### YEARLY VIEW (Last 365 Days)
+
 ```
 Per Employee:
 - Tasks: 6 records
@@ -370,6 +416,7 @@ Organization Total (10 employees):
 ## 🎯 Data Characteristics
 
 ### Uniqueness
+
 - ✅ Each employee has different task titles
 - ✅ Each employee has different leave patterns
 - ✅ Leave durations vary (1-5 days each)
@@ -377,6 +424,7 @@ Organization Total (10 employees):
 - ✅ Leave statuses vary (Approved/Pending/Rejected)
 
 ### Realism
+
 - ✅ Dates are realistic and distributed
 - ✅ Leave reasons are meaningful
 - ✅ Performance scores vary (3.0-9.8 per 10)
@@ -384,6 +432,7 @@ Organization Total (10 employees):
 - ✅ Task and leave counts are proportional
 
 ### Organization
+
 - ✅ Data organized by time periods
 - ✅ Consistent across all API endpoints
 - ✅ Easy to filter and sort
@@ -395,6 +444,7 @@ Organization Total (10 employees):
 ## 🔍 API Access Points
 
 ### Get Employee Summary (All Data)
+
 ```bash
 # Returns tasks AND leaves for one employee in given period
 GET /api/tasks/employee/{emp_id}?filter=month
@@ -402,12 +452,14 @@ GET /api/leaves/employee/{emp_id}?filter=month
 ```
 
 ### Get Leave Summary (All Employees)
+
 ```bash
 # Returns leave data for all 10 employees in given period
 GET /api/leaves/summary?filter=month
 ```
 
 ### Response Format Example
+
 ```json
 {
   "success": true,
@@ -446,6 +498,7 @@ GET /api/leaves/summary?filter=month
 ## 📱 Frontend Access Points
 
 ### Admin Dashboard
+
 - **Path:** `http://localhost:5173/#/admin/leaves`
 - **Route:** `/admin/leaves`
 - **Component:** `LeaveDashboard.jsx`
@@ -462,6 +515,7 @@ GET /api/leaves/summary?filter=month
 ## ✅ Complete Implementation Checklist
 
 ### Backend
+
 - [x] Leave API endpoints created
 - [x] Employee-specific mock data generation
 - [x] Time-based filtering (week/month/year)
@@ -470,6 +524,7 @@ GET /api/leaves/summary?filter=month
 - [x] Route registration in main.py
 
 ### Frontend
+
 - [x] LeaveDashboard component
 - [x] Leave table with all columns
 - [x] Time filter buttons
@@ -481,12 +536,14 @@ GET /api/leaves/summary?filter=month
 - [x] Refresh functionality
 
 ### Integration
+
 - [x] Admin sidebar menu
 - [x] Route in App.jsx
 - [x] Navigation working
 - [x] API integration
 
 ### Data
+
 - [x] 10 unique employees
 - [x] 4 leave types
 - [x] Time-based data
@@ -499,6 +556,7 @@ GET /api/leaves/summary?filter=month
 ## 🎉 System is Ready!
 
 All employee data is now complete with:
+
 - ✅ Employee information (name, role, department, performance, salary)
 - ✅ Task management (weekly/monthly/yearly filtering)
 - ✅ Leave management (4 types, time-based data)
@@ -509,10 +567,12 @@ All employee data is now complete with:
 **Access the system at:** http://localhost:5173
 
 **Login Credentials:**
+
 - Email: admin@nexushr.com
 - Password: 123
 
 **Navigation:**
+
 1. Login → Admin Dashboard
 2. Click "Leave Management" in sidebar
 3. Select time period filter

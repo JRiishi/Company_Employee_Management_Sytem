@@ -31,7 +31,6 @@ const Sidebar = () => {
         path: "/admin/dashboard",
       },
       { icon: Users, label: "All Employees", path: "/admin/employees" },
-      { icon: Calendar, label: "Leave Management", path: "/admin/leaves" },
       { icon: Settings, label: "Admin Settings", path: "/admin/settings" },
     ];
   } else if (user?.role === "manager") {
