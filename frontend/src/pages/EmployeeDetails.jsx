@@ -22,6 +22,7 @@ const EmployeeDetails = () => {
   const navigate = useNavigate();
   const [employee, setEmployee] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [leaveBalance, setLeaveBalance] = useState(20); // Default annual leaves
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("overview"); // overview, tasks, or leave
@@ -29,6 +30,7 @@ const EmployeeDetails = () => {
   useEffect(() => {
     fetchEmployeeDetails();
     fetchEmployeeTasks();
+    fetchLeaveBalance();
   }, [empId]);
 
   const fetchEmployeeDetails = async () => {
@@ -62,6 +64,25 @@ const EmployeeDetails = () => {
     } catch (err) {
       console.error("Error fetching tasks:", err);
       setTasks([]);
+    }
+  };
+
+  const fetchLeaveBalance = async () => {
+    try {
+      // Fetch yearly leave data to calculate balance
+      const response = await api.get(`/leaves/employee/${empId}`, {
+        params: { filter: "year" },
+      });
+      if (response.success && response.data) {
+        // Total annual leaves - days used = balance
+        const totalDaysUsed = response.data.total_days || 0;
+        const annualLeaves = 20; // Standard annual leaves
+        const balance = Math.max(0, annualLeaves - totalDaysUsed);
+        setLeaveBalance(balance);
+      }
+    } catch (err) {
+      console.error("Error fetching leave balance:", err);
+      setLeaveBalance(20); // Default if error
     }
   };
 
@@ -372,9 +393,7 @@ const EmployeeDetails = () => {
                 Leave Balance
               </p>
               <p className="text-lg font-semibold text-gray-900">
-                {employee.leave_balance !== undefined
-                  ? `${employee.leave_balance} days`
-                  : "N/A"}
+                {leaveBalance} days
               </p>
             </div>
           </div>
