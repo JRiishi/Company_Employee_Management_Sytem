@@ -151,11 +151,7 @@ const TaskDashboard = ({ empId, empName }) => {
   return (
     <div className="space-y-6">
       {/* Header with Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-4"
-      >
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -181,17 +177,13 @@ const TaskDashboard = ({ empId, empName }) => {
 
         {/* Error Message */}
         {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-center gap-2"
-          >
+          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-center gap-2">
             <AlertCircle size={20} />
             <div>
               <p className="font-semibold">Error loading tasks</p>
               <p className="text-sm">{error}</p>
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Time Filter Buttons */}
@@ -213,7 +205,7 @@ const TaskDashboard = ({ empId, empName }) => {
             </motion.button>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* Stats Cards - 4 Column Grid */}
       <motion.div
@@ -293,44 +285,33 @@ const TaskDashboard = ({ empId, empName }) => {
       </motion.div>
 
       {/* Completion Progress Bar */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Card className="border-gray-200 bg-white">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="text-blue-600" size={20} />
-                <h3 className="font-semibold text-gray-900">Completion Rate</h3>
-              </div>
-              <span className="text-2xl font-bold text-blue-600">
-                {stats.completionRate}%
-              </span>
+      <Card className="border-gray-200 bg-white">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="text-blue-600" size={20} />
+              <h3 className="font-semibold text-gray-900">Completion Rate</h3>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${stats.completionRate}%` }}
-                transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-                className="h-full bg-gradient-to-r from-blue-500 to-blue-700 rounded-full"
-              />
-            </div>
+            <span className="text-2xl font-bold text-blue-600">
+              {stats.completionRate}%
+            </span>
           </div>
-        </Card>
-      </motion.div>
+          <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${stats.completionRate}%` }}
+              transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+              className="h-full bg-gradient-to-r from-blue-500 to-blue-700 rounded-full"
+            />
+          </div>
+        </div>
+      </Card>
 
       {/* Charts Section - Two Column Layout */}
       <TaskChart stats={stats} />
 
       {/* Sort Options */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="flex gap-3"
-      >
+      <div className="flex gap-3">
         <button
           onClick={() => setSortBy("date")}
           className={`px-4 py-2 rounded-lg font-medium transition-all ${
@@ -351,99 +332,89 @@ const TaskDashboard = ({ empId, empName }) => {
         >
           Sort by Status
         </button>
-      </motion.div>
+      </div>
 
       {/* Tasks Table */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.45 }}
-      >
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Task Details</h3>
+      <Card className="border-gray-200 bg-white">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Task Details</h3>
 
-          {sortedTasks.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-12 text-gray-500"
-            >
-              <Calendar size={48} className="mx-auto mb-3 opacity-30" />
-              <p className="text-lg font-medium">No tasks found for this period</p>
-              <p className="text-sm text-gray-400 mt-1">
-                Try selecting a different time period
-              </p>
-            </motion.div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                      Task Title
-                    </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                      Status
-                    </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                      Created
-                    </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                      Due Date
-                    </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                      Completed
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedTasks.map((task, idx) => (
-                    <motion.tr
-                      key={task.task_id || idx}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.02 }}
-                      className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="py-3 px-4">
-                        <p className="font-medium text-gray-900">
-                          {task.Title || task.title || "Untitled Task"}
-                        </p>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 w-fit ${getStatusColor(
-                            task.status
-                          )}`}
-                        >
-                          {getStatusIcon(task.status)}
-                          {task.status?.charAt(0).toUpperCase() +
-                            task.status?.slice(1)}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-gray-600 text-sm">
-                        {task.created_at
-                          ? new Date(task.created_at).toLocaleDateString()
-                          : "-"}
-                      </td>
-                      <td className="py-3 px-4 text-gray-600 text-sm">
-                        {task.due_date
-                          ? new Date(task.due_date).toLocaleDateString()
-                          : "-"}
-                      </td>
-                      <td className="py-3 px-4 text-gray-600 text-sm">
-                        {task.completed_at
-                          ? new Date(task.completed_at).toLocaleDateString()
-                          : "-"}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </Card>
-      </motion.div>
+        {sortedTasks.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            <Calendar size={48} className="mx-auto mb-3 opacity-30" />
+            <p className="text-lg font-medium">No tasks found for this period</p>
+            <p className="text-sm text-gray-400 mt-1">
+              Try selecting a different time period
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-200 bg-gray-50">
+                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    Task Title
+                  </th>
+                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    Status
+                  </th>
+                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    Created
+                  </th>
+                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    Due Date
+                  </th>
+                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    Completed
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedTasks.map((task, idx) => (
+                  <motion.tr
+                    key={task.task_id || idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.02 }}
+                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="py-3 px-4">
+                      <p className="font-medium text-gray-900">
+                        {task.Title || task.title || "Untitled Task"}
+                      </p>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 w-fit ${getStatusColor(
+                          task.status
+                        )}`}
+                      >
+                        {getStatusIcon(task.status)}
+                        {task.status?.charAt(0).toUpperCase() +
+                          task.status?.slice(1)}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 text-sm">
+                      {task.created_at
+                        ? new Date(task.created_at).toLocaleDateString()
+                        : "-"}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 text-sm">
+                      {task.due_date
+                        ? new Date(task.due_date).toLocaleDateString()
+                        : "-"}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 text-sm">
+                      {task.completed_at
+                        ? new Date(task.completed_at).toLocaleDateString()
+                        : "-"}
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
     </div>
   );
 };
