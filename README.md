@@ -18,8 +18,34 @@ A comprehensive Employee Management System built with FastAPI backend and React 
 
 ### Admin Panel
 
-- **Employee Management**: View all employees with departments and performance scores
-- **Employee Details View**: Access individual employee information and performance
+- **Employee Management**: 
+  - View all employees with comprehensive data (name, email, department, salary, performance)
+  - Search and filter employees by department, status, performance, salary
+  - Bulk actions (Mark Active/Inactive, Delete)
+  - Employee termination with confirmation dialog
+  - Export employee data to CSV
+  - Expandable rows showing employee tasks and leave summary
+
+- **Employee Details View**: 
+  - Tabbed interface (Overview, Tasks, Leave)
+  - Terminate employee from details page
+  - View employee performance, salary, joining date
+  - Access employee tasks and leave records
+
+- **Admin Dashboard**:
+  - System overview with key statistics
+  - Pending approvals queue (New Employees, Leave Requests, Role Changes)
+  - Recent activity feed
+  - Random employee names for pending approvals
+  - Alert management
+  - Advanced admin settings with RBAC
+
+- **New Employee Management**:
+  - Approve new employee requests from the admin dashboard
+  - New employees automatically assigned unique data (salary, department, performance)
+  - New employees integrated into all employee views
+  - Persistent storage across page refreshes and logout
+
 - **Leave Management**: Track employee leave requests and approvals
 - **Responsive Design**: Optimized for desktop and tablet screens
 
@@ -174,6 +200,34 @@ Company_Employee_Management_Sytem/
 - `GET /api/leaves/summary` - Get leave summary
 
 ## 🎯 Key Features Explained
+
+### Employee Termination
+- **Terminate from Multiple Locations**: 
+  - All Employees table (trash icon in actions)
+  - Employee Details page (terminate button in header)
+  - Admin Dashboard (for specific admin tasks)
+- **Confirmation Dialog**: Safety confirmation before termination
+- **Support for All Employee Types**: Works for both API employees and newly created employees
+
+### New Employee Management
+- **Approval Workflow**: Admin dashboard shows pending new employee approvals
+- **Diverse Employee Data**: Each new employee receives:
+  - Unique salary (50k-100k range based on emp_id)
+  - Random department assignment
+  - Performance score (3-10 based on emp_id)
+  - Joining date (current date)
+  - Generated email (firstname.lastname@nexushr.com)
+- **Persistent Storage**: New employees persist across:
+  - Page refreshes
+  - Logout/login sessions
+  - All admin views
+
+### Data Persistence
+- **LocalStorage Integration**: Admin settings and new employees stored locally
+- **Cross-Session Preservation**: Employee approvals maintained through logout
+- **Seamless Fallback**: Employee details load from localStorage if API unavailable
+
+## 🎯 Key Features Explained (Original)
 
 ### Time-Based Filtering
 
