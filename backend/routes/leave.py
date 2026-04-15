@@ -30,7 +30,7 @@ def get_employee_leaves(emp_id: int, filter: str = Query("month", regex="^(week|
 
     # Generate employee-specific leave data
     def get_mock_leaves():
-        random.seed(emp_id)
+        random.seed(emp_id * 54321)  # Multiply by larger number for more variance
 
         # Reason templates per leave type
         leave_reasons = {
@@ -74,16 +74,16 @@ def get_employee_leaves(emp_id: int, filter: str = Query("month", regex="^(week|
 
         all_leaves = []
 
-        # Generate 12-15 leave records across the year
-        for i in range(15):
+        # Generate 20-25 leave records across the year for more diversity
+        for i in range(25):
             leave_type = LEAVE_TYPES[i % len(LEAVE_TYPES)]
 
-            # Distribute leaves across various time periods
-            if i < 2:  # Week leaves (0-7 days from now)
+            # Distribute leaves across various time periods with more variance
+            if i < 3:  # Week leaves
                 days_ago = random.randint(0, 7)
-            elif i < 6:  # Month leaves (8-30 days from now)
+            elif i < 12:  # Month leaves
                 days_ago = random.randint(8, 30)
-            else:  # Year leaves (31-365 days from now)
+            else:  # Year leaves
                 days_ago = random.randint(31, 365)
 
             start = now - timedelta(days=days_ago)

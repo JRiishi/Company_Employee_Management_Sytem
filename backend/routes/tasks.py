@@ -52,7 +52,7 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
     # Mock data with diverse statuses and dates - employee-specific
     def get_mock_tasks():
         # Use emp_id as seed for deterministic randomness
-        random.seed(emp_id)
+        random.seed(emp_id * 12345)  # Multiply by larger number for more variance
 
         # Task templates for different employee types
         task_templates = {
@@ -63,6 +63,10 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
                 "Frontend Performance Testing",
                 "Bug Fix - Login Page UI",
                 "Unit Test Coverage Improvement",
+                "Backend API Documentation",
+                "System Architecture Design",
+                "Security Audit and Patch",
+                "Deployment Pipeline Setup",
             ],
             "sales": [
                 "Client Follow-up Call",
@@ -71,6 +75,10 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
                 "Pipeline Review Meeting",
                 "Demo Preparation",
                 "Contract Negotiation",
+                "Quarterly Business Review",
+                "Lead Generation Campaign",
+                "Sales Forecast Analysis",
+                "Customer Retention Plan",
             ],
             "marketing": [
                 "Campaign Analysis Report",
@@ -79,6 +87,10 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
                 "Market Research",
                 "Brand Audit",
                 "Conference Presentation",
+                "Content Strategy Development",
+                "Industry Trend Analysis",
+                "Marketing ROI Report",
+                "Customer Testimonial Collection",
             ],
             "hr": [
                 "Employee Onboarding",
@@ -87,6 +99,10 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
                 "Training Session Planning",
                 "Recruitment Screening",
                 "Team Building Event Planning",
+                "Exit Interview Follow-up",
+                "Compensation Review Meeting",
+                "Employee Wellness Program",
+                "Diversity Initiative Planning",
             ],
         }
 
@@ -94,30 +110,29 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
         template_type = list(task_templates.keys())[(emp_id - 1) % len(task_templates)]
         templates = task_templates[template_type]
 
-        # Generate 6 employee-specific tasks
+        # Generate 12 employee-specific tasks
         all_tasks = []
         statuses = ["completed", "in_progress", "pending"]
 
-        for i in range(6):
+        for i in range(12):
             task_title = templates[i % len(templates)]
-            status = statuses[(emp_id + i) % len(statuses)]
+            # More varied status distribution
+            status_index = (emp_id + i * 7) % len(statuses)
+            status = statuses[status_index]
 
-            if i < 2:  # Week tasks
+            if i < 3:  # Week tasks
                 days_ago = random.randint(1, 7)
-                due_offset = random.randint(-3, 3)
-            elif i < 4:  # Month tasks
+            elif i < 8:  # Month tasks
                 days_ago = random.randint(8, 30)
-                due_offset = random.randint(-5, 5)
             else:  # Year tasks
-                days_ago = random.randint(31, 200)
-                due_offset = random.randint(-10, 10)
+                days_ago = random.randint(31, 250)
 
             created = now - timedelta(days=days_ago)
-            due = created + timedelta(days=random.randint(5, 20))
+            due = created + timedelta(days=random.randint(5, 25))
 
             task = {
-                "task_id": emp_id * 100 + i + 1,
-                "Title": task_title,
+                "task_id": emp_id * 1000 + i + 1,
+                "title": task_title,
                 "status": status,
                 "created_at": created.strftime("%Y-%m-%d"),
                 "due_date": due.strftime("%Y-%m-%d"),
@@ -132,7 +147,7 @@ def get_employee_tasks(emp_id: int, filter: str = Query("month", regex="^(week|m
             if task_created >= start_date:
                 filtered_tasks.append(task)
 
-        return filtered_tasks if filtered_tasks else all_tasks[:2]  # Return at least 2 tasks
+        return filtered_tasks if filtered_tasks else all_tasks[:3]  # Return at least 3 tasks
 
     def calculate_stats(tasks):
         total = len(tasks)

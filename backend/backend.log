@@ -574,3 +574,102 @@ INFO:     127.0.0.1:58712 - "GET /api/admin/employees HTTP/1.1" 200 OK
 Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
 INFO:     127.0.0.1:58712 - "GET /api/tasks/employee/26?filter=week HTTP/1.1" 200 OK
 INFO:     127.0.0.1:58712 - "GET /api/leaves/employee/26?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58753 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58753 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58753 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58753 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58753 - "OPTIONS /api/admin/employee/12 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58758 - "OPTIONS /api/tasks/employee/12?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58762 - "OPTIONS /api/admin/employee/12 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58763 - "OPTIONS /api/tasks/employee/12?filter=week HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58758 - "GET /api/tasks/employee/12?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58753 - "GET /api/admin/employee/12 HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58758 - "GET /api/tasks/employee/12?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58753 - "GET /api/admin/employee/12 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58765 - "OPTIONS /api/tasks/employee/12?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "OPTIONS /api/tasks/employee/12?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58765 - "GET /api/tasks/employee/12?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58765 - "GET /api/tasks/employee/12?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58765 - "GET /api/tasks/employee/12?filter=week HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58765 - "GET /api/tasks/employee/12?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58765 - "OPTIONS /api/tasks/employee/12?filter=year HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58767 - "GET /api/tasks/employee/12?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "OPTIONS /api/admin/employee/30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58773 - "OPTIONS /api/tasks/employee/30?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58784 - "OPTIONS /api/admin/employee/30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58785 - "OPTIONS /api/tasks/employee/30?filter=week HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58787 - "GET /api/tasks/employee/30?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "GET /api/admin/employee/30 HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58787 - "GET /api/tasks/employee/30?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "GET /api/admin/employee/30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58767 - "OPTIONS /api/tasks/employee/30?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58787 - "OPTIONS /api/tasks/employee/30?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58785 - "GET /api/tasks/employee/30?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58785 - "GET /api/tasks/employee/30?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58785 - "OPTIONS /api/tasks/employee/30?filter=year HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58787 - "GET /api/tasks/employee/30?filter=year HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58787 - "GET /api/tasks/employee/30?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58787 - "GET /api/tasks/employee/30?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58798 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58798 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58798 - "OPTIONS /api/admin/employee/59 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58803 - "OPTIONS /api/tasks/employee/59?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58805 - "OPTIONS /api/admin/employee/59 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "OPTIONS /api/tasks/employee/59?filter=week HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58808 - "GET /api/tasks/employee/59?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58798 - "GET /api/admin/employee/59 HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58808 - "GET /api/tasks/employee/59?filter=week HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58798 - "GET /api/admin/employee/59 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58798 - "OPTIONS /api/tasks/employee/59?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58808 - "OPTIONS /api/tasks/employee/59?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58806 - "GET /api/tasks/employee/59?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58806 - "GET /api/tasks/employee/59?filter=month HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58806 - "GET /api/tasks/employee/59?filter=week HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58806 - "GET /api/tasks/employee/59?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "OPTIONS /api/tasks/employee/59?filter=year HTTP/1.1" 200 OK
+Error fetching tasks: 1054 (42S22): Unknown column 'created_at' in 'field list'
+INFO:     127.0.0.1:58806 - "GET /api/tasks/employee/59?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "OPTIONS /api/leaves/employee/59?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58818 - "OPTIONS /api/leaves/employee/59?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "GET /api/leaves/employee/59?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58806 - "GET /api/leaves/employee/59?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58821 - "OPTIONS /api/leaves/employee/59?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58821 - "GET /api/leaves/employee/59?filter=year HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58821 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58825 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58825 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58821 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58833 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58837 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58849 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58849 - "GET /api/admin/employees HTTP/1.1" 200 OK
