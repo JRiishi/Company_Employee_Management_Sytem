@@ -53,6 +53,7 @@ const SystemOverview = () => {
     isOpen: false,
     type: "", // "employees", "active", "tasks", "leaves"
     data: [],
+    loading: false,
   });
 
   useEffect(() => {
@@ -144,6 +145,7 @@ const SystemOverview = () => {
 
   const handleStatCardClick = async (type) => {
     let data = [];
+    setDetailModal({ isOpen: true, type, data: [], loading: true });
 
     if (type === "employees") {
       data = employees.map((e) => ({
@@ -155,6 +157,7 @@ const SystemOverview = () => {
         salary: e.salary,
         emp_id: e.emp_id,
       }));
+      setDetailModal({ isOpen: true, type, data, loading: false });
     } else if (type === "active") {
       data = employees
         .filter((e) => e.status === "active")
@@ -166,60 +169,67 @@ const SystemOverview = () => {
           status: e.status,
           emp_id: e.emp_id,
         }));
+      setDetailModal({ isOpen: true, type, data, loading: false });
     } else if (type === "tasks") {
-      // Fetch completed tasks from all employees
-      let allTasks = [];
-      for (const emp of employees) {
-        try {
-          const res = await api.get(`/tasks/employee/${emp.emp_id}?filter=year`);
-          if (res.data?.tasks) {
-            const completedTasks = res.data.tasks
-              .filter((t) => t.status === "completed")
-              .map((t) => ({
-                taskName: t.title || t.Title || "Untitled",
-                employee: emp.name,
-                status: t.status,
-                dueDate: t.due_date,
-                completedDate: t.completed_at,
-              }));
-            allTasks = allTasks.concat(completedTasks);
-          }
-        } catch (err) {
-          console.error(`Error fetching tasks for ${emp.name}:`, err);
-        }
-      }
-      data = allTasks;
-    } else if (type === "leaves") {
-      // Fetch approved leaves from all employees
-      let allLeaves = [];
-      for (const emp of employees) {
-        try {
-          const res = await api.get(`/leaves/employee/${emp.emp_id}?filter=year`);
-          if (res.data?.leaves) {
-            const approvedLeaves = res.data.leaves
-              .filter((l) => l.status === "Approved")
-              .map((l) => ({
-                leaveType: l.leave_type,
-                employee: emp.name,
-                reason: l.reason,
-                startDate: l.start_date,
-                endDate: l.end_date,
-                duration: l.duration,
-              }));
-            allLeaves = allLeaves.concat(approvedLeaves);
-          }
-        } catch (err) {
-          console.error(`Error fetching leaves for ${emp.name}:`, err);
-        }
-      }
-      data = allLeaves;
-    }
+      // Fetch completed tasks from all employees in parallel
+      try {
+        const taskPromises = employees.map((emp) =>
+          api
+            .get(`/tasks/employee/${emp.emp_id}?filter=year`)
+            .then((res) => {
+              if (res.data?.tasks) {
+                return res.data.tasks
+                  .filter((t) => t.status === "completed")
+                  .map((t) => ({
+                    taskName: t.title || t.Title || "Untitled",
+                    employee: emp.name,
+                    status: t.status,
+                    dueDate: t.due_date,
+                    completedDate: t.completed_at,
+                  }));
+              }
+              return [];
+            })
+            .catch(() => [])
+        );
 
-    setDetailModal({
-      isOpen: true,
-      type,
-      data,
-    });
+        const results = await Promise.all(taskPromises);
+        data = results.flat();
+      } catch (err) {
+        console.error("Error fetching tasks:", err);
+      }
+      setDetailModal({ isOpen: true, type, data, loading: false });
+    } else if (type === "leaves") {
+      // Fetch approved leaves from all employees in parallel
+      try {
+        const leavePromises = employees.map((emp) =>
+          api
+            .get(`/leaves/employee/${emp.emp_id}?filter=year`)
+            .then((res) => {
+              if (res.data?.leaves) {
+                return res.data.leaves
+                  .filter((l) => l.status === "Approved")
+                  .map((l) => ({
+                    leaveType: l.leave_type,
+                    employee: emp.name,
+                    reason: l.reason,
+                    startDate: l.start_date,
+                    endDate: l.end_date,
+                    duration: l.duration,
+                  }));
+              }
+              return [];
+            })
+            .catch(() => [])
+        );
+
+        const results = await Promise.all(leavePromises);
+        data = results.flat();
+      } catch (err) {
+        console.error("Error fetching leaves:", err);
+      }
+      setDetailModal({ isOpen: true, type, data, loading: false });
+    }
   };
 
   const StatCard = ({ title, value, change, isPositive, icon: Icon, onClick }) => (
@@ -337,7 +347,12 @@ const SystemOverview = () => {
             </button>
           </div>
 
-          {detailModal.data.length === 0 ? (
+          {detailModal.loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <span className="ml-3 text-gray-600">Loading data...</span>
+            </div>
+          ) : detailModal.data.length === 0 ? (
             <p className="text-center text-gray-500 py-8">No data available</p>
           ) : (
             <div className="overflow-x-auto">
