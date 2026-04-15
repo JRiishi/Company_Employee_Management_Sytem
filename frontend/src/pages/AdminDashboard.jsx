@@ -57,10 +57,21 @@ const AdminDashboard = () => {
   const [modalEmployeeType, setModalEmployeeType] = useState("all");
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [selectedAlert, setSelectedAlert] = useState(null);
+
+  // Helper function to generate random names
+  const generateRandomName = () => {
+    const firstNames = ["James", "Sarah", "Michael", "Emma", "David", "Sophia", "Robert", "Isabella", "John", "Olivia", "William", "Ava", "Benjamin", "Mia", "Lucas", "Charlotte", "Alexander", "Amelia", "Daniel", "Harper"];
+    const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzales", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin"];
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    return `${firstName} ${lastName}`;
+  };
+
+  // Initialize approvals with random names for New Employee
   const [approvals, setApprovals] = useState([
     { id: 1, type: "Leave Request", employee: "John Doe", date: "2 hours ago", status: "pending" },
     { id: 2, type: "Role Change", employee: "Sarah Smith", date: "5 hours ago", status: "pending" },
-    { id: 3, type: "New Employee", employee: "Mike Johnson", date: "1 day ago", status: "pending" },
+    { id: 3, type: "New Employee", employee: generateRandomName(), date: "1 day ago", status: "pending" },
     { id: 4, type: "Leave Request", employee: "Alex Kumar", date: "1 day ago", status: "pending" },
   ]);
   const [recentActivities, setRecentActivities] = useState([
@@ -95,6 +106,13 @@ const AdminDashboard = () => {
     fetchEmployees();
     fetchLeaves();
     fetchTasks();
+
+    // Regenerate approval names on each page load
+    setApprovals(prev => prev.map(app =>
+      app.type === "New Employee"
+        ? { ...app, employee: generateRandomName() }
+        : app
+    ));
   }, []);
 
   const fetchEmployees = async () => {
@@ -186,27 +204,46 @@ const AdminDashboard = () => {
 
     try {
       setFiringLoading(true);
-      const response = await api.post("/admin/fire-employee", {
-        emp_id: employeeToFire.emp_id,
-        reason: "Terminated by admin",
-      });
 
-      if (response.success) {
+      // Check if this is a new employee (in localStorage)
+      const addedEmployees = localStorage.getItem("addedEmployees");
+      const addedList = addedEmployees ? JSON.parse(addedEmployees) : [];
+      const isNewEmployee = addedList.some((e) => e.emp_id === employeeToFire.emp_id);
+
+      if (isNewEmployee) {
+        // Remove from localStorage
+        const updated = addedList.filter((e) => e.emp_id !== employeeToFire.emp_id);
+        localStorage.setItem("addedEmployees", JSON.stringify(updated));
+
         setSubmitStatus({
           type: "success",
           message: `${employeeToFire.name} has been terminated.`,
         });
-        setShowFireConfirm(false);
-        setEmployeeToFire(null);
-        fetchEmployees();
       } else {
+        // Call API for regular employees
+        const response = await api.post("/admin/fire-employee", {
+          emp_id: employeeToFire.emp_id,
+          reason: "Terminated by admin",
+        });
+
+        if (!response.success) {
+          throw new Error(response.message || "Failed to terminate employee");
+        }
+
         setSubmitStatus({
-          type: "error",
-          message: response.message || "Failed to terminate employee",
+          type: "success",
+          message: `${employeeToFire.name} has been terminated.`,
         });
       }
+
+      setShowFireConfirm(false);
+      setEmployeeToFire(null);
+      fetchEmployees();
     } catch (err) {
-      setSubmitStatus({ type: "error", message: "Error terminating employee" });
+      setSubmitStatus({
+        type: "error",
+        message: err.message || "Error terminating employee",
+      });
     } finally {
       setFiringLoading(false);
     }
@@ -279,18 +316,33 @@ const AdminDashboard = () => {
 
     // If New Employee is approved, add them to employees list and save to localStorage
     if (approval.type === "New Employee") {
+      const newEmpId = Math.max(...employees.map((e) => e.emp_id || 0), 999) + 1;
+
+      // Use emp_id as seed for deterministic but diverse data
+      const seed1 = (newEmpId * 12345) % 100;
+      const seed2 = (newEmpId * 54321) % 100;
+      const seed3 = (newEmpId * 98765) % 100;
+
+      const departments = ["Engineering", "Sales", "HR", "Marketing", "Operations"];
+      const department = departments[(seed1) % departments.length];
+      const performance = 3 + ((seed2) % 8);
+      const salary = 50000 + ((seed3) * 600);
+
       const newEmployee = {
-        emp_id: Math.max(...employees.map((e) => e.emp_id || 0), 999) + 1,
+        emp_id: newEmpId,
         name: approval.employee,
-        email: `${approval.employee.toLowerCase().replace(" ", ".")}@company.com`,
-        department: "Engineering",
+        email: `${approval.employee.toLowerCase().replace(" ", ".")}@nexushr.com`,
+        department: department,
         role: "employee",
         status: "active",
-        performance_score: Math.floor(Math.random() * 10) + 1,
+        performance_score: performance,
+        salary: salary,
+        joining_date: new Date().toISOString().split('T')[0],
       };
 
       const updatedEmployees = [...employees, newEmployee];
       setEmployees(updatedEmployees);
+      setFilteredEmployees(updatedEmployees);
 
       // Save to localStorage
       const addedEmployees = localStorage.getItem("addedEmployees");

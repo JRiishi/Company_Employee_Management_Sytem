@@ -56,7 +56,13 @@ const AllEmployees = () => {
       setEmployeesLoading(true);
       const response = await api.get("/admin/employees");
       if (response.success) {
-        const data = response.data || [];
+        let data = response.data || [];
+        // Merge with added employees from localStorage
+        const addedEmployees = localStorage.getItem("addedEmployees");
+        if (addedEmployees) {
+          const added = JSON.parse(addedEmployees);
+          data = [...data, ...added];
+        }
         setEmployees(data);
         const depts = [...new Set(data.map((e) => e.department))].filter(Boolean);
         setDepartments(depts);
@@ -207,27 +213,46 @@ const AllEmployees = () => {
 
     try {
       setFiringLoading(true);
-      const response = await api.post("/admin/fire-employee", {
-        emp_id: employeeToFire.emp_id,
-        reason: "Terminated by admin",
-      });
 
-      if (response.success) {
+      // Check if this is a new employee (in localStorage)
+      const addedEmployees = localStorage.getItem("addedEmployees");
+      const addedList = addedEmployees ? JSON.parse(addedEmployees) : [];
+      const isNewEmployee = addedList.some((e) => e.emp_id === employeeToFire.emp_id);
+
+      if (isNewEmployee) {
+        // Remove from localStorage
+        const updated = addedList.filter((e) => e.emp_id !== employeeToFire.emp_id);
+        localStorage.setItem("addedEmployees", JSON.stringify(updated));
+
         setSubmitStatus({
           type: "success",
           message: `${employeeToFire.name} has been terminated.`,
         });
-        setShowFireConfirm(false);
-        setEmployeeToFire(null);
-        fetchEmployees();
       } else {
+        // Call API for regular employees
+        const response = await api.post("/admin/fire-employee", {
+          emp_id: employeeToFire.emp_id,
+          reason: "Terminated by admin",
+        });
+
+        if (!response.success) {
+          throw new Error(response.message || "Failed to terminate employee");
+        }
+
         setSubmitStatus({
-          type: "error",
-          message: response.message || "Failed to terminate employee",
+          type: "success",
+          message: `${employeeToFire.name} has been terminated.`,
         });
       }
+
+      setShowFireConfirm(false);
+      setEmployeeToFire(null);
+      fetchEmployees();
     } catch (err) {
-      setSubmitStatus({ type: "error", message: "Error terminating employee" });
+      setSubmitStatus({
+        type: "error",
+        message: err.message || "Error terminating employee",
+      });
     } finally {
       setFiringLoading(false);
     }

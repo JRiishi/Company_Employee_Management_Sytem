@@ -65,7 +65,15 @@ const SystemOverview = () => {
       const empRes = await api.get("/admin/employees");
 
       if (empRes.success) {
-        const emps = empRes.data || [];
+        let emps = empRes.data || [];
+
+        // Load added employees from localStorage
+        const addedEmployees = localStorage.getItem("addedEmployees");
+        if (addedEmployees) {
+          const added = JSON.parse(addedEmployees);
+          emps = [...emps, ...added];
+        }
+
         setEmployees(emps);
 
         const active = emps.filter((e) => e.status === "active").length;
