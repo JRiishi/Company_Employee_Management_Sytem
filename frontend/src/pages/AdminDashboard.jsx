@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Shield,
   Users,
@@ -26,6 +27,7 @@ import api from "../services/api";
 
 const AdminDashboard = () => {
   const { data, loading, error, createUser } = useAdminData();
+  const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -240,7 +242,7 @@ const AdminDashboard = () => {
     {
       emp_id: 999,
       name: "Admin User",
-      email: "admin@company.com",
+      email: "admin@nexushr.com",
       department: "Administration",
       role: "admin",
       status: "active",
@@ -893,7 +895,7 @@ const AdminDashboard = () => {
                   </thead>
                   <tbody>
                     {modalEmployees.map((emp, idx) => (
-                      <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                      <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}>
                         <td className="py-3 px-4 text-gray-900 font-medium">{emp.name}</td>
                         <td className="py-3 px-4 text-gray-700">{emp.email || "N/A"}</td>
                         <td className="py-3 px-4 text-gray-700">{emp.department || "N/A"}</td>
@@ -910,19 +912,21 @@ const AdminDashboard = () => {
                           </span>
                         </td>
                         <td className="py-3 px-4 text-gray-900 font-medium">
-                          {emp.performance_score || "N/A"}/10
+                          {emp.emp_id === 999 ? "--" : `${emp.performance_score || "N/A"}/10`}
                         </td>
                         <td className="py-3 px-4">
-                          <button
-                            onClick={() => {
-                              setShowEmployeesModal(false);
-                              // Could navigate to employee details here
-                            }}
-                            className="p-1 hover:bg-blue-500/20 rounded text-blue-600 hover:text-blue-700 transition-colors"
-                            title="View Employee"
-                          >
-                            <Eye size={18} />
-                          </button>
+                          {emp.emp_id !== 999 && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/admin/employee/${emp.emp_id}`);
+                              }}
+                              className="p-1 hover:bg-blue-500/20 rounded text-blue-600 hover:text-blue-700 transition-colors"
+                              title="View Employee"
+                            >
+                              <Eye size={18} />
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
