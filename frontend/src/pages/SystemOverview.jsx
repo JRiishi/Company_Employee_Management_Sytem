@@ -53,7 +53,6 @@ const SystemOverview = () => {
     isOpen: false,
     type: "", // "employees", "active", "tasks", "leaves"
     data: [],
-    loading: false,
   });
 
   useEffect(() => {
@@ -145,7 +144,6 @@ const SystemOverview = () => {
 
   const handleStatCardClick = async (type) => {
     let data = [];
-    setDetailModal({ isOpen: true, type, data: [], loading: true });
 
     if (type === "employees") {
       data = employees.map((e) => ({
@@ -157,7 +155,7 @@ const SystemOverview = () => {
         salary: e.salary,
         emp_id: e.emp_id,
       }));
-      setDetailModal({ isOpen: true, type, data, loading: false });
+      setDetailModal({ isOpen: true, type, data });
     } else if (type === "active") {
       data = employees
         .filter((e) => e.status === "active")
@@ -169,7 +167,7 @@ const SystemOverview = () => {
           status: e.status,
           emp_id: e.emp_id,
         }));
-      setDetailModal({ isOpen: true, type, data, loading: false });
+      setDetailModal({ isOpen: true, type, data });
     } else if (type === "tasks") {
       // Fetch completed tasks from all employees in parallel
       try {
@@ -198,7 +196,7 @@ const SystemOverview = () => {
       } catch (err) {
         console.error("Error fetching tasks:", err);
       }
-      setDetailModal({ isOpen: true, type, data, loading: false });
+      setDetailModal({ isOpen: true, type, data });
     } else if (type === "leaves") {
       // Fetch approved leaves from all employees in parallel
       try {
@@ -228,7 +226,7 @@ const SystemOverview = () => {
       } catch (err) {
         console.error("Error fetching leaves:", err);
       }
-      setDetailModal({ isOpen: true, type, data, loading: false });
+      setDetailModal({ isOpen: true, type, data });
     }
   };
 
@@ -347,12 +345,7 @@ const SystemOverview = () => {
             </button>
           </div>
 
-          {detailModal.loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <span className="ml-3 text-gray-600">Loading data...</span>
-            </div>
-          ) : detailModal.data.length === 0 ? (
+          {detailModal.data.length === 0 ? (
             <p className="text-center text-gray-500 py-8">No data available</p>
           ) : (
             <div className="overflow-x-auto">
