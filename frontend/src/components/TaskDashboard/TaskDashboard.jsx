@@ -149,27 +149,27 @@ const TaskDashboard = ({ empId, empName }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 md:space-y-10">
       {/* Header with Filters */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Calendar size={28} className="text-blue-600" />
+      <div className="space-y-6">
+        <div className="flex items-center justify-between gap-4">
+          <div className="space-y-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center gap-2">
+              <Calendar size={32} className="text-blue-600" />
               Tasks & Performance
             </h2>
-            <p className="text-gray-600">Task overview for {empName}</p>
+            <p className="text-gray-600 text-base">Task overview for {empName}</p>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRefresh}
             disabled={refreshing}
-            className="p-2 hover:bg-blue-100 rounded-lg transition-colors disabled:opacity-50"
+            className="p-3 hover:bg-blue-100 rounded-lg transition-colors disabled:opacity-50"
             title="Refresh tasks"
           >
             <RefreshCw
-              size={20}
+              size={24}
               className={`text-blue-600 ${refreshing ? "animate-spin" : ""}`}
             />
           </motion.button>
@@ -177,11 +177,11 @@ const TaskDashboard = ({ empId, empName }) => {
 
         {/* Error Message */}
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-center gap-2">
-            <AlertCircle size={20} />
+          <div className="p-4 md:p-6 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-start gap-3">
+            <AlertCircle size={24} className="flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold">Error loading tasks</p>
-              <p className="text-sm">{error}</p>
+              <p className="font-semibold text-base">Error loading tasks</p>
+              <p className="text-sm mt-1">{error}</p>
             </div>
           </div>
         )}
@@ -194,13 +194,13 @@ const TaskDashboard = ({ empId, empName }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setTimeFilter(period)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 ${
+              className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 text-base ${
                 timeFilter === period
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-200 text-gray-800 hover:bg-gray-300"
               }`}
             >
-              <Filter size={16} />
+              <Filter size={18} />
               {period.charAt(0).toUpperCase() + period.slice(1)}
             </motion.button>
           ))}
@@ -209,17 +209,17 @@ const TaskDashboard = ({ empId, empName }) => {
 
       {/* Stats Cards - 4 Column Grid */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
       >
         {/* Total Tasks */}
         <motion.div
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200 }}
         >
-          <Card className="border-blue-200 bg-blue-50 hover:shadow-lg transition-shadow cursor-pointer h-40 flex flex-col justify-center">
-            <div className="text-center">
-              <p className="text-gray-600 text-sm font-medium mb-2">Total Tasks</p>
-              <p className="text-4xl font-bold text-blue-700">{stats.total}</p>
+          <Card className="border-blue-200 bg-blue-50 hover:shadow-lg transition-shadow cursor-pointer min-h-48 flex flex-col justify-center">
+            <div className="text-center space-y-2">
+              <p className="text-gray-600 text-sm font-medium">Total Tasks</p>
+              <p className="text-5xl font-bold text-blue-700">{stats.total}</p>
               <p className="text-xs text-gray-500 mt-2">
                 All time tasks assigned
               </p>
@@ -232,13 +232,13 @@ const TaskDashboard = ({ empId, empName }) => {
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.05 }}
         >
-          <Card className="border-green-200 bg-green-50 hover:shadow-lg transition-shadow cursor-pointer h-40 flex flex-col justify-center">
-            <div className="text-center">
+          <Card className="border-green-200 bg-green-50 hover:shadow-lg transition-shadow cursor-pointer min-h-48 flex flex-col justify-center">
+            <div className="text-center space-y-2">
               <div className="flex items-center justify-center mb-2">
-                <CheckCircle2 className="text-green-700" size={24} />
+                <CheckCircle2 className="text-green-700" size={28} />
               </div>
               <p className="text-gray-600 text-sm font-medium">Completed</p>
-              <p className="text-4xl font-bold text-green-700">{stats.completed}</p>
+              <p className="text-5xl font-bold text-green-700">{stats.completed}</p>
               <p className="text-xs text-gray-500 mt-2">
                 {stats.total > 0
                   ? `${Math.round((stats.completed / stats.total) * 100)}% completion`
@@ -254,13 +254,13 @@ const TaskDashboard = ({ empId, empName }) => {
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
         >
-          <Card className="border-blue-200 bg-blue-50 hover:shadow-lg transition-shadow cursor-pointer h-40 flex flex-col justify-center">
-            <div className="text-center">
+          <Card className="border-blue-200 bg-blue-50 hover:shadow-lg transition-shadow cursor-pointer min-h-48 flex flex-col justify-center">
+            <div className="text-center space-y-2">
               <div className="flex items-center justify-center mb-2">
-                <Clock className="text-blue-600" size={24} />
+                <Clock className="text-blue-600" size={28} />
               </div>
               <p className="text-gray-600 text-sm font-medium">In Progress</p>
-              <p className="text-4xl font-bold text-blue-700">{stats.ongoing}</p>
+              <p className="text-5xl font-bold text-blue-700">{stats.ongoing}</p>
               <p className="text-xs text-gray-500 mt-2">Currently working on</p>
             </div>
           </Card>
@@ -271,13 +271,13 @@ const TaskDashboard = ({ empId, empName }) => {
           whileHover={{ translateY: -4 }}
           transition={{ type: "spring", stiffness: 200, delay: 0.15 }}
         >
-          <Card className="border-yellow-200 bg-yellow-50 hover:shadow-lg transition-shadow cursor-pointer h-40 flex flex-col justify-center">
-            <div className="text-center">
+          <Card className="border-yellow-200 bg-yellow-50 hover:shadow-lg transition-shadow cursor-pointer min-h-48 flex flex-col justify-center">
+            <div className="text-center space-y-2">
               <div className="flex items-center justify-center mb-2">
-                <AlertCircle className="text-yellow-700" size={24} />
+                <AlertCircle className="text-yellow-700" size={28} />
               </div>
               <p className="text-gray-600 text-sm font-medium">Pending</p>
-              <p className="text-4xl font-bold text-yellow-700">{stats.pending}</p>
+              <p className="text-5xl font-bold text-yellow-700">{stats.pending}</p>
               <p className="text-xs text-gray-500 mt-2">Waiting to start</p>
             </div>
           </Card>

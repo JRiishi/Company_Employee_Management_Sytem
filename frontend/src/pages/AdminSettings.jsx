@@ -193,14 +193,14 @@ const AdminSettings = () => {
   );
 
   return (
-    <div className="p-8 font-inter max-w-7xl mx-auto space-y-8 text-gray-900">
-      <div className="flex justify-between items-start">
+    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-gray-900">
+      <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
-            <Settings size={28} className="text-blue-600" />
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3 flex items-center gap-3">
+            <Settings size={32} className="text-blue-600" />
             Admin Settings
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-lg">
             Configure system settings, roles, and policies
           </p>
         </div>

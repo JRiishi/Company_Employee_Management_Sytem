@@ -409,17 +409,17 @@ const SystemOverview = () => {
   }
 
   return (
-    <div className="p-8 font-inter max-w-7xl mx-auto space-y-8 text-gray-900">
+    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-gray-900">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
           System Overview
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 text-lg">
           Executive dashboard with key metrics and insights (click cards for details)
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Total Employees"
           value={stats.totalEmployees}

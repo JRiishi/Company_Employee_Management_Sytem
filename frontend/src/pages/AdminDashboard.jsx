@@ -373,7 +373,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="p-4 md:p-8 font-inter max-w-7xl mx-auto space-y-6 md:space-y-8 text-gray-900">
+    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-gray-900">
           <div className="flex flex-col md:flex-row justify-between md:items-end gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">

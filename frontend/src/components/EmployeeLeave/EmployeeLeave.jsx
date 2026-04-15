@@ -78,33 +78,33 @@ const EmployeeLeave = ({ empId, empName }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 md:space-y-10">
       {/* Header with Filters */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Calendar size={28} className="text-blue-600" />
+      <div className="space-y-6">
+        <div className="flex items-center justify-between gap-4">
+          <div className="space-y-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center gap-2">
+              <Calendar size={32} className="text-blue-600" />
               Leave Records
             </h2>
-            <p className="text-gray-600">Leave history for {empName}</p>
+            <p className="text-gray-600 text-base">Leave history for {empName}</p>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRefresh}
             disabled={refreshing}
-            className="p-2 hover:bg-blue-100 rounded-lg transition-colors disabled:opacity-50"
+            className="p-3 hover:bg-blue-100 rounded-lg transition-colors disabled:opacity-50"
           >
-            <RefreshCw size={20} className={`text-blue-600 ${refreshing ? "animate-spin" : ""}`} />
+            <RefreshCw size={24} className={`text-blue-600 ${refreshing ? "animate-spin" : ""}`} />
           </motion.button>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-center gap-2">
-            <AlertCircle size={20} />
-            <p>{error}</p>
+          <div className="p-4 md:p-6 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-start gap-3">
+            <AlertCircle size={24} className="flex-shrink-0 mt-0.5" />
+            <p className="font-semibold text-base">{error}</p>
           </div>
         )}
 
@@ -116,13 +116,13 @@ const EmployeeLeave = ({ empId, empName }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setTimeFilter(period)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 ${
+              className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 text-base ${
                 timeFilter === period
                   ? "bg-blue-600 text-white shadow-lg"
                   : "bg-gray-200 text-gray-800 hover:bg-gray-300"
               }`}
             >
-              <Filter size={16} />
+              <Filter size={18} />
               {period.charAt(0).toUpperCase() + period.slice(1)}
             </motion.button>
           ))}
@@ -131,13 +131,13 @@ const EmployeeLeave = ({ empId, empName }) => {
 
       {/* Leave Stats */}
       {leaveData && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Total Leaves */}
           <motion.div whileHover={{ translateY: -4 }}>
-            <Card className="border-blue-200 bg-blue-50 h-40 flex flex-col justify-center">
-              <div className="text-center">
-                <p className="text-gray-600 text-sm font-medium mb-2">Total Leave Records</p>
-                <p className="text-4xl font-bold text-blue-700">{leaveData.total_leaves || 0}</p>
+            <Card className="border-blue-200 bg-blue-50 min-h-48 flex flex-col justify-center">
+              <div className="text-center space-y-2">
+                <p className="text-gray-600 text-sm font-medium">Total Leave Records</p>
+                <p className="text-5xl font-bold text-blue-700">{leaveData.total_leaves || 0}</p>
                 <p className="text-xs text-gray-500 mt-2">In {timeFilter} period</p>
               </div>
             </Card>
@@ -145,10 +145,10 @@ const EmployeeLeave = ({ empId, empName }) => {
 
           {/* Approved Leave Days */}
           <motion.div whileHover={{ translateY: -4 }}>
-            <Card className="border-green-200 bg-green-50 h-40 flex flex-col justify-center">
-              <div className="text-center">
-                <p className="text-gray-600 text-sm font-medium mb-2">Approved Leave Days</p>
-                <p className="text-4xl font-bold text-green-700">
+            <Card className="border-green-200 bg-green-50 min-h-48 flex flex-col justify-center">
+              <div className="text-center space-y-2">
+                <p className="text-gray-600 text-sm font-medium">Approved Leave Days</p>
+                <p className="text-5xl font-bold text-green-700">
                   {leaveData.leaves
                     ? leaveData.leaves
                         .filter((l) => l.status === "Approved")
@@ -162,10 +162,10 @@ const EmployeeLeave = ({ empId, empName }) => {
 
           {/* Pending Leave Days */}
           <motion.div whileHover={{ translateY: -4 }}>
-            <Card className="border-yellow-200 bg-yellow-50 h-40 flex flex-col justify-center">
-              <div className="text-center">
-                <p className="text-gray-600 text-sm font-medium mb-2">Pending Leave Days</p>
-                <p className="text-4xl font-bold text-yellow-700">
+            <Card className="border-yellow-200 bg-yellow-50 min-h-48 flex flex-col justify-center">
+              <div className="text-center space-y-2">
+                <p className="text-gray-600 text-sm font-medium">Pending Leave Days</p>
+                <p className="text-5xl font-bold text-yellow-700">
                   {leaveData.leaves
                     ? leaveData.leaves
                         .filter((l) => l.status === "Pending")
@@ -179,10 +179,10 @@ const EmployeeLeave = ({ empId, empName }) => {
 
           {/* Rejected Leave Days */}
           <motion.div whileHover={{ translateY: -4 }}>
-            <Card className="border-red-200 bg-red-50 h-40 flex flex-col justify-center">
-              <div className="text-center">
-                <p className="text-gray-600 text-sm font-medium mb-2">Rejected Leave Days</p>
-                <p className="text-4xl font-bold text-red-700">
+            <Card className="border-red-200 bg-red-50 min-h-48 flex flex-col justify-center">
+              <div className="text-center space-y-2">
+                <p className="text-gray-600 text-sm font-medium">Rejected Leave Days</p>
+                <p className="text-5xl font-bold text-red-700">
                   {leaveData.leaves
                     ? leaveData.leaves
                         .filter((l) => l.status === "Rejected")
