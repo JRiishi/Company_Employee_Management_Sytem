@@ -18,6 +18,7 @@ import {
   Database,
   Server,
   AlertTriangle,
+  X,
 } from "lucide-react";
 import { useAdminData } from "../hooks/useAdminData";
 import Card from "../components/Card/Card";
@@ -57,6 +58,32 @@ const AdminDashboard = () => {
     { id: 2, type: "Role Change", employee: "Sarah Smith", date: "5 hours ago", status: "pending" },
     { id: 3, type: "New Employee", employee: "Mike Johnson", date: "1 day ago", status: "pending" },
     { id: 4, type: "Leave Request", employee: "Alex Kumar", date: "1 day ago", status: "pending" },
+  ]);
+  const [recentActivities, setRecentActivities] = useState([
+    {
+      action: "Employee Onboarded",
+      details: "John Doe joined Sales",
+      time: "2 hours ago",
+      icon: UserPlus,
+    },
+    {
+      action: "Task Completed",
+      details: "API Integration completed by Sarah",
+      time: "4 hours ago",
+      icon: CheckSquare,
+    },
+    {
+      action: "Leave Approved",
+      details: "Vacation leave approved for Mike",
+      time: "1 day ago",
+      icon: Clock,
+    },
+    {
+      action: "Performance Review",
+      details: "Q1 review submitted for 5 employees",
+      time: "1 day ago",
+      icon: Activity,
+    },
   ]);
 
   // Fetch all employees with details
@@ -209,10 +236,31 @@ const AdminDashboard = () => {
   const adminAccessEmployees = employees.filter((e) => e.role === "admin" || e.role === "manager");
 
   const handleApproval = (id) => {
+    const approval = approvals.find(app => app.id === id);
+    if (!approval) return;
+
+    // Update approvals list
     setApprovals(approvals.map(app =>
       app.id === id ? { ...app, status: "approved" } : app
     ));
-    setSubmitStatus({ type: "success", message: "Approval accepted!" });
+
+    // Add to recent activity
+    const newActivity = {
+      action: `${approval.type} Approved`,
+      details: `${approval.type} approved for ${approval.employee}`,
+      time: "Just now",
+      icon: CheckCircle,
+    };
+    setRecentActivities([newActivity, ...recentActivities.slice(0, 3)]);
+
+    // Update leaves/approvals data if it's a leave request
+    if (approval.type === "Leave Request") {
+      setLeaves(leaves.map(l =>
+        l.employee_name === approval.employee ? { ...l, status: "Approved" } : l
+      ));
+    }
+
+    setSubmitStatus({ type: "success", message: `${approval.employee}'s ${approval.type.toLowerCase()} accepted!` });
     setTimeout(() => {
       setApprovals(approvals.filter(app => app.id !== id));
       setSubmitStatus({ type: "", message: "" });
@@ -220,10 +268,31 @@ const AdminDashboard = () => {
   };
 
   const handleReject = (id) => {
+    const approval = approvals.find(app => app.id === id);
+    if (!approval) return;
+
+    // Update approvals list
     setApprovals(approvals.map(app =>
       app.id === id ? { ...app, status: "rejected" } : app
     ));
-    setSubmitStatus({ type: "success", message: "Approval rejected!" });
+
+    // Add to recent activity
+    const newActivity = {
+      action: `${approval.type} Rejected`,
+      details: `${approval.type} rejected for ${approval.employee}`,
+      time: "Just now",
+      icon: AlertCircle,
+    };
+    setRecentActivities([newActivity, ...recentActivities.slice(0, 3)]);
+
+    // Update leaves/approvals data if it's a leave request
+    if (approval.type === "Leave Request") {
+      setLeaves(leaves.map(l =>
+        l.employee_name === approval.employee ? { ...l, status: "Rejected" } : l
+      ));
+    }
+
+    setSubmitStatus({ type: "success", message: `${approval.employee}'s ${approval.type.toLowerCase()} rejected!` });
     setTimeout(() => {
       setApprovals(approvals.filter(app => app.id !== id));
       setSubmitStatus({ type: "", message: "" });
@@ -242,42 +311,7 @@ const AdminDashboard = () => {
     { type: "attendance", title: "2 Unauthorized Absences", detail: "Employees missing without notification", severity: "high" },
   ];
 
-  // Enhanced sample pending approvals
-  const samplePendingApprovals = [
-    { type: "Leave Request", employee: "John Doe", date: "2 hours ago", status: "Awaiting approval" },
-    { type: "Role Change", employee: "Sarah Smith", date: "5 hours ago", status: "Awaiting approval" },
-    { type: "New Employee", employee: "Mike Johnson", date: "1 day ago", status: "Awaiting approval" },
-    { type: "Leave Request", employee: "Alex Kumar", date: "1 day ago", status: "Awaiting approval" },
-  ];
-
   const pendingLeaves = leaves.filter((l) => l.status === "Pending").slice(0, 2);
-
-  const recentActivities = [
-    {
-      action: "Employee Onboarded",
-      details: "John Doe joined Sales",
-      time: "2 hours ago",
-      icon: UserPlus,
-    },
-    {
-      action: "Task Completed",
-      details: "API Integration completed by Sarah",
-      time: "4 hours ago",
-      icon: CheckSquare,
-    },
-    {
-      action: "Leave Approved",
-      details: "Vacation leave approved for Mike",
-      time: "1 day ago",
-      icon: Clock,
-    },
-    {
-      action: "Performance Review",
-      details: "Q1 review submitted for 5 employees",
-      time: "1 day ago",
-      icon: Activity,
-    },
-  ];
 
   if (loading)
     return (
@@ -485,19 +519,23 @@ const AdminDashboard = () => {
         {/* Critical Alerts */}
         <Card className="border-gray-200 bg-white">
           <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
-            <AlertTriangle size={18} className="text-red-600" />
-            Critical Alerts
+            <AlertTriangle size={18} className="text-red-600 flex-shrink-0" />
+            <span>Critical Alerts</span>
           </h3>
           <div className="space-y-3">
             {sampleAlerts.map((alert, idx) => (
               <div key={idx} className="border-b border-gray-200 pb-3 last:border-b-0 last:pb-0">
-                <p className="text-sm font-semibold text-gray-900">
-                  {alert.title}
-                </p>
-                <p className="text-gray-600 text-xs mt-1">{alert.detail}</p>
-                <span className={`inline-block mt-2 text-xs font-semibold px-2 py-1 rounded ${alert.severity === "high" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
-                  {alert.severity === "high" ? "High" : "Medium"} Priority
-                </span>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-gray-900">
+                      {alert.title}
+                    </p>
+                    <p className="text-gray-600 text-xs mt-1">{alert.detail}</p>
+                  </div>
+                  <span className={`inline-block flex-shrink-0 text-xs font-semibold px-2 py-1 rounded whitespace-nowrap mt-2 sm:mt-0 ${alert.severity === "high" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
+                    {alert.severity === "high" ? "High" : "Medium"}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
@@ -669,30 +707,63 @@ const AdminDashboard = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-2xl w-full max-h-96 flex flex-col shadow-lg"
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-5xl w-full max-h-[80vh] flex flex-col shadow-lg"
           >
-            <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
-              {modalTitle}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 overflow-y-auto flex-1">
-              {modalEmployees.map((emp, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
-                >
-                  <p className="text-sm font-semibold text-gray-900">
-                    {emp.name}
-                  </p>
-                  <div className="space-y-1 text-xs text-gray-600 mt-2">
-                    <p><strong>Email:</strong> {emp.email || "N/A"}</p>
-                    <p><strong>Department:</strong> {emp.department || "N/A"}</p>
-                    <p><strong>Role:</strong> {emp.role || "Employee"}</p>
-                    <p><strong>Status:</strong> <span className={`font-semibold ${emp.status === "active" ? "text-green-600" : emp.status === "inactive" ? "text-yellow-600" : "text-red-600"}`}>{emp.status}</span></p>
-                    {emp.performance_score !== undefined && <p><strong>Performance:</strong> {emp.performance_score}/10</p>}
-                  </div>
-                </div>
-              ))}
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                {modalTitle}
+              </h3>
+              <button
+                onClick={() => setShowEmployeesModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
             </div>
+
+            {modalEmployees.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No employees found</p>
+            ) : (
+              <div className="overflow-x-auto flex-1">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-200 bg-gray-50">
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Name</th>
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Email</th>
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Department</th>
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Role</th>
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Performance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {modalEmployees.map((emp, idx) => (
+                      <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                        <td className="py-3 px-4 text-gray-900 font-medium">{emp.name}</td>
+                        <td className="py-3 px-4 text-gray-700">{emp.email || "N/A"}</td>
+                        <td className="py-3 px-4 text-gray-700">{emp.department || "N/A"}</td>
+                        <td className="py-3 px-4 text-gray-700">{emp.role || "Employee"}</td>
+                        <td className="py-3 px-4">
+                          <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
+                            emp.status === "active"
+                              ? "bg-green-100 text-green-700"
+                              : emp.status === "inactive"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700"
+                          }`}>
+                            {emp.status || "N/A"}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-gray-900 font-medium">
+                          {emp.performance_score || "N/A"}/10
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
             <button
               onClick={() => setShowEmployeesModal(false)}
               className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm w-full"
