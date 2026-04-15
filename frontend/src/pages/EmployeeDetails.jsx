@@ -98,13 +98,13 @@ const EmployeeDetails = () => {
   }
 
   return (
-    <div className="p-8 font-inter max-w-7xl mx-auto space-y-8 animate-fade-in text-gray-900">
+    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 animate-fade-in text-gray-900">
       {/* Back Button */}
       <button
         onClick={() => navigate("/admin/employees")}
-        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors font-medium"
+        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors font-medium text-base"
       >
-        <ArrowLeft size={20} />
+        <ArrowLeft size={24} />
         Back to Employees
       </button>
 
@@ -114,10 +114,10 @@ const EmployeeDetails = () => {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-4"
       >
-        <h1 className="text-4xl font-bold text-gray-900">{employee.name}</h1>
+        <h1 className="text-5xl md:text-6xl font-bold text-gray-900">{employee.name}</h1>
         <div className="flex items-center gap-2 text-gray-600">
           <span
-            className={`px-3 py-1 rounded-full text-sm font-semibold ${
+            className={`px-4 py-2 rounded-full text-base font-semibold ${
               employee.status === "active"
                 ? "bg-green-100 text-green-800"
                 : "bg-red-100 text-red-800"
@@ -133,7 +133,7 @@ const EmployeeDetails = () => {
       <div className="flex gap-3 border-b border-gray-200">
         <button
           onClick={() => setActiveTab("overview")}
-          className={`px-6 py-3 font-semibold transition-all border-b-2 ${
+          className={`px-8 py-4 text-base font-semibold transition-all border-b-2 ${
             activeTab === "overview"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-gray-600 hover:text-gray-900"
@@ -143,7 +143,7 @@ const EmployeeDetails = () => {
         </button>
         <button
           onClick={() => setActiveTab("tasks")}
-          className={`px-6 py-3 font-semibold transition-all border-b-2 ${
+          className={`px-8 py-4 text-base font-semibold transition-all border-b-2 ${
             activeTab === "tasks"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-gray-600 hover:text-gray-900"
@@ -153,7 +153,7 @@ const EmployeeDetails = () => {
         </button>
         <button
           onClick={() => setActiveTab("leave")}
-          className={`px-6 py-3 font-semibold transition-all border-b-2 ${
+          className={`px-8 py-4 text-base font-semibold transition-all border-b-2 ${
             activeTab === "leave"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-gray-600 hover:text-gray-900"
@@ -239,35 +239,35 @@ const EmployeeDetails = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="space-y-4"
+        className="space-y-6"
       >
-        <h2 className="text-2xl font-bold flex items-center gap-2 text-gray-900">
-          <Calendar size={24} className="text-blue-600" />
+        <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-2 text-gray-900">
+          <Calendar size={32} className="text-blue-600" />
           Tasks & Assignments
         </h2>
 
         {/* Task Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-blue-50 border-blue-200">
-            <div className="text-center">
-              <p className="text-gray-600 mb-2 font-medium">Pending</p>
-              <p className="text-3xl font-bold text-blue-700">
+            <div className="text-center space-y-2">
+              <p className="text-gray-600 font-medium text-base">Pending</p>
+              <p className="text-5xl font-bold text-blue-700">
                 {taskStats.pending}
               </p>
             </div>
           </Card>
           <Card className="bg-amber-50 border-amber-200">
-            <div className="text-center">
-              <p className="text-gray-600 mb-2 font-medium">Ongoing</p>
-              <p className="text-3xl font-bold text-amber-700">
+            <div className="text-center space-y-2">
+              <p className="text-gray-600 font-medium text-base">Ongoing</p>
+              <p className="text-5xl font-bold text-amber-700">
                 {taskStats.ongoing}
               </p>
             </div>
           </Card>
           <Card className="bg-green-50 border-green-200">
-            <div className="text-center">
-              <p className="text-gray-600 mb-2 font-medium">Completed</p>
-              <p className="text-3xl font-bold text-green-700">
+            <div className="text-center space-y-2">
+              <p className="text-gray-600 font-medium text-base">Completed</p>
+              <p className="text-5xl font-bold text-green-700">
                 {taskStats.completed}
               </p>
             </div>
