@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   TrendingUp,
   Users,
@@ -9,6 +10,8 @@ import {
   Clock,
   ArrowUp,
   ArrowDown,
+  X,
+  Eye,
 } from "lucide-react";
 import Card from "../components/Card/Card";
 import api from "../services/api";
@@ -29,6 +32,7 @@ import {
 } from "recharts";
 
 const SystemOverview = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalEmployees: 0,
     activeEmployees: 0,
@@ -45,6 +49,11 @@ const SystemOverview = () => {
   const [topPerformers, setTopPerformers] = useState([]);
   const [taskTimeline, setTaskTimeline] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [detailModal, setDetailModal] = useState({
+    isOpen: false,
+    type: "", // "employees", "active", "tasks", "leaves"
+    data: [],
+  });
 
   useEffect(() => {
     fetchSystemData();
@@ -86,18 +95,19 @@ const SystemOverview = () => {
           .filter((e) => e.performance_score < 5 || e.status === "inactive")
           .slice(0, 5)
           .map((e) => ({
+            emp_id: e.emp_id,
             name: e.name,
             performance: e.performance_score,
-            issue: e.performance_score < 5 ? "Low Performance" : "Inactive",
+            issue:
+              e.performance_score < 5 ? "Low Performance" : "Inactive",
           }));
         setRiskEmployees(riskEmps);
 
         const topEmps = [...emps]
-          .sort(
-            (a, b) => (b.performance_score || 0) - (a.performance_score || 0),
-          )
+          .sort((a, b) => (b.performance_score || 0) - (a.performance_score || 0))
           .slice(0, 3)
           .map((e) => ({
+            emp_id: e.emp_id,
             name: e.name,
             department: e.department,
             performance: e.performance_score,
@@ -132,9 +142,93 @@ const SystemOverview = () => {
     }
   };
 
-  const StatCard = ({ title, value, change, isPositive, icon: Icon }) => (
-    <motion.div whileHover={{ translateY: -4 }} className="h-full">
-      <Card className="border-gray-200 bg-white h-full flex flex-col justify-between">
+  const handleStatCardClick = async (type) => {
+    let data = [];
+
+    if (type === "employees") {
+      data = employees.map((e) => ({
+        name: e.name,
+        email: e.email,
+        department: e.department,
+        performance: e.performance_score,
+        status: e.status,
+        salary: e.salary,
+        emp_id: e.emp_id,
+      }));
+    } else if (type === "active") {
+      data = employees
+        .filter((e) => e.status === "active")
+        .map((e) => ({
+          name: e.name,
+          email: e.email,
+          department: e.department,
+          performance: e.performance_score,
+          status: e.status,
+          emp_id: e.emp_id,
+        }));
+    } else if (type === "tasks") {
+      // Fetch completed tasks from all employees
+      let allTasks = [];
+      for (const emp of employees) {
+        try {
+          const res = await api.get(`/tasks/employee/${emp.emp_id}?filter=year`);
+          if (res.data?.tasks) {
+            const completedTasks = res.data.tasks
+              .filter((t) => t.status === "completed")
+              .map((t) => ({
+                taskName: t.title || t.Title || "Untitled",
+                employee: emp.name,
+                status: t.status,
+                dueDate: t.due_date,
+                completedDate: t.completed_at,
+              }));
+            allTasks = allTasks.concat(completedTasks);
+          }
+        } catch (err) {
+          console.error(`Error fetching tasks for ${emp.name}:`, err);
+        }
+      }
+      data = allTasks;
+    } else if (type === "leaves") {
+      // Fetch approved leaves from all employees
+      let allLeaves = [];
+      for (const emp of employees) {
+        try {
+          const res = await api.get(`/leaves/employee/${emp.emp_id}?filter=year`);
+          if (res.data?.leaves) {
+            const approvedLeaves = res.data.leaves
+              .filter((l) => l.status === "Approved")
+              .map((l) => ({
+                leaveType: l.leave_type,
+                employee: emp.name,
+                reason: l.reason,
+                startDate: l.start_date,
+                endDate: l.end_date,
+                duration: l.duration,
+              }));
+            allLeaves = allLeaves.concat(approvedLeaves);
+          }
+        } catch (err) {
+          console.error(`Error fetching leaves for ${emp.name}:`, err);
+        }
+      }
+      data = allLeaves;
+    }
+
+    setDetailModal({
+      isOpen: true,
+      type,
+      data,
+    });
+  };
+
+  const StatCard = ({ title, value, change, isPositive, icon: Icon, onClick }) => (
+    <motion.div
+      whileHover={{ translateY: -4, cursor: "pointer" }}
+      onClick={onClick}
+      className="h-full"
+    >
+      <Card className="border-gray-200 bg-white h-full flex flex-col justify-between hover:shadow-lg transition-shadow">
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-gray-600 text-sm font-medium">{title}</h3>
           <Icon
@@ -165,6 +259,139 @@ const SystemOverview = () => {
     </motion.div>
   );
 
+  const DetailModal = () => {
+    if (!detailModal.isOpen) return null;
+
+    const getTableHeaders = () => {
+      switch (detailModal.type) {
+        case "employees":
+        case "active":
+          return ["Name", "Email", "Department", "Performance", "Status"];
+        case "tasks":
+          return ["Task Name", "Employee", "Status", "Due Date", "Completed Date"];
+        case "leaves":
+          return ["Leave Type", "Employee", "Reason", "Start Date", "End Date", "Duration"];
+        default:
+          return [];
+      }
+    };
+
+    const getTableData = (item) => {
+      switch (detailModal.type) {
+        case "employees":
+        case "active":
+          return [
+            item.name,
+            item.email,
+            item.department,
+            `${item.performance}/10`,
+            item.status,
+          ];
+        case "tasks":
+          return [
+            item.taskName,
+            item.employee,
+            item.status,
+            item.dueDate,
+            item.completedDate || "--",
+          ];
+        case "leaves":
+          return [
+            item.leaveType,
+            item.employee,
+            item.reason,
+            item.startDate,
+            item.endDate,
+            `${item.duration} days`,
+          ];
+        default:
+          return [];
+      }
+    };
+
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+        onClick={() => setDetailModal({ isOpen: false, type: "", data: [] })}
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white rounded-xl border border-gray-200 p-6 max-w-4xl w-full max-h-96 overflow-y-auto shadow-xl"
+        >
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {detailModal.type === "employees" && "All Employees"}
+              {detailModal.type === "active" && "Active Employees"}
+              {detailModal.type === "tasks" && "Completed Tasks"}
+              {detailModal.type === "leaves" && "Approved Leaves"}
+            </h2>
+            <button
+              onClick={() => setDetailModal({ isOpen: false, type: "", data: [] })}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {detailModal.data.length === 0 ? (
+            <p className="text-center text-gray-500 py-8">No data available</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    {getTableHeaders().map((header) => (
+                      <th
+                        key={header}
+                        className="text-left py-3 px-4 text-gray-900 font-semibold"
+                      >
+                        {header}
+                      </th>
+                    ))}
+                    {(detailModal.type === "employees" || detailModal.type === "active") && (
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">
+                        Action
+                      </th>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailModal.data.map((item, i) => (
+                    <tr key={i} className="border-b border-gray-200 hover:bg-gray-50">
+                      {getTableData(item).map((cell, j) => (
+                        <td key={j} className="py-3 px-4 text-gray-700">
+                          {cell}
+                        </td>
+                      ))}
+                      {(detailModal.type === "employees" || detailModal.type === "active") && (
+                        <td className="py-3 px-4">
+                          <button
+                            onClick={() => {
+                              navigate(`/admin/employee/${item.emp_id}`);
+                              setDetailModal({ isOpen: false, type: "", data: [] });
+                            }}
+                            className="p-1 hover:bg-blue-500/20 rounded text-blue-600 hover:text-blue-700"
+                            title="View Employee"
+                          >
+                            <Eye size={18} />
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </motion.div>
+      </motion.div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="p-8 font-inter max-w-7xl mx-auto flex items-center justify-center min-h-screen">
@@ -180,7 +407,7 @@ const SystemOverview = () => {
           System Overview
         </h1>
         <p className="text-gray-600">
-          Executive dashboard with key metrics and insights
+          Executive dashboard with key metrics and insights (click cards for details)
         </p>
       </div>
 
@@ -191,6 +418,7 @@ const SystemOverview = () => {
           change={5}
           isPositive={true}
           icon={Users}
+          onClick={() => handleStatCardClick("employees")}
         />
         <StatCard
           title="Active Employees"
@@ -198,18 +426,21 @@ const SystemOverview = () => {
           change={3}
           isPositive={true}
           icon={TrendingUp}
+          onClick={() => handleStatCardClick("active")}
         />
         <StatCard
           title="Tasks Completed"
-          value={`${stats.completedTasks}/${stats.totalTasks}`}
+          value={stats.completedTasks}
           isPositive={true}
           icon={Zap}
+          onClick={() => handleStatCardClick("tasks")}
         />
         <StatCard
           title="Leaves Approved"
-          value={`${stats.approvedLeaves}/${stats.totalLeaves}`}
+          value={stats.approvedLeaves}
           isPositive={true}
           icon={Clock}
+          onClick={() => handleStatCardClick("leaves")}
         />
       </div>
 
@@ -268,7 +499,10 @@ const SystemOverview = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="border-red-200 bg-red-50">
           <div className="flex items-start gap-3 mb-4">
-            <AlertTriangle size={24} className="text-red-600 flex-shrink-0" />
+            <AlertTriangle
+              size={24}
+              className="text-red-600 flex-shrink-0"
+            />
             <div>
               <h2 className="text-xl font-bold text-red-900">Risk Panel</h2>
               <p className="text-sm text-red-700">
@@ -279,9 +513,11 @@ const SystemOverview = () => {
           <div className="space-y-3">
             {riskEmployees.length > 0 ? (
               riskEmployees.map((emp, i) => (
-                <div
+                <motion.div
                   key={i}
-                  className="bg-white rounded-lg p-3 border border-red-200"
+                  whileHover={{ translateX: 4, cursor: "pointer" }}
+                  onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
+                  className="bg-white rounded-lg p-3 border border-red-200 hover:shadow-md transition-shadow"
                 >
                   <div className="flex justify-between items-start mb-1">
                     <p className="font-semibold text-gray-900">{emp.name}</p>
@@ -294,7 +530,7 @@ const SystemOverview = () => {
                       Performance: {emp.performance}/10
                     </p>
                   )}
-                </div>
+                </motion.div>
               ))
             ) : (
               <p className="text-gray-700 text-center py-4">
@@ -318,9 +554,11 @@ const SystemOverview = () => {
           </div>
           <div className="space-y-3">
             {topPerformers.map((emp, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="bg-white rounded-lg p-3 border border-green-200"
+                whileHover={{ translateX: 4, cursor: "pointer" }}
+                onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
+                className="bg-white rounded-lg p-3 border border-green-200 hover:shadow-md transition-shadow"
               >
                 <div className="flex justify-between items-start mb-1">
                   <p className="font-semibold text-gray-900">{emp.name}</p>
@@ -329,7 +567,7 @@ const SystemOverview = () => {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600">{emp.department}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </Card>
@@ -407,6 +645,8 @@ const SystemOverview = () => {
           </ResponsiveContainer>
         </div>
       </Card>
+
+      <DetailModal />
     </div>
   );
 };
