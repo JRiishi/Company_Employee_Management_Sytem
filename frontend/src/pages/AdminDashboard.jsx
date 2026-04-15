@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Users, Activity, Settings, UserPlus, AlertCircle, CheckCircle, Trash2, Eye, MoreVertical, Loader } from 'lucide-react';
+import { Shield, Users, Activity, Settings, UserPlus, AlertCircle, CheckCircle, Trash2, Eye, MoreVertical, Loader, Clock, CheckSquare, Home, Database, Server, AlertTriangle } from 'lucide-react';
 import { useAdminData } from '../hooks/useAdminData';
 import Card from '../components/Card/Card';
 import api from '../services/api';
@@ -18,10 +18,14 @@ const AdminDashboard = () => {
   const [submitStatus, setSubmitStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [employeesLoading, setEmployeesLoading] = useState(true);
+  const [leaves, setLeaves] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   // Fetch all employees with details
   useEffect(() => {
     fetchEmployees();
+    fetchLeaves();
+    fetchTasks();
   }, []);
 
   const fetchEmployees = async () => {
@@ -36,6 +40,32 @@ const AdminDashboard = () => {
       console.error('Error fetching employees:', err);
     } finally {
       setEmployeesLoading(false);
+    }
+  };
+
+  const fetchLeaves = async () => {
+    try {
+      const response = await api.get('/leaves/summary?filter=month');
+      if (response.success) {
+        setLeaves(response.data?.leaves || []);
+      }
+    } catch (err) {
+      console.error('Error fetching leaves:', err);
+    }
+  };
+
+  const fetchTasks = async () => {
+    try {
+      let allTasks = [];
+      for (const emp of employees) {
+        const res = await api.get(`/tasks/employee/${emp.emp_id}?filter=month`);
+        if (res.data?.tasks) {
+          allTasks = allTasks.concat(res.data.tasks);
+        }
+      }
+      setTasks(allTasks);
+    } catch (err) {
+      console.error('Error fetching tasks:', err);
     }
   };
 
@@ -68,19 +98,18 @@ const AdminDashboard = () => {
   // Fire employee
   const handleFireEmployee = async () => {
     if (!employeeToFire) return;
-    
+
     try {
       setFiringLoading(true);
       const response = await api.post('/admin/fire-employee', {
         emp_id: employeeToFire.emp_id,
         reason: 'Terminated by admin'
       });
-      
+
       if (response.success) {
         setSubmitStatus({ type: 'success', message: `${employeeToFire.name} has been terminated.` });
         setShowFireConfirm(false);
         setEmployeeToFire(null);
-        // Refresh employee list
         fetchEmployees();
       } else {
         setSubmitStatus({ type: 'error', message: response.message || 'Failed to terminate employee' });
@@ -119,12 +148,24 @@ const AdminDashboard = () => {
     setIsSubmitting(false);
   };
 
+  const managers = employees.filter(e => e.role === 'manager' || e.department === 'Management').slice(0, 5);
+  const pendingLeaves = leaves.filter(l => l.status === 'Pending').slice(0, 4);
+  const lowPerformanceEmployees = employees.filter(e => e.performance_score < 5).slice(0, 3);
+  const overdueTasks = tasks.filter(t => t.status === 'pending').slice(0, 3);
+
+  const recentActivities = [
+    { action: 'Employee Onboarded', details: 'John Doe joined Sales', time: '2 hours ago', icon: UserPlus },
+    { action: 'Task Completed', details: 'API Integration completed by Sarah', time: '4 hours ago', icon: CheckSquare },
+    { action: 'Leave Approved', details: 'Vacation leave approved for Mike', time: '1 day ago', icon: Clock },
+    { action: 'Performance Review', details: 'Q1 review submitted for 5 employees', time: '1 day ago', icon: Activity },
+  ];
+
   if (loading) return <div className="p-8 text-center text-gray-400 font-inter">Loading admin data...</div>;
   if (error) return <div className="p-8 text-center text-red-400 font-inter">{error}</div>;
 
   return (
     <div className="p-8 font-inter max-w-7xl mx-auto space-y-8 animate-fade-in text-gray-100">
-      
+
       {/* Header */}
       <div className="flex justify-between items-end">
         <div>
@@ -132,6 +173,61 @@ const AdminDashboard = () => {
             System Administration
           </h1>
           <p className="text-gray-400">Manage employees, view details, and handle HR decisions</p>
+        </div>
+      </div>
+
+      {/* Admin Header Section */}
+      <Card className="border-blue-500/30 bg-gradient-to-r from-blue-900/20 to-blue-800/20">
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="text-sm text-gray-400 mb-1">System Administrator</p>
+            <h2 className="text-2xl font-bold text-blue-400 mb-4">Welcome back, Admin</h2>
+            <div className="flex gap-6 text-sm">
+              <div>
+                <p className="text-gray-500">Last Login</p>
+                <p className="text-gray-300">Today at 09:45 AM</p>
+              </div>
+              <div>
+                <p className="text-gray-500">Active Sessions</p>
+                <p className="text-gray-300">1 session</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/50 rounded-lg">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-sm text-green-400 font-semibold">System Healthy</span>
+          </div>
+        </div>
+      </Card>
+
+      {/* Quick Actions */}
+      <div>
+        <h3 className="text-lg font-bold text-gray-100 mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { icon: UserPlus, label: 'Add Employee', color: 'blue' },
+            { icon: Shield, label: 'Add Manager', color: 'purple' },
+            { icon: Home, label: 'Create Department', color: 'green' },
+            { icon: Users, label: 'Assign Roles', color: 'yellow' },
+          ].map((action, idx) => {
+            const Icon = action.icon;
+            const colorMap = {
+              blue: 'bg-blue-500/20 hover:bg-blue-500/30 border-blue-500/50 text-blue-400',
+              purple: 'bg-purple-500/20 hover:bg-purple-500/30 border-purple-500/50 text-purple-400',
+              green: 'bg-green-500/20 hover:bg-green-500/30 border-green-500/50 text-green-400',
+              yellow: 'bg-yellow-500/20 hover:bg-yellow-500/30 border-yellow-500/50 text-yellow-400',
+            };
+            return (
+              <motion.button
+                key={idx}
+                whileHover={{ translateY: -2 }}
+                className={`p-4 rounded-lg border transition-colors ${colorMap[action.color]}`}
+              >
+                <Icon size={24} className="mb-2" />
+                <p className="text-sm font-semibold">{action.label}</p>
+              </motion.button>
+            );
+          })}
         </div>
       </div>
 
@@ -186,6 +282,121 @@ const AdminDashboard = () => {
         </Card>
       </div>
 
+      {/* Critical Alerts & Manager Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Critical Alerts */}
+        <Card className="border-red-500/30">
+          <h3 className="text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
+            <AlertTriangle size={20} />
+            Critical Alerts
+          </h3>
+          <div className="space-y-3">
+            {overdueTasks.length > 0 ? (
+              <>
+                <div className="text-sm">
+                  <p className="text-red-400 font-semibold">{overdueTasks.length} Overdue Tasks</p>
+                  <p className="text-gray-400 text-xs mt-1">Tasks pending for more than 7 days</p>
+                </div>
+                <div className="border-t border-gray-700 pt-3">
+                  <p className="text-yellow-400 font-semibold">{lowPerformanceEmployees.length} Low Performance</p>
+                  <p className="text-gray-400 text-xs mt-1">Employees with score below 5</p>
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-400 text-sm">No critical alerts</p>
+            )}
+          </div>
+        </Card>
+
+        {/* Manager Overview */}
+        <Card className="border-purple-500/30">
+          <h3 className="text-lg font-bold text-purple-400 mb-4">Manager Overview</h3>
+          <div className="space-y-2">
+            {managers.length > 0 ? (
+              managers.map((mgr, idx) => (
+                <div key={idx} className="flex justify-between items-center text-sm p-2 bg-purple-500/10 rounded">
+                  <div>
+                    <p className="text-gray-300 font-medium">{mgr.name}</p>
+                    <p className="text-gray-500 text-xs">{mgr.department}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-purple-400">1 team</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400 text-sm">No managers assigned</p>
+            )}
+          </div>
+        </Card>
+      </div>
+
+      {/* Pending Approvals & Recent Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Pending Approvals */}
+        <Card className="border-yellow-500/30">
+          <h3 className="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">
+            <Clock size={20} />
+            Pending Approvals
+          </h3>
+          <div className="space-y-2">
+            {pendingLeaves.length > 0 ? (
+              pendingLeaves.map((leave, idx) => (
+                <div key={idx} className="p-2 bg-yellow-500/10 rounded text-sm">
+                  <p className="text-gray-300">{leave.leave_type || 'Leave Request'}</p>
+                  <p className="text-gray-500 text-xs">Awaiting approval</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400 text-sm">No pending approvals</p>
+            )}
+          </div>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card className="border-blue-500/30">
+          <h3 className="text-lg font-bold text-blue-400 mb-4">Recent Activity</h3>
+          <div className="space-y-3">
+            {recentActivities.map((activity, idx) => {
+              const Icon = activity.icon;
+              return (
+                <div key={idx} className="flex gap-3 text-sm">
+                  <Icon size={16} className="text-blue-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="text-gray-300 font-medium">{activity.action}</p>
+                    <p className="text-gray-500 text-xs">{activity.details}</p>
+                    <p className="text-gray-600 text-xs mt-1">{activity.time}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      </div>
+
+      {/* System Health */}
+      <Card className="border-green-500/30 bg-gradient-to-r from-green-900/20 to-green-800/20">
+        <h3 className="text-lg font-bold text-green-400 mb-4">System Health</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { label: 'Server', status: 'Online', icon: Server },
+            { label: 'Database', status: 'Connected', icon: Database },
+            { label: 'Last Backup', status: 'Today 02:00 AM', icon: Clock },
+          ].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={idx} className="p-3 bg-green-500/10 rounded border border-green-500/30 flex items-start gap-3">
+                <Icon size={20} className="text-green-400 flex-shrink-0" />
+                <div className="text-sm">
+                  <p className="text-gray-400">{item.label}</p>
+                  <p className="text-green-400 font-semibold">{item.status}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
       {/* Status Messages */}
       {submitStatus.message && (
         <motion.div
@@ -205,7 +416,6 @@ const AdminDashboard = () => {
           <span>{submitStatus.message}</span>
         </motion.div>
       )}
-
 
       {/* Fire Confirmation Modal */}
       {showFireConfirm && employeeToFire && (
