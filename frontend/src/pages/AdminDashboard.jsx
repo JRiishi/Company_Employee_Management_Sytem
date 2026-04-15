@@ -43,7 +43,6 @@ const AdminDashboard = () => {
   const [employeesLoading, setEmployeesLoading] = useState(true);
   const [leaves, setLeaves] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [currentView, setCurrentView] = useState("dashboard");
   const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false);
   const [showAddManagerModal, setShowAddManagerModal] = useState(false);
   const [showCreateDeptModal, setShowCreateDeptModal] = useState(false);
@@ -51,6 +50,14 @@ const AdminDashboard = () => {
   const [newDepartment, setNewDepartment] = useState("");
   const [newRole, setNewRole] = useState("");
   const [selectedRoleEmployee, setSelectedRoleEmployee] = useState(null);
+  const [showEmployeesModal, setShowEmployeesModal] = useState(false);
+  const [modalEmployeeType, setModalEmployeeType] = useState("all");
+  const [approvals, setApprovals] = useState([
+    { id: 1, type: "Leave Request", employee: "John Doe", date: "2 hours ago", status: "pending" },
+    { id: 2, type: "Role Change", employee: "Sarah Smith", date: "5 hours ago", status: "pending" },
+    { id: 3, type: "New Employee", employee: "Mike Johnson", date: "1 day ago", status: "pending" },
+    { id: 4, type: "Leave Request", employee: "Alex Kumar", date: "1 day ago", status: "pending" },
+  ]);
 
   // Fetch all employees with details
   useEffect(() => {
@@ -201,6 +208,28 @@ const AdminDashboard = () => {
 
   const adminAccessEmployees = employees.filter((e) => e.role === "admin" || e.role === "manager");
 
+  const handleApproval = (id) => {
+    setApprovals(approvals.map(app =>
+      app.id === id ? { ...app, status: "approved" } : app
+    ));
+    setSubmitStatus({ type: "success", message: "Approval accepted!" });
+    setTimeout(() => {
+      setApprovals(approvals.filter(app => app.id !== id));
+      setSubmitStatus({ type: "", message: "" });
+    }, 1500);
+  };
+
+  const handleReject = (id) => {
+    setApprovals(approvals.map(app =>
+      app.id === id ? { ...app, status: "rejected" } : app
+    ));
+    setSubmitStatus({ type: "success", message: "Approval rejected!" });
+    setTimeout(() => {
+      setApprovals(approvals.filter(app => app.id !== id));
+      setSubmitStatus({ type: "", message: "" });
+    }, 1500);
+  };
+
   const lowPerformanceEmployees = employees
     .filter((e) => e.performance_score < 5)
     .slice(0, 3);
@@ -261,66 +290,27 @@ const AdminDashboard = () => {
       <div className="p-8 text-center text-red-600 font-inter">{error}</div>
     );
 
-  // Determine which employees to display based on current view
-  let viewContent = null;
-  let viewTitle = "";
   const activeEmployees = employees.filter((e) => e.status === "active");
   const inactiveEmployees = employees.filter((e) => e.status === "inactive");
 
-  if (currentView !== "dashboard") {
-    let displayEmployees = [];
-    if (currentView === "allEmployees") {
-      displayEmployees = employees;
-      viewTitle = `All Employees (${employees.length})`;
-    } else if (currentView === "activeEmployees") {
-      displayEmployees = activeEmployees;
-      viewTitle = `Active Employees (${activeEmployees.length})`;
-    } else if (currentView === "inactiveEmployees") {
-      displayEmployees = inactiveEmployees;
-      viewTitle = `Inactive Employees (${inactiveEmployees.length})`;
-    } else if (currentView === "adminAccess") {
-      displayEmployees = adminAccessEmployees;
-      viewTitle = `Admin Access Employees (${adminAccessEmployees.length})`;
-    }
-
-    viewContent = (
-      <div>
-        <button
-          onClick={() => setCurrentView("dashboard")}
-          className="mb-4 text-blue-600 hover:text-blue-700 font-semibold text-sm"
-        >
-          ← Back to Dashboard
-        </button>
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-          {viewTitle}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {displayEmployees.map((emp, idx) => (
-            <Card key={idx} className="border-gray-200 bg-white">
-              <p className="text-sm font-semibold text-gray-900 mb-2">
-                {emp.name}
-              </p>
-              <div className="space-y-1 text-xs text-gray-600">
-                <p><strong>Email:</strong> {emp.email || "N/A"}</p>
-                <p><strong>Department:</strong> {emp.department || "N/A"}</p>
-                <p><strong>Role:</strong> {emp.role || "Employee"}</p>
-                <p><strong>Status:</strong> <span className={`font-semibold ${emp.status === "active" ? "text-green-600" : "text-yellow-600"}`}>{emp.status}</span></p>
-                {emp.performance_score !== undefined && <p><strong>Performance:</strong> {emp.performance_score}/10</p>}
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    );
+  let modalEmployees = [];
+  let modalTitle = "";
+  if (modalEmployeeType === "all") {
+    modalEmployees = employees;
+    modalTitle = `All Employees (${employees.length})`;
+  } else if (modalEmployeeType === "active") {
+    modalEmployees = activeEmployees;
+    modalTitle = `Active Employees (${activeEmployees.length})`;
+  } else if (modalEmployeeType === "inactive") {
+    modalEmployees = inactiveEmployees;
+    modalTitle = `Inactive Employees (${inactiveEmployees.length})`;
+  } else if (modalEmployeeType === "admin") {
+    modalEmployees = adminAccessEmployees;
+    modalTitle = `Admin Access (${adminAccessEmployees.length})`;
   }
 
   return (
     <div className="p-4 md:p-8 font-inter max-w-7xl mx-auto space-y-6 md:space-y-8 text-gray-900">
-      {viewContent ? (
-        viewContent
-      ) : (
-        <>
-          {/* Header */}
           <div className="flex flex-col md:flex-row justify-between md:items-end gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
@@ -365,7 +355,10 @@ const AdminDashboard = () => {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             <Card
-              onClick={() => setCurrentView("allEmployees")}
+              onClick={() => {
+                setModalEmployeeType("all");
+                setShowEmployeesModal(true);
+              }}
               className="border-gray-200 bg-white hover:border-blue-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
@@ -384,7 +377,10 @@ const AdminDashboard = () => {
             </Card>
 
             <Card
-              onClick={() => setCurrentView("activeEmployees")}
+              onClick={() => {
+                setModalEmployeeType("active");
+                setShowEmployeesModal(true);
+              }}
               className="border-gray-200 bg-white hover:border-green-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
@@ -403,7 +399,10 @@ const AdminDashboard = () => {
             </Card>
 
             <Card
-              onClick={() => setCurrentView("inactiveEmployees")}
+              onClick={() => {
+                setModalEmployeeType("inactive");
+                setShowEmployeesModal(true);
+              }}
               className="border-gray-200 bg-white hover:border-yellow-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
@@ -420,7 +419,10 @@ const AdminDashboard = () => {
             </Card>
 
             <Card
-              onClick={() => setCurrentView("adminAccess")}
+              onClick={() => {
+                setModalEmployeeType("admin");
+                setShowEmployeesModal(true);
+              }}
               className="border-gray-200 bg-white hover:border-purple-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
@@ -538,13 +540,13 @@ const AdminDashboard = () => {
             Pending Approvals
           </h3>
           <div className="space-y-2 max-h-48 overflow-y-auto">
-            {samplePendingApprovals.length > 0 ? (
-              samplePendingApprovals.map((approval, idx) => (
+            {approvals.length > 0 ? (
+              approvals.map((approval) => (
                 <div
-                  key={idx}
+                  key={approval.id}
                   className="p-2 md:p-3 bg-gray-50 rounded border border-gray-200 text-sm"
                 >
-                  <div className="flex justify-between items-start gap-2">
+                  <div className="flex justify-between items-start gap-2 mb-2">
                     <div className="min-w-0">
                       <p className="text-gray-900 font-medium">{approval.type}</p>
                       <p className="text-gray-600 text-xs">
@@ -555,7 +557,20 @@ const AdminDashboard = () => {
                       {approval.date}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-xs mt-1">{approval.status}</p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleApproval(approval.id)}
+                      className="flex-1 px-2 py-1 bg-green-100 hover:bg-green-200 text-green-700 rounded text-xs font-semibold transition-colors"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      onClick={() => handleReject(approval.id)}
+                      className="flex-1 px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-xs font-semibold transition-colors"
+                    >
+                      Reject
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -642,7 +657,51 @@ const AdminDashboard = () => {
         </motion.div>
       )}
 
-      {/* Add Employee Modal */}
+      {/* Employees Modal */}
+      {showEmployeesModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowEmployeesModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-2xl w-full max-h-96 flex flex-col shadow-lg"
+          >
+            <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
+              {modalTitle}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 overflow-y-auto flex-1">
+              {modalEmployees.map((emp, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
+                >
+                  <p className="text-sm font-semibold text-gray-900">
+                    {emp.name}
+                  </p>
+                  <div className="space-y-1 text-xs text-gray-600 mt-2">
+                    <p><strong>Email:</strong> {emp.email || "N/A"}</p>
+                    <p><strong>Department:</strong> {emp.department || "N/A"}</p>
+                    <p><strong>Role:</strong> {emp.role || "Employee"}</p>
+                    <p><strong>Status:</strong> <span className={`font-semibold ${emp.status === "active" ? "text-green-600" : emp.status === "inactive" ? "text-yellow-600" : "text-red-600"}`}>{emp.status}</span></p>
+                    {emp.performance_score !== undefined && <p><strong>Performance:</strong> {emp.performance_score}/10</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => setShowEmployeesModal(false)}
+              className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm w-full"
+            >
+              Close
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
       {showAddEmployeeModal && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -935,8 +994,6 @@ const AdminDashboard = () => {
             </div>
           </motion.div>
         </motion.div>
-      )}
-        </>
       )}
     </div>
   );
