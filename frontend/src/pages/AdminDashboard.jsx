@@ -53,6 +53,8 @@ const AdminDashboard = () => {
   const [selectedRoleEmployee, setSelectedRoleEmployee] = useState(null);
   const [showEmployeesModal, setShowEmployeesModal] = useState(false);
   const [modalEmployeeType, setModalEmployeeType] = useState("all");
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [selectedAlert, setSelectedAlert] = useState(null);
   const [approvals, setApprovals] = useState([
     { id: 1, type: "Leave Request", employee: "John Doe", date: "2 hours ago", status: "pending" },
     { id: 2, type: "Role Change", employee: "Sarah Smith", date: "5 hours ago", status: "pending" },
@@ -233,7 +235,18 @@ const AdminDashboard = () => {
     .filter((e) => e.role === "manager" || e.department === "Management")
     .slice(0, 5);
 
-  const adminAccessEmployees = employees.filter((e) => e.role === "admin" || e.role === "manager");
+  const adminAccessEmployees = [
+    ...employees.filter((e) => e.role === "admin" || e.role === "manager"),
+    {
+      emp_id: 999,
+      name: "Admin User",
+      email: "admin@company.com",
+      department: "Administration",
+      role: "admin",
+      status: "active",
+      performance_score: 9,
+    },
+  ];
 
   const handleApproval = (id) => {
     const approval = approvals.find(app => app.id === id);
@@ -252,6 +265,20 @@ const AdminDashboard = () => {
       icon: CheckCircle,
     };
     setRecentActivities([newActivity, ...recentActivities.slice(0, 3)]);
+
+    // If New Employee is approved, add them to employees list
+    if (approval.type === "New Employee") {
+      const newEmployee = {
+        emp_id: employees.length + 1,
+        name: approval.employee,
+        email: `${approval.employee.toLowerCase().replace(" ", ".")}@company.com`,
+        department: "Engineering",
+        role: "employee",
+        status: "active",
+        performance_score: Math.floor(Math.random() * 10) + 1,
+      };
+      setEmployees([...employees, newEmployee]);
+    }
 
     // Update leaves/approvals data if it's a leave request
     if (approval.type === "Leave Request") {
@@ -525,17 +552,25 @@ const AdminDashboard = () => {
           <div className="space-y-3">
             {sampleAlerts.map((alert, idx) => (
               <div key={idx} className="border-b border-gray-200 pb-3 last:border-b-0 last:pb-0">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900">
-                      {alert.title}
-                    </p>
-                    <p className="text-gray-600 text-xs mt-1">{alert.detail}</p>
+                <button
+                  onClick={() => {
+                    setSelectedAlert(alert);
+                    setShowAlertModal(true);
+                  }}
+                  className="w-full text-left hover:opacity-80 transition-opacity"
+                >
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 hover:text-blue-600">
+                        {alert.title}
+                      </p>
+                      <p className="text-gray-600 text-xs mt-1">{alert.detail}</p>
+                    </div>
+                    <span className={`inline-block flex-shrink-0 text-xs font-semibold px-2 py-1 rounded whitespace-nowrap mt-2 sm:mt-0 ${alert.severity === "high" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
+                      {alert.severity === "high" ? "High" : "Medium"}
+                    </span>
                   </div>
-                  <span className={`inline-block flex-shrink-0 text-xs font-semibold px-2 py-1 rounded whitespace-nowrap mt-2 sm:mt-0 ${alert.severity === "high" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
-                    {alert.severity === "high" ? "High" : "Medium"}
-                  </span>
-                </div>
+                </button>
               </div>
             ))}
           </div>
@@ -695,7 +730,126 @@ const AdminDashboard = () => {
         </motion.div>
       )}
 
-      {/* Employees Modal */}
+      {/* Alert Details Modal */}
+      {showAlertModal && selectedAlert && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowAlertModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-3xl w-full max-h-[80vh] flex flex-col shadow-lg"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                {selectedAlert.title}
+              </h3>
+              <button
+                onClick={() => setShowAlertModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="overflow-x-auto flex-1">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    {selectedAlert.type === "overdue" && (
+                      <>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Task</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Assigned To</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Due Date</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Days Overdue</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Priority</th>
+                      </>
+                    )}
+                    {selectedAlert.type === "performance" && (
+                      <>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Employee</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Department</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Performance Score</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
+                      </>
+                    )}
+                    {selectedAlert.type === "attendance" && (
+                      <>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Employee</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Date</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
+                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Reason</th>
+                      </>
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedAlert.type === "overdue" && (
+                    <>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-gray-900 font-medium">API Integration with Stripe</td>
+                        <td className="py-3 px-4 text-gray-700">David Chen</td>
+                        <td className="py-3 px-4 text-gray-700">2024-03-15</td>
+                        <td className="py-3 px-4 text-red-600 font-semibold">12 days</td>
+                        <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">High</span></td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-gray-900 font-medium">Database Optimization</td>
+                        <td className="py-3 px-4 text-gray-700">Lisa Wong</td>
+                        <td className="py-3 px-4 text-gray-700">2024-03-20</td>
+                        <td className="py-3 px-4 text-red-600 font-semibold">7 days</td>
+                        <td className="py-3 px-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">Medium</span></td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-gray-900 font-medium">Security Audit</td>
+                        <td className="py-3 px-4 text-gray-700">Mark Johnson</td>
+                        <td className="py-3 px-4 text-gray-700">2024-03-18</td>
+                        <td className="py-3 px-4 text-red-600 font-semibold">9 days</td>
+                        <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">High</span></td>
+                      </tr>
+                    </>
+                  )}
+                  {selectedAlert.type === "performance" && lowPerformanceEmployees.map((emp, idx) => (
+                    <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50">
+                      <td className="py-3 px-4 text-gray-900 font-medium">{emp.name}</td>
+                      <td className="py-3 px-4 text-gray-700">{employees.find(e => e.emp_id === emp.emp_id)?.department || "N/A"}</td>
+                      <td className="py-3 px-4 text-red-600 font-semibold">{emp.performance_score}/10</td>
+                      <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">At Risk</span></td>
+                    </tr>
+                  ))}
+                  {selectedAlert.type === "attendance" && (
+                    <>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-gray-900 font-medium">Emma Wilson</td>
+                        <td className="py-3 px-4 text-gray-700">2024-04-10</td>
+                        <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">Absent</span></td>
+                        <td className="py-3 px-4 text-gray-700">No notification</td>
+                      </tr>
+                      <tr className="border-b border-gray-200 hover:bg-gray-50">
+                        <td className="py-3 px-4 text-gray-900 font-medium">James Martinez</td>
+                        <td className="py-3 px-4 text-gray-700">2024-04-09</td>
+                        <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">Absent</span></td>
+                        <td className="py-3 px-4 text-gray-700">No notification</td>
+                      </tr>
+                    </>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <button
+              onClick={() => setShowAlertModal(false)}
+              className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm w-full"
+            >
+              Close
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
       {showEmployeesModal && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -734,6 +888,7 @@ const AdminDashboard = () => {
                       <th className="text-left py-3 px-4 text-gray-900 font-semibold">Role</th>
                       <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
                       <th className="text-left py-3 px-4 text-gray-900 font-semibold">Performance</th>
+                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -756,6 +911,18 @@ const AdminDashboard = () => {
                         </td>
                         <td className="py-3 px-4 text-gray-900 font-medium">
                           {emp.performance_score || "N/A"}/10
+                        </td>
+                        <td className="py-3 px-4">
+                          <button
+                            onClick={() => {
+                              setShowEmployeesModal(false);
+                              // Could navigate to employee details here
+                            }}
+                            className="p-1 hover:bg-blue-500/20 rounded text-blue-600 hover:text-blue-700 transition-colors"
+                            title="View Employee"
+                          >
+                            <Eye size={18} />
+                          </button>
                         </td>
                       </tr>
                     ))}
