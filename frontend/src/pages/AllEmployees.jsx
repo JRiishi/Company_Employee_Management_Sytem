@@ -520,7 +520,8 @@ const AllEmployees = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: idx * 0.02 }}
-                        className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                        onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
+                        className="border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
                       >
                         <td
                           className="p-4"

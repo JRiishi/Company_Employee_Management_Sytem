@@ -65,11 +65,14 @@ const SystemOverview = () => {
         const deptMap = {};
         emps.forEach((emp) => {
           if (!deptMap[emp.department]) {
-            deptMap[emp.department] = { count: 0, totalPerf: 0, dept: emp.department };
+            deptMap[emp.department] = {
+              count: 0,
+              totalPerf: 0,
+              dept: emp.department,
+            };
           }
           deptMap[emp.department].count++;
-          deptMap[emp.department].totalPerf +=
-            emp.performance_score || 0;
+          deptMap[emp.department].totalPerf += emp.performance_score || 0;
         });
 
         const deptData = Object.values(deptMap).map((d) => ({
@@ -85,13 +88,14 @@ const SystemOverview = () => {
           .map((e) => ({
             name: e.name,
             performance: e.performance_score,
-            issue:
-              e.performance_score < 5 ? "Low Performance" : "Inactive",
+            issue: e.performance_score < 5 ? "Low Performance" : "Inactive",
           }));
         setRiskEmployees(riskEmps);
 
         const topEmps = [...emps]
-          .sort((a, b) => (b.performance_score || 0) - (a.performance_score || 0))
+          .sort(
+            (a, b) => (b.performance_score || 0) - (a.performance_score || 0),
+          )
           .slice(0, 3)
           .map((e) => ({
             name: e.name,
@@ -219,8 +223,17 @@ const SystemOverview = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="department" stroke="#6b7280" />
               <YAxis stroke="#6b7280" />
-              <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #e5e7eb" }} />
-              <Bar dataKey="performance" fill="#3b82f6" name="Avg Performance" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #e5e7eb",
+                }}
+              />
+              <Bar
+                dataKey="performance"
+                fill="#3b82f6"
+                name="Avg Performance"
+              />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -234,7 +247,12 @@ const SystemOverview = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="day" stroke="#6b7280" />
               <YAxis stroke="#6b7280" />
-              <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #e5e7eb" }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #e5e7eb",
+                }}
+              />
               <Line
                 type="monotone"
                 dataKey="created"
@@ -279,7 +297,9 @@ const SystemOverview = () => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-700 text-center py-4">No risks detected</p>
+              <p className="text-gray-700 text-center py-4">
+                No risks detected
+              </p>
             )}
           </div>
         </Card>
@@ -288,8 +308,12 @@ const SystemOverview = () => {
           <div className="flex items-start gap-3 mb-4">
             <TrendingUp size={24} className="text-green-600 flex-shrink-0" />
             <div>
-              <h2 className="text-xl font-bold text-green-900">Top Performers</h2>
-              <p className="text-sm text-green-700">Based on performance score</p>
+              <h2 className="text-xl font-bold text-green-900">
+                Top Performers
+              </h2>
+              <p className="text-sm text-green-700">
+                Based on performance score
+              </p>
             </div>
           </div>
           <div className="space-y-3">
@@ -356,7 +380,9 @@ const SystemOverview = () => {
       </div>
 
       <Card className="border-gray-200 bg-white">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Employee Status Distribution</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">
+          Employee Status Distribution
+        </h2>
         <div className="flex justify-center">
           <ResponsiveContainer width={300} height={300}>
             <PieChart>
