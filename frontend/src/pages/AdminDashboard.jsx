@@ -43,6 +43,14 @@ const AdminDashboard = () => {
   const [employeesLoading, setEmployeesLoading] = useState(true);
   const [leaves, setLeaves] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [currentView, setCurrentView] = useState("dashboard");
+  const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false);
+  const [showAddManagerModal, setShowAddManagerModal] = useState(false);
+  const [showCreateDeptModal, setShowCreateDeptModal] = useState(false);
+  const [showAssignRolesModal, setShowAssignRolesModal] = useState(false);
+  const [newDepartment, setNewDepartment] = useState("");
+  const [newRole, setNewRole] = useState("");
+  const [selectedRoleEmployee, setSelectedRoleEmployee] = useState(null);
 
   // Fetch all employees with details
   useEffect(() => {
@@ -190,23 +198,30 @@ const AdminDashboard = () => {
   const managers = employees
     .filter((e) => e.role === "manager" || e.department === "Management")
     .slice(0, 5);
-  const pendingLeaves = leaves
-    .filter((l) => l.status === "Pending")
-    .slice(0, 4);
+
+  const adminAccessEmployees = employees.filter((e) => e.role === "admin" || e.role === "manager");
+
   const lowPerformanceEmployees = employees
     .filter((e) => e.performance_score < 5)
     .slice(0, 3);
   const overdueTasks = tasks.filter((t) => t.status === "pending").slice(0, 3);
-  const employeeTaskStats = employees.map((emp) => {
-    const empTasks = tasks.filter((t) => t.emp_id === emp.emp_id);
-    return {
-      emp_id: emp.emp_id,
-      emp_name: emp.name,
-      total: empTasks.length,
-      completed: empTasks.filter((t) => t.status === "completed").length,
-      pending: empTasks.filter((t) => t.status === "pending").length,
-    };
-  });
+
+  // Enhanced sample alerts data
+  const sampleAlerts = [
+    { type: "overdue", title: "3 Overdue Tasks", detail: "Tasks pending for more than 7 days", severity: "high" },
+    { type: "performance", title: `${lowPerformanceEmployees.length} Low Performance`, detail: "Employees with score below 5", severity: "medium" },
+    { type: "attendance", title: "2 Unauthorized Absences", detail: "Employees missing without notification", severity: "high" },
+  ];
+
+  // Enhanced sample pending approvals
+  const samplePendingApprovals = [
+    { type: "Leave Request", employee: "John Doe", date: "2 hours ago", status: "Awaiting approval" },
+    { type: "Role Change", employee: "Sarah Smith", date: "5 hours ago", status: "Awaiting approval" },
+    { type: "New Employee", employee: "Mike Johnson", date: "1 day ago", status: "Awaiting approval" },
+    { type: "Leave Request", employee: "Alex Kumar", date: "1 day ago", status: "Awaiting approval" },
+  ];
+
+  const pendingLeaves = leaves.filter((l) => l.status === "Pending").slice(0, 2);
 
   const recentActivities = [
     {
@@ -246,112 +261,181 @@ const AdminDashboard = () => {
       <div className="p-8 text-center text-red-600 font-inter">{error}</div>
     );
 
+  // Determine which employees to display based on current view
+  let viewContent = null;
+  let viewTitle = "";
+  const activeEmployees = employees.filter((e) => e.status === "active");
+  const inactiveEmployees = employees.filter((e) => e.status === "inactive");
+
+  if (currentView !== "dashboard") {
+    let displayEmployees = [];
+    if (currentView === "allEmployees") {
+      displayEmployees = employees;
+      viewTitle = `All Employees (${employees.length})`;
+    } else if (currentView === "activeEmployees") {
+      displayEmployees = activeEmployees;
+      viewTitle = `Active Employees (${activeEmployees.length})`;
+    } else if (currentView === "inactiveEmployees") {
+      displayEmployees = inactiveEmployees;
+      viewTitle = `Inactive Employees (${inactiveEmployees.length})`;
+    } else if (currentView === "adminAccess") {
+      displayEmployees = adminAccessEmployees;
+      viewTitle = `Admin Access Employees (${adminAccessEmployees.length})`;
+    }
+
+    viewContent = (
+      <div>
+        <button
+          onClick={() => setCurrentView("dashboard")}
+          className="mb-4 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+        >
+          ← Back to Dashboard
+        </button>
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+          {viewTitle}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {displayEmployees.map((emp, idx) => (
+            <Card key={idx} className="border-gray-200 bg-white">
+              <p className="text-sm font-semibold text-gray-900 mb-2">
+                {emp.name}
+              </p>
+              <div className="space-y-1 text-xs text-gray-600">
+                <p><strong>Email:</strong> {emp.email || "N/A"}</p>
+                <p><strong>Department:</strong> {emp.department || "N/A"}</p>
+                <p><strong>Role:</strong> {emp.role || "Employee"}</p>
+                <p><strong>Status:</strong> <span className={`font-semibold ${emp.status === "active" ? "text-green-600" : "text-yellow-600"}`}>{emp.status}</span></p>
+                {emp.performance_score !== undefined && <p><strong>Performance:</strong> {emp.performance_score}/10</p>}
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 md:p-8 font-inter max-w-7xl mx-auto space-y-6 md:space-y-8 text-gray-900">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between md:items-end gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-            System Administration
-          </h1>
-          <p className="text-gray-600 text-sm md:text-base">
-            Manage employees, view details, and handle HR decisions
-          </p>
-        </div>
-      </div>
-
-      {/* Admin Header Section */}
-      <Card className="border-gray-200 bg-white">
-        <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
-          <div>
-            <p className="text-xs md:text-sm text-gray-600 mb-1">
-              System Administrator
-            </p>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
-              Welcome back, Admin
-            </h2>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6 text-xs md:text-sm">
-              <div>
-                <p className="text-gray-600">Last Login</p>
-                <p className="text-gray-900 font-medium">Today at 09:45 AM</p>
-              </div>
-              <div>
-                <p className="text-gray-600">Active Sessions</p>
-                <p className="text-gray-900 font-medium">1 session</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 px-3 md:px-4 py-2 bg-green-100 border border-green-300 rounded-lg whitespace-nowrap">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-xs md:text-sm text-green-700 font-semibold">
-              System Healthy
-            </span>
-          </div>
-        </div>
-      </Card>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-        <Card className="border-gray-200 bg-white hover:border-blue-400 transition-colors">
-          <div className="flex items-center space-x-3 md:space-x-4">
-            <div className="p-2 md:p-3 bg-blue-100 rounded-lg flex-shrink-0">
-              <Users className="text-blue-600" size={20} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs md:text-sm text-gray-600">
-                Total Employees
+      {viewContent ? (
+        viewContent
+      ) : (
+        <>
+          {/* Header */}
+          <div className="flex flex-col md:flex-row justify-between md:items-end gap-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                System Administration
+              </h1>
+              <p className="text-gray-600 text-sm md:text-base">
+                Manage employees, view details, and handle HR decisions
               </p>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
-                {employees.length}
-              </h3>
             </div>
           </div>
-        </Card>
 
-        <Card className="border-gray-200 bg-white hover:border-green-400 transition-colors">
-          <div className="flex items-center space-x-3 md:space-x-4">
-            <div className="p-2 md:p-3 bg-green-100 rounded-lg flex-shrink-0">
-              <Activity className="text-green-600" size={20} />
+          {/* Admin Header Section */}
+          <Card className="border-gray-200 bg-white">
+            <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
+              <div>
+                <p className="text-xs md:text-sm text-gray-600 mb-1">
+                  System Administrator
+                </p>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
+                  Welcome back, Admin
+                </h2>
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6 text-xs md:text-sm">
+                  <div>
+                    <p className="text-gray-600">Last Login</p>
+                    <p className="text-gray-900 font-medium">Today at 09:45 AM</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-600">Active Sessions</p>
+                    <p className="text-gray-900 font-medium">1 session</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 px-3 md:px-4 py-2 bg-green-100 border border-green-300 rounded-lg whitespace-nowrap">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-xs md:text-sm text-green-700 font-semibold">
+                  System Healthy
+                </span>
+              </div>
             </div>
-            <div className="min-w-0">
-              <p className="text-xs md:text-sm text-gray-600">
-                Active Employees
-              </p>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
-                {employees.filter((e) => e.status === "active").length}
-              </h3>
-            </div>
-          </div>
-        </Card>
+          </Card>
 
-        <Card className="border-gray-200 bg-white hover:border-yellow-400 transition-colors">
-          <div className="flex items-center space-x-3 md:space-x-4">
-            <div className="p-2 md:p-3 bg-yellow-100 rounded-lg flex-shrink-0">
-              <AlertCircle className="text-yellow-600" size={20} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs md:text-sm text-gray-600">Inactive</p>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
-                {employees.filter((e) => e.status === "inactive").length}
-              </h3>
-            </div>
-          </div>
-        </Card>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <Card
+              onClick={() => setCurrentView("allEmployees")}
+              className="border-gray-200 bg-white hover:border-blue-400 transition-colors cursor-pointer"
+            >
+              <div className="flex items-center space-x-3 md:space-x-4">
+                <div className="p-2 md:p-3 bg-blue-100 rounded-lg flex-shrink-0">
+                  <Users className="text-blue-600" size={20} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-gray-600">
+                    Total Employees
+                  </p>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                    {employees.length}
+                  </h3>
+                </div>
+              </div>
+            </Card>
 
-        <Card className="border-gray-200 bg-white hover:border-purple-400 transition-colors">
-          <div className="flex items-center space-x-3 md:space-x-4">
-            <div className="p-2 md:p-3 bg-purple-100 rounded-lg flex-shrink-0">
-              <Shield className="text-purple-600" size={20} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs md:text-sm text-gray-600">Admin Access</p>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
-                2
-              </h3>
-            </div>
+            <Card
+              onClick={() => setCurrentView("activeEmployees")}
+              className="border-gray-200 bg-white hover:border-green-400 transition-colors cursor-pointer"
+            >
+              <div className="flex items-center space-x-3 md:space-x-4">
+                <div className="p-2 md:p-3 bg-green-100 rounded-lg flex-shrink-0">
+                  <Activity className="text-green-600" size={20} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-gray-600">
+                    Active Employees
+                  </p>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                    {activeEmployees.length}
+                  </h3>
+                </div>
+              </div>
+            </Card>
+
+            <Card
+              onClick={() => setCurrentView("inactiveEmployees")}
+              className="border-gray-200 bg-white hover:border-yellow-400 transition-colors cursor-pointer"
+            >
+              <div className="flex items-center space-x-3 md:space-x-4">
+                <div className="p-2 md:p-3 bg-yellow-100 rounded-lg flex-shrink-0">
+                  <AlertCircle className="text-yellow-600" size={20} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-gray-600">Inactive</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                    {inactiveEmployees.length}
+                  </h3>
+                </div>
+              </div>
+            </Card>
+
+            <Card
+              onClick={() => setCurrentView("adminAccess")}
+              className="border-gray-200 bg-white hover:border-purple-400 transition-colors cursor-pointer"
+            >
+              <div className="flex items-center space-x-3 md:space-x-4">
+                <div className="p-2 md:p-3 bg-purple-100 rounded-lg flex-shrink-0">
+                  <Shield className="text-purple-600" size={20} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-gray-600">Admin Access</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                    {adminAccessEmployees.length}
+                  </h3>
+                </div>
+              </div>
+            </Card>
           </div>
-        </Card>
-      </div>
 
       {/* Quick Actions */}
       <div>
@@ -360,10 +444,10 @@ const AdminDashboard = () => {
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {[
-            { icon: UserPlus, label: "Add Employee", color: "blue" },
-            { icon: Shield, label: "Add Manager", color: "purple" },
-            { icon: Home, label: "Create Department", color: "green" },
-            { icon: Users, label: "Assign Roles", color: "yellow" },
+            { icon: UserPlus, label: "Add Employee", color: "blue", action: () => setShowAddEmployeeModal(true) },
+            { icon: Shield, label: "Add Manager", color: "purple", action: () => setShowAddManagerModal(true) },
+            { icon: Home, label: "Create Department", color: "green", action: () => setShowCreateDeptModal(true) },
+            { icon: Users, label: "Assign Roles", color: "yellow", action: () => setShowAssignRolesModal(true) },
           ].map((action, idx) => {
             const Icon = action.icon;
             const colorMap = {
@@ -379,6 +463,7 @@ const AdminDashboard = () => {
               <motion.button
                 key={idx}
                 whileHover={{ translateY: -2 }}
+                onClick={action.action}
                 className={`p-3 md:p-4 rounded-lg border transition-colors ${
                   colorMap[action.color]
                 }`}
@@ -402,28 +487,17 @@ const AdminDashboard = () => {
             Critical Alerts
           </h3>
           <div className="space-y-3">
-            {overdueTasks.length > 0 ? (
-              <>
-                <div className="text-sm">
-                  <p className="text-gray-900 font-semibold">
-                    {overdueTasks.length} Overdue Tasks
-                  </p>
-                  <p className="text-gray-600 text-xs mt-1">
-                    Tasks pending for more than 7 days
-                  </p>
-                </div>
-                <div className="border-t border-gray-200 pt-3">
-                  <p className="text-gray-900 font-semibold">
-                    {lowPerformanceEmployees.length} Low Performance
-                  </p>
-                  <p className="text-gray-600 text-xs mt-1">
-                    Employees with score below 5
-                  </p>
-                </div>
-              </>
-            ) : (
-              <p className="text-gray-600 text-sm">No critical alerts</p>
-            )}
+            {sampleAlerts.map((alert, idx) => (
+              <div key={idx} className="border-b border-gray-200 pb-3 last:border-b-0 last:pb-0">
+                <p className="text-sm font-semibold text-gray-900">
+                  {alert.title}
+                </p>
+                <p className="text-gray-600 text-xs mt-1">{alert.detail}</p>
+                <span className={`inline-block mt-2 text-xs font-semibold px-2 py-1 rounded ${alert.severity === "high" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
+                  {alert.severity === "high" ? "High" : "Medium"} Priority
+                </span>
+              </div>
+            ))}
           </div>
         </Card>
 
@@ -455,44 +529,6 @@ const AdminDashboard = () => {
         </Card>
       </div>
 
-      {/* Employee Task Statistics */}
-      <div>
-        <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4">
-          Employee Task Statistics
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 max-h-96 overflow-y-auto">
-          {employeeTaskStats
-            .filter((s) => s.total > 0)
-            .map((stat, idx) => (
-              <Card key={idx} className="border-gray-200 bg-white">
-                <p className="text-sm font-semibold text-gray-900 mb-3">
-                  {stat.emp_name}
-                </p>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-blue-50 p-2 rounded">
-                    <p className="text-xl md:text-2xl font-bold text-blue-600">
-                      {stat.total}
-                    </p>
-                    <p className="text-xs text-gray-600">Total</p>
-                  </div>
-                  <div className="bg-green-50 p-2 rounded">
-                    <p className="text-xl md:text-2xl font-bold text-green-600">
-                      {stat.completed}
-                    </p>
-                    <p className="text-xs text-gray-600">Completed</p>
-                  </div>
-                  <div className="bg-yellow-50 p-2 rounded">
-                    <p className="text-xl md:text-2xl font-bold text-yellow-600">
-                      {stat.pending}
-                    </p>
-                    <p className="text-xs text-gray-600">Pending</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-        </div>
-      </div>
-
       {/* Pending Approvals & Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Pending Approvals */}
@@ -502,16 +538,24 @@ const AdminDashboard = () => {
             Pending Approvals
           </h3>
           <div className="space-y-2 max-h-48 overflow-y-auto">
-            {pendingLeaves.length > 0 ? (
-              pendingLeaves.map((leave, idx) => (
+            {samplePendingApprovals.length > 0 ? (
+              samplePendingApprovals.map((approval, idx) => (
                 <div
                   key={idx}
                   className="p-2 md:p-3 bg-gray-50 rounded border border-gray-200 text-sm"
                 >
-                  <p className="text-gray-900 font-medium">
-                    {leave.leave_type || "Leave Request"}
-                  </p>
-                  <p className="text-gray-600 text-xs">Awaiting approval</p>
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="min-w-0">
+                      <p className="text-gray-900 font-medium">{approval.type}</p>
+                      <p className="text-gray-600 text-xs">
+                        {approval.employee}
+                      </p>
+                    </div>
+                    <span className="text-xs text-gray-500 whitespace-nowrap">
+                      {approval.date}
+                    </span>
+                  </div>
+                  <p className="text-gray-600 text-xs mt-1">{approval.status}</p>
                 </div>
               ))
             ) : (
@@ -598,6 +642,251 @@ const AdminDashboard = () => {
         </motion.div>
       )}
 
+      {/* Add Employee Modal */}
+      {showAddEmployeeModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowAddEmployeeModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+          >
+            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+              Add New Employee
+            </h3>
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Employee Name"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+              />
+              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500">
+                <option>Select Department</option>
+                <option>Engineering</option>
+                <option>Sales</option>
+                <option>HR</option>
+                <option>Marketing</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Position"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowAddEmployeeModal(false)}
+                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setSubmitStatus({ type: "success", message: "Employee added successfully!" });
+                  setShowAddEmployeeModal(false);
+                }}
+                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-semibold text-sm"
+              >
+                Add Employee
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Add Manager Modal */}
+      {showAddManagerModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowAddManagerModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+          >
+            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+              Add New Manager
+            </h3>
+            <div className="space-y-3">
+              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500">
+                <option>Select Employee to Promote</option>
+                {employees.map((emp, idx) => (
+                  <option key={idx}>{emp.name}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                placeholder="Team Name"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+              />
+              <input
+                type="number"
+                placeholder="Team Size"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+              />
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowAddManagerModal(false)}
+                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setSubmitStatus({ type: "success", message: "Manager added successfully!" });
+                  setShowAddManagerModal(false);
+                }}
+                className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-semibold text-sm"
+              >
+                Add Manager
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Create Department Modal */}
+      {showCreateDeptModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowCreateDeptModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+          >
+            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+              Create New Department
+            </h3>
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Department Name"
+                value={newDepartment}
+                onChange={(e) => setNewDepartment(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+              />
+              <input
+                type="text"
+                placeholder="Department Head"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+              />
+              <textarea
+                placeholder="Description"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+                rows="3"
+              />
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowCreateDeptModal(false)}
+                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setSubmitStatus({ type: "success", message: "Department created successfully!" });
+                  setShowCreateDeptModal(false);
+                }}
+                className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-semibold text-sm"
+              >
+                Create
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Assign Roles Modal */}
+      {showAssignRolesModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowAssignRolesModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+          >
+            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+              Assign Roles
+            </h3>
+            <div className="space-y-3">
+              <select
+                value={selectedRoleEmployee?.emp_id || ""}
+                onChange={(e) => {
+                  const emp = employees.find(e => e.emp_id === parseInt(e.target.value));
+                  setSelectedRoleEmployee(emp);
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-yellow-500"
+              >
+                <option value="">Select Employee</option>
+                {employees.map((emp) => (
+                  <option key={emp.emp_id} value={emp.emp_id}>
+                    {emp.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={newRole}
+                onChange={(e) => setNewRole(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-yellow-500"
+              >
+                <option value="">Select New Role</option>
+                <option value="employee">Employee</option>
+                <option value="manager">Manager</option>
+                <option value="admin">Admin</option>
+                <option value="hr">HR</option>
+              </select>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowAssignRolesModal(false)}
+                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (selectedRoleEmployee && newRole) {
+                    setSubmitStatus({ type: "success", message: `Role assigned to ${selectedRoleEmployee.name}!` });
+                    setShowAssignRolesModal(false);
+                    setNewRole("");
+                    setSelectedRoleEmployee(null);
+                  }
+                }}
+                className="flex-1 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition-colors font-semibold text-sm"
+              >
+                Assign
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
       {/* Fire Confirmation Modal */}
       {showFireConfirm && employeeToFire && (
         <motion.div
@@ -646,6 +935,8 @@ const AdminDashboard = () => {
             </div>
           </motion.div>
         </motion.div>
+      )}
+        </>
       )}
     </div>
   );
