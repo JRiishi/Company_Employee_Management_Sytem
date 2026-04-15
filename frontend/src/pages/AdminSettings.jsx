@@ -141,6 +141,18 @@ const AdminSettings = () => {
     },
   ]);
 
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const savedSettings = localStorage.getItem("adminSettings");
+    if (savedSettings) {
+      const settings = JSON.parse(savedSettings);
+      if (settings.permissions) setPermissions(settings.permissions);
+      if (settings.leavePolicy) setLeavePolicy(settings.leavePolicy);
+      if (settings.workingHours) setWorkingHours(settings.workingHours);
+      if (settings.notifications) setNotifications(settings.notifications);
+    }
+  }, []);
+
   const handlePermissionChange = (role, permission) => {
     setPermissions({
       ...permissions,
@@ -173,6 +185,14 @@ const AdminSettings = () => {
   const handleSave = () => {
     setSaveStatus("saving");
     setTimeout(() => {
+      // Save to localStorage
+      const settings = {
+        permissions,
+        leavePolicy,
+        workingHours,
+        notifications,
+      };
+      localStorage.setItem("adminSettings", JSON.stringify(settings));
       setSaveStatus("success");
       setHasChanges(false);
       setTimeout(() => setSaveStatus(""), 3000);

@@ -101,9 +101,18 @@ const AdminDashboard = () => {
     try {
       setEmployeesLoading(true);
       const response = await api.get("/admin/employees");
+      let empList = response.data || [];
+
+      // Load added employees from localStorage
+      const addedEmployees = localStorage.getItem("addedEmployees");
+      if (addedEmployees) {
+        const added = JSON.parse(addedEmployees);
+        empList = [...empList, ...added];
+      }
+
       if (response.success) {
-        setEmployees(response.data || []);
-        setFilteredEmployees(response.data || []);
+        setEmployees(empList);
+        setFilteredEmployees(empList);
       }
     } catch (err) {
       console.error("Error fetching employees:", err);
@@ -268,10 +277,10 @@ const AdminDashboard = () => {
     };
     setRecentActivities([newActivity, ...recentActivities.slice(0, 3)]);
 
-    // If New Employee is approved, add them to employees list
+    // If New Employee is approved, add them to employees list and save to localStorage
     if (approval.type === "New Employee") {
       const newEmployee = {
-        emp_id: employees.length + 1,
+        emp_id: Math.max(...employees.map((e) => e.emp_id || 0), 999) + 1,
         name: approval.employee,
         email: `${approval.employee.toLowerCase().replace(" ", ".")}@company.com`,
         department: "Engineering",
@@ -279,7 +288,15 @@ const AdminDashboard = () => {
         status: "active",
         performance_score: Math.floor(Math.random() * 10) + 1,
       };
-      setEmployees([...employees, newEmployee]);
+
+      const updatedEmployees = [...employees, newEmployee];
+      setEmployees(updatedEmployees);
+
+      // Save to localStorage
+      const addedEmployees = localStorage.getItem("addedEmployees");
+      const currentAdded = addedEmployees ? JSON.parse(addedEmployees) : [];
+      currentAdded.push(newEmployee);
+      localStorage.setItem("addedEmployees", JSON.stringify(currentAdded));
     }
 
     // Update leaves/approvals data if it's a leave request
