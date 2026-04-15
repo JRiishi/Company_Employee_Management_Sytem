@@ -5,7 +5,7 @@ import {
   Lock,
   Clock,
   Bell,
-  LogSquare,
+  BarChart3,
   Save,
   CheckCircle,
   AlertCircle,
@@ -341,9 +341,7 @@ const AdminSettings = () => {
                           <input
                             type="checkbox"
                             checked={permissions[role][perm]}
-                            onChange={() =>
-                              handlePermissionChange(role, perm)
-                            }
+                            onChange={() => handlePermissionChange(role, perm)}
                             className="w-5 h-5 cursor-pointer"
                           />
                         </td>
@@ -378,7 +376,7 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleLeavePolicyChange(
                       "maxLeavesPerYear",
-                      parseInt(e.target.value)
+                      parseInt(e.target.value),
                     )
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -394,7 +392,7 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleLeavePolicyChange(
                       "approvalDays",
-                      parseInt(e.target.value)
+                      parseInt(e.target.value),
                     )
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -410,7 +408,7 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleLeavePolicyChange(
                       "sickLeaves",
-                      parseInt(e.target.value)
+                      parseInt(e.target.value),
                     )
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -426,7 +424,7 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleLeavePolicyChange(
                       "casualLeaves",
-                      parseInt(e.target.value)
+                      parseInt(e.target.value),
                     )
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -442,7 +440,7 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleLeavePolicyChange(
                       "vacationLeaves",
-                      parseInt(e.target.value)
+                      parseInt(e.target.value),
                     )
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -539,7 +537,7 @@ const AdminSettings = () => {
                         } else {
                           handleWorkingHoursChange(
                             "workDays",
-                            workingHours.workDays.filter((d) => d !== day)
+                            workingHours.workDays.filter((d) => d !== day),
                           );
                         }
                       }}
@@ -595,7 +593,7 @@ const AdminSettings = () => {
         >
           <Card className="border-gray-200 bg-white">
             <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <LogSquare size={20} className="text-blue-600" />
+              <BarChart3 size={20} className="text-blue-600" />
               Audit Logs
             </h2>
             <div className="overflow-x-auto">
@@ -626,9 +624,7 @@ const AdminSettings = () => {
                       <td className="py-3 px-4 text-gray-700">
                         {log.timestamp}
                       </td>
-                      <td className="py-3 px-4 text-gray-600">
-                        {log.details}
-                      </td>
+                      <td className="py-3 px-4 text-gray-600">{log.details}</td>
                     </tr>
                   ))}
                 </tbody>
