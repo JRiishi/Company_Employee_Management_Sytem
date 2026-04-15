@@ -8,6 +8,11 @@ import {
   Loader,
   AlertCircle,
   CheckCircle,
+  Download,
+  ChevronDown,
+  MoreVertical,
+  Filter,
+  X,
 } from "lucide-react";
 import Card from "../components/Card/Card";
 import api from "../services/api";
@@ -17,42 +22,44 @@ const AllEmployees = () => {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedRows, setSelectedRows] = useState(new Set());
+  const [expandedRow, setExpandedRow] = useState(null);
+  const [expandedData, setExpandedData] = useState({});
+  const [showBulkMenu, setShowBulkMenu] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    department: "",
+    status: "",
+    performanceMin: 0,
+    performanceMax: 10,
+    salaryMin: 0,
+    salaryMax: 500000,
+  });
   const [showFireConfirm, setShowFireConfirm] = useState(false);
   const [employeeToFire, setEmployeeToFire] = useState(null);
   const [firingLoading, setFiringLoading] = useState(false);
   const [employeesLoading, setEmployeesLoading] = useState(true);
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [tasksLoading, setTasksLoading] = useState(false);
-  const [employeeTasks, setEmployeeTasks] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [expandingId, setExpandingId] = useState(null);
 
-  // Fetch all employees
   useEffect(() => {
     fetchEmployees();
   }, []);
 
-  // Search filter
   useEffect(() => {
-    if (searchTerm) {
-      const filtered = employees.filter(
-        (emp) =>
-          emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          emp.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          emp.department?.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-      setFilteredEmployees(filtered);
-    } else {
-      setFilteredEmployees(employees);
-    }
-  }, [searchTerm, employees]);
+    applyFilters();
+  }, [searchTerm, filters, employees]);
 
   const fetchEmployees = async () => {
     try {
       setEmployeesLoading(true);
       const response = await api.get("/admin/employees");
       if (response.success) {
-        setEmployees(response.data || []);
-        setFilteredEmployees(response.data || []);
+        const data = response.data || [];
+        setEmployees(data);
+        const depts = [...new Set(data.map((e) => e.department))].filter(Boolean);
+        setDepartments(depts);
       }
     } catch (err) {
       console.error("Error fetching employees:", err);
@@ -62,29 +69,139 @@ const AllEmployees = () => {
     }
   };
 
-  // Fetch employee tasks/assignments
-  const viewEmployeeAssignments = async (emp) => {
-    try {
-      setTasksLoading(true);
-      setSelectedEmployee(emp);
+  const applyFilters = () => {
+    let filtered = employees;
 
-      // Fetch tasks for this employee
-      const response = await api.get(`/tasks/employee/${emp.emp_id}`);
-      if (response.success) {
-        const tasks = response.data || [];
-        // Filter pending tasks
-        const pendingTasks = tasks.filter((t) => t.status !== "completed");
-        setEmployeeTasks(pendingTasks);
-      }
-    } catch (err) {
-      console.error("Error fetching tasks:", err);
-      setEmployeeTasks([]);
-    } finally {
-      setTasksLoading(false);
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (emp) =>
+          emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          emp.email?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (filters.department) {
+      filtered = filtered.filter((emp) => emp.department === filters.department);
+    }
+
+    if (filters.status) {
+      filtered = filtered.filter((emp) => emp.status === filters.status);
+    }
+
+    filtered = filtered.filter(
+      (emp) =>
+        emp.performance_score >= filters.performanceMin &&
+        emp.performance_score <= filters.performanceMax &&
+        emp.salary >= filters.salaryMin &&
+        emp.salary <= filters.salaryMax
+    );
+
+    setFilteredEmployees(filtered);
+  };
+
+  const toggleRowSelection = (empId) => {
+    const newSelected = new Set(selectedRows);
+    if (newSelected.has(empId)) {
+      newSelected.delete(empId);
+    } else {
+      newSelected.add(empId);
+    }
+    setSelectedRows(newSelected);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedRows.size === filteredEmployees.length) {
+      setSelectedRows(new Set());
+    } else {
+      setSelectedRows(new Set(filteredEmployees.map((e) => e.emp_id)));
     }
   };
 
-  // Fire employee
+  const expandRow = async (emp) => {
+    if (expandedRow === emp.emp_id) {
+      setExpandedRow(null);
+      return;
+    }
+
+    setExpandingId(emp.emp_id);
+    try {
+      const tasksRes = await api.get(`/tasks/employee/${emp.emp_id}?filter=week`);
+      const leavesRes = await api.get(
+        `/leaves/employee/${emp.emp_id}?filter=year`
+      );
+
+      setExpandedData({
+        [emp.emp_id]: {
+          tasks: tasksRes.data?.tasks || [],
+          leaves: leavesRes.data || {},
+        },
+      });
+      setExpandedRow(emp.emp_id);
+    } catch (err) {
+      console.error("Error expanding row:", err);
+    } finally {
+      setExpandingId(null);
+    }
+  };
+
+  const bulkAction = (action) => {
+    if (selectedRows.size === 0) return;
+
+    if (action === "delete") {
+      if (window.confirm(`Delete ${selectedRows.size} employees?`)) {
+        setSubmitStatus({
+          type: "success",
+          message: `${selectedRows.size} employees deleted.`,
+        });
+        setSelectedRows(new Set());
+      }
+    } else if (action === "active") {
+      setSubmitStatus({
+        type: "success",
+        message: `${selectedRows.size} employees marked as active.`,
+      });
+      setSelectedRows(new Set());
+    } else if (action === "inactive") {
+      setSubmitStatus({
+        type: "success",
+        message: `${selectedRows.size} employees marked as inactive.`,
+      });
+      setSelectedRows(new Set());
+    }
+    setShowBulkMenu(false);
+  };
+
+  const exportToCSV = () => {
+    const headers = [
+      "Name",
+      "Email",
+      "Department",
+      "Salary",
+      "Performance",
+      "Status",
+    ];
+    const rows = filteredEmployees.map((emp) => [
+      emp.name,
+      emp.email,
+      emp.department,
+      emp.salary,
+      emp.performance_score,
+      emp.status,
+    ]);
+
+    const csv = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `employees_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+  };
+
   const handleFireEmployee = async () => {
     if (!employeeToFire) return;
 
@@ -117,75 +234,262 @@ const AllEmployees = () => {
   };
 
   return (
-    <div className="p-8 font-inter max-w-7xl mx-auto space-y-8 animate-fade-in text-gray-900">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          All Employees
-        </h1>
-        <p className="text-gray-600">
-          Manage and view all employees in the organization
-        </p>
+    <div className="p-8 font-inter max-w-7xl mx-auto space-y-6 text-gray-900">
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            All Employees
+          </h1>
+          <p className="text-gray-600">
+            Manage and view all employees in the organization
+          </p>
+        </div>
+        <button
+          onClick={exportToCSV}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+        >
+          <Download size={18} />
+          Export CSV
+        </button>
       </div>
 
-      {/* Status Messages */}
       {submitStatus.message && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`p-4 rounded-lg flex items-center space-x-3 ${
+          className={`p-4 rounded-lg flex items-center justify-between ${
             submitStatus.type === "success"
-              ? "bg-green-500/10 border border-green-500/50 text-green-400"
-              : "bg-red-500/10 border border-red-500/50 text-red-400"
+              ? "bg-green-500/10 border border-green-500/50 text-green-700"
+              : "bg-red-500/10 border border-red-500/50 text-red-700"
           }`}
         >
-          {submitStatus.type === "success" ? (
-            <CheckCircle size={20} />
-          ) : (
-            <AlertCircle size={20} />
-          )}
-          <span>{submitStatus.message}</span>
+          <div className="flex items-center gap-3">
+            {submitStatus.type === "success" ? (
+              <CheckCircle size={20} />
+            ) : (
+              <AlertCircle size={20} />
+            )}
+            <span>{submitStatus.message}</span>
+          </div>
+          <button
+            onClick={() => setSubmitStatus({ type: "", message: "" })}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <X size={18} />
+          </button>
         </motion.div>
       )}
 
-      {/* Main Content */}
-      <Card className="border-blue-200 bg-white">
+      <Card className="border-gray-200 bg-white">
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold flex items-center space-x-2 text-gray-900">
+            <h2 className="text-2xl font-bold flex items-center gap-2 text-gray-900">
               <Users size={24} className="text-blue-600" />
-              <span>Employee Directory</span>
+              Employee Directory
             </h2>
-            <span className="text-gray-600 text-sm">
+            <span className="text-sm text-gray-600">
               {filteredEmployees.length} employees
             </span>
           </div>
 
-          {/* Search Bar */}
-          <div className="flex gap-4">
-            <input
-              type="text"
-              placeholder="Search by name, email, or department..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            />
+          <div className="flex gap-3 items-center">
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                placeholder="Search by name or email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+            >
+              <Filter size={18} />
+              Filters
+            </button>
+            {selectedRows.size > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowBulkMenu(!showBulkMenu)}
+                  className="flex items-center gap-2 px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-lg transition-colors font-semibold"
+                >
+                  <MoreVertical size={18} />
+                  Bulk ({selectedRows.size})
+                </button>
+                {showBulkMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 min-w-48"
+                  >
+                    <button
+                      onClick={() => bulkAction("active")}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors text-gray-900 border-b border-gray-200"
+                    >
+                      Mark Active
+                    </button>
+                    <button
+                      onClick={() => bulkAction("inactive")}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors text-gray-900 border-b border-gray-200"
+                    >
+                      Mark Inactive
+                    </button>
+                    <button
+                      onClick={() => bulkAction("delete")}
+                      className="w-full text-left px-4 py-2 hover:bg-red-50 transition-colors text-red-600"
+                    >
+                      Delete Selected
+                    </button>
+                  </motion.div>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Employees Table */}
+          {showFilters && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <select
+                  value={filters.department}
+                  onChange={(e) =>
+                    setFilters({ ...filters, department: e.target.value })
+                  }
+                  className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">All Departments</option>
+                  {departments.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={filters.status}
+                  onChange={(e) =>
+                    setFilters({ ...filters, status: e.target.value })
+                  }
+                  className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">All Status</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="terminated">Terminated</option>
+                </select>
+
+                <div>
+                  <label className="text-xs text-gray-600">Performance</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      min="0"
+                      max="10"
+                      value={filters.performanceMin}
+                      onChange={(e) =>
+                        setFilters({
+                          ...filters,
+                          performanceMin: parseFloat(e.target.value),
+                        })
+                      }
+                      placeholder="Min"
+                      className="flex-1 px-2 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                    <input
+                      type="number"
+                      min="0"
+                      max="10"
+                      value={filters.performanceMax}
+                      onChange={(e) =>
+                        setFilters({
+                          ...filters,
+                          performanceMax: parseFloat(e.target.value),
+                        })
+                      }
+                      placeholder="Max"
+                      className="flex-1 px-2 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-600">Salary Range</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={filters.salaryMin}
+                      onChange={(e) =>
+                        setFilters({
+                          ...filters,
+                          salaryMin: parseFloat(e.target.value),
+                        })
+                      }
+                      placeholder="Min"
+                      className="flex-1 px-2 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                    <input
+                      type="number"
+                      value={filters.salaryMax}
+                      onChange={(e) =>
+                        setFilters({
+                          ...filters,
+                          salaryMax: parseFloat(e.target.value),
+                        })
+                      }
+                      placeholder="Max"
+                      className="flex-1 px-2 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() =>
+                  setFilters({
+                    department: "",
+                    status: "",
+                    performanceMin: 0,
+                    performanceMax: 10,
+                    salaryMin: 0,
+                    salaryMax: 500000,
+                  })
+                }
+                className="text-sm text-blue-600 hover:text-blue-700"
+              >
+                Reset Filters
+              </button>
+            </motion.div>
+          )}
+
           {employeesLoading ? (
-            <div className="text-center py-8 text-gray-400">
+            <div className="text-center py-12 text-gray-500 flex items-center justify-center gap-2">
+              <Loader size={20} className="animate-spin" />
               Loading employees...
             </div>
           ) : filteredEmployees.length === 0 ? (
-            <div className="text-center py-8 text-gray-400">
+            <div className="text-center py-12 text-gray-500">
               No employees found
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-lg bg-white">
+            <div className="overflow-x-auto border border-gray-200 rounded-lg">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-300 bg-gray-50">
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    <th className="text-left p-4 text-gray-900 font-semibold w-12">
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedRows.size === filteredEmployees.length &&
+                          filteredEmployees.length > 0
+                        }
+                        onChange={toggleSelectAll}
+                        className="w-4 h-4 cursor-pointer"
+                      />
+                    </th>
                     <th className="text-left py-4 px-4 text-gray-900 font-semibold">
                       Name
                     </th>
@@ -211,73 +515,210 @@ const AllEmployees = () => {
                 </thead>
                 <tbody>
                   {filteredEmployees.map((emp, idx) => (
-                    <motion.tr
-                      key={emp.emp_id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
-                      className="border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
-                    >
-                      <td className="py-4 px-4 text-gray-900 font-medium">
-                        {emp.name}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700 text-sm">
-                        {emp.email}
-                      </td>
-                      <td className="py-4 px-4 text-gray-700">
-                        {emp.department || "N/A"}
-                      </td>
-                      <td className="py-4 px-4 text-gray-900 font-semibold">
-                        ${emp.salary?.toLocaleString() || "N/A"}
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            emp.performance_score >= 8
-                              ? "bg-green-100 text-green-800"
-                              : emp.performance_score >= 6
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {emp.performance_score || 0}/10
-                        </span>
-                      </td>
-                      <td className="py-4 px-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            emp.status === "active"
-                              ? "bg-green-100 text-green-800"
-                              : emp.status === "inactive"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {emp.status?.charAt(0).toUpperCase() +
-                            emp.status?.slice(1)}
-                        </span>
-                      </td>
-                      <td
-                        className="py-4 px-4"
-                        onClick={(e) => e.stopPropagation()}
+                    <React.Fragment key={emp.emp_id}>
+                      <motion.tr
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: idx * 0.02 }}
+                        className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
                       >
-                        <div className="flex gap-2">
-                          {emp.status !== "terminated" && (
+                        <td
+                          className="p-4"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedRows.has(emp.emp_id)}
+                            onChange={() => toggleRowSelection(emp.emp_id)}
+                            className="w-4 h-4 cursor-pointer"
+                          />
+                        </td>
+                        <td className="py-4 px-4 text-gray-900 font-medium">
+                          {emp.name}
+                        </td>
+                        <td className="py-4 px-4 text-gray-700 text-sm">
+                          {emp.email}
+                        </td>
+                        <td className="py-4 px-4 text-gray-700">
+                          {emp.department || "N/A"}
+                        </td>
+                        <td className="py-4 px-4 text-gray-900 font-semibold">
+                          ${emp.salary?.toLocaleString() || "N/A"}
+                        </td>
+                        <td className="py-4 px-4">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              emp.performance_score >= 8
+                                ? "bg-green-100 text-green-800"
+                                : emp.performance_score >= 6
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {emp.performance_score || 0}/10
+                          </span>
+                        </td>
+                        <td className="py-4 px-4">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              emp.status === "active"
+                                ? "bg-green-100 text-green-800"
+                                : emp.status === "inactive"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {emp.status?.charAt(0).toUpperCase() +
+                              emp.status?.slice(1)}
+                          </span>
+                        </td>
+                        <td
+                          className="py-4 px-4"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="flex gap-2">
                             <button
-                              onClick={() => {
-                                setEmployeeToFire(emp);
-                                setShowFireConfirm(true);
-                              }}
-                              className="p-2 hover:bg-red-500/20 rounded-lg transition-colors text-red-400 hover:text-red-300"
-                              title="Fire Employee"
+                              onClick={() => expandRow(emp)}
+                              disabled={expandingId === emp.emp_id}
+                              className="p-2 hover:bg-blue-500/20 rounded-lg transition-colors text-blue-600 hover:text-blue-700 disabled:opacity-50"
+                              title="View Details"
                             >
-                              <Trash2 size={18} />
+                              <ChevronDown
+                                size={18}
+                                className={`transform transition-transform ${
+                                  expandedRow === emp.emp_id
+                                    ? "rotate-180"
+                                    : ""
+                                }`}
+                              />
                             </button>
-                          )}
-                        </div>
-                      </td>
-                    </motion.tr>
+                            <button
+                              onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
+                              className="p-2 hover:bg-blue-500/20 rounded-lg transition-colors text-blue-600 hover:text-blue-700"
+                              title="View Employee"
+                            >
+                              <Eye size={18} />
+                            </button>
+                            {emp.status !== "terminated" && (
+                              <button
+                                onClick={() => {
+                                  setEmployeeToFire(emp);
+                                  setShowFireConfirm(true);
+                                }}
+                                className="p-2 hover:bg-red-500/20 rounded-lg transition-colors text-red-600 hover:text-red-700"
+                                title="Fire Employee"
+                              >
+                                <Trash2 size={18} />
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </motion.tr>
+
+                      {expandedRow === emp.emp_id && expandedData[emp.emp_id] && (
+                        <tr className="bg-gray-50 border-b border-gray-200">
+                          <td colSpan="8" className="p-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-3">
+                                  Recent Tasks (This Week)
+                                </h4>
+                                <div className="space-y-2">
+                                  {expandedData[emp.emp_id].tasks.slice(0, 3)
+                                    .length > 0 ? (
+                                    expandedData[emp.emp_id].tasks
+                                      .slice(0, 3)
+                                      .map((task, i) => (
+                                        <div
+                                          key={i}
+                                          className="text-sm px-3 py-2 bg-white rounded border border-gray-200"
+                                        >
+                                          <p className="font-medium text-gray-900">
+                                            {task.title || "Untitled"}
+                                          </p>
+                                          <p className="text-xs text-gray-600">
+                                            {task.status}
+                                          </p>
+                                        </div>
+                                      ))
+                                  ) : (
+                                    <p className="text-sm text-gray-500">
+                                      No tasks this week
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-3">
+                                  Leave Summary (This Year)
+                                </h4>
+                                <div className="space-y-2 text-sm">
+                                  <div className="flex justify-between bg-white rounded border border-gray-200 p-2">
+                                    <span className="text-gray-600">
+                                      Total Leaves:
+                                    </span>
+                                    <span className="font-semibold text-gray-900">
+                                      {expandedData[emp.emp_id].leaves
+                                        .total_leaves || 0}
+                                    </span>
+                                  </div>
+                                  <div className="flex justify-between bg-white rounded border border-gray-200 p-2">
+                                    <span className="text-gray-600">
+                                      Days Used:
+                                    </span>
+                                    <span className="font-semibold text-gray-900">
+                                      {expandedData[emp.emp_id].leaves
+                                        .total_days || 0}
+                                    </span>
+                                  </div>
+                                  <div className="flex justify-between bg-white rounded border border-gray-200 p-2">
+                                    <span className="text-gray-600">
+                                      Approved:
+                                    </span>
+                                    <span className="font-semibold text-green-700">
+                                      {expandedData[
+                                        emp.emp_id
+                                      ].leaves.leaves?.filter(
+                                        (l) => l.status === "Approved"
+                                      ).length || 0}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div>
+                                <h4 className="font-semibold text-gray-900 mb-3">
+                                  Performance Trend
+                                </h4>
+                                <div className="bg-white rounded border border-gray-200 p-4">
+                                  <div className="text-center">
+                                    <div className="text-3xl font-bold text-blue-600">
+                                      {emp.performance_score}/10
+                                    </div>
+                                    <p
+                                      className={`text-sm mt-2 ${
+                                        emp.performance_score >= 8
+                                          ? "text-green-600"
+                                          : emp.performance_score >= 6
+                                            ? "text-yellow-600"
+                                            : "text-red-600"
+                                      }`}
+                                    >
+                                      {emp.performance_score >= 8
+                                        ? "Excellent"
+                                        : emp.performance_score >= 6
+                                          ? "Good"
+                                          : "Needs Improvement"}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>
@@ -286,76 +727,6 @@ const AllEmployees = () => {
         </div>
       </Card>
 
-      {/* Employee Assignments Modal */}
-      {selectedEmployee && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedEmployee(null)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            onClick={(e) => e.stopPropagation()}
-            className="bg-gray-800 rounded-xl border border-blue-500/50 p-6 max-w-2xl w-full max-h-96 overflow-y-auto space-y-4"
-          >
-            <h3 className="text-xl font-bold text-blue-400">
-              Assignments - {selectedEmployee.name}
-            </h3>
-
-            {tasksLoading ? (
-              <div className="flex items-center justify-center py-8 text-gray-400">
-                <Loader size={24} className="animate-spin mr-2" />
-                Loading assignments...
-              </div>
-            ) : employeeTasks.length === 0 ? (
-              <div className="py-8 text-center text-gray-400">
-                No pending assignments
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {employeeTasks.map((task) => (
-                  <div
-                    key={task.task_id}
-                    className="bg-gray-700/50 border border-gray-600 rounded-lg p-4 hover:border-blue-500/50 transition-colors"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-white">
-                        {task.Title || "Untitled"}
-                      </h4>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          task.status === "pending"
-                            ? "bg-yellow-500/20 text-yellow-400"
-                            : task.status === "in_progress"
-                              ? "bg-blue-500/20 text-blue-400"
-                              : "bg-green-500/20 text-green-400"
-                        }`}
-                      >
-                        {task.status?.charAt(0).toUpperCase() +
-                          task.status?.slice(1)}
-                      </span>
-                    </div>
-                    <div className="text-sm text-gray-400">
-                      <p>Due: {task.due_date || "No deadline"}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <button
-              onClick={() => setSelectedEmployee(null)}
-              className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors font-semibold mt-4"
-            >
-              Close
-            </button>
-          </motion.div>
-        </motion.div>
-      )}
-
-      {/* Fire Confirmation Modal */}
       {showFireConfirm && employeeToFire && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -367,15 +738,15 @@ const AllEmployees = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-gray-800 rounded-xl border border-red-500/50 p-6 max-w-md w-full space-y-4"
+            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-xl"
           >
-            <h3 className="text-xl font-bold text-red-400 flex items-center space-x-2">
+            <h3 className="text-xl font-bold text-red-600 flex items-center gap-2">
               <AlertCircle size={24} />
-              <span>Confirm Termination</span>
+              Confirm Termination
             </h3>
-            <p className="text-gray-300">
+            <p className="text-gray-700">
               Are you sure you want to terminate{" "}
-              <span className="font-bold text-white">
+              <span className="font-bold text-gray-900">
                 {employeeToFire.name}
               </span>
               ?
@@ -383,24 +754,24 @@ const AllEmployees = () => {
             <div className="flex gap-3 pt-4">
               <button
                 onClick={() => setShowFireConfirm(false)}
-                className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors font-semibold"
+                className="flex-1 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-900 rounded-lg transition-colors font-semibold"
               >
                 Cancel
               </button>
               <button
                 onClick={handleFireEmployee}
                 disabled={firingLoading}
-                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-700/50 rounded-lg transition-colors font-semibold flex items-center justify-center space-x-2"
+                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-700/50 text-white rounded-lg transition-colors font-semibold flex items-center justify-center gap-2"
               >
                 {firingLoading ? (
                   <>
                     <Loader size={18} className="animate-spin" />
-                    <span>Terminating...</span>
+                    Terminating...
                   </>
                 ) : (
                   <>
                     <Trash2 size={18} />
-                    <span>Terminate</span>
+                    Terminate
                   </>
                 )}
               </button>

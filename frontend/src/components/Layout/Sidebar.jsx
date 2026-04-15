@@ -27,8 +27,13 @@ const Sidebar = () => {
     menuItems = [
       {
         icon: LayoutDashboard,
-        label: "System Overview",
+        label: "Dashboard",
         path: "/admin/dashboard",
+      },
+      {
+        icon: BarChart2,
+        label: "System Overview",
+        path: "/admin/overview",
       },
       { icon: Users, label: "All Employees", path: "/admin/employees" },
       { icon: Settings, label: "Admin Settings", path: "/admin/settings" },

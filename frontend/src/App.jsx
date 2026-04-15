@@ -18,6 +18,8 @@ import EmployeeSalary from "./pages/EmployeeSalary";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import AllEmployees from "./pages/AllEmployees";
+import SystemOverview from "./pages/SystemOverview";
+import AdminSettings from "./pages/AdminSettings";
 import EmployeeDetails from "./pages/EmployeeDetails";
 import Settings from "./pages/Settings";
 
@@ -75,9 +77,10 @@ function App() {
           >
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="overview" element={<SystemOverview />} />
             <Route path="employees" element={<AllEmployees />} />
             <Route path="employee/:empId" element={<EmployeeDetails />} />
-            <Route path="settings" element={<Settings />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
 
           {/* Catch-all throws back to login */}
