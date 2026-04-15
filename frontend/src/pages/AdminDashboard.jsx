@@ -889,8 +889,6 @@ const AdminDashboard = () => {
                       <th className="text-left py-3 px-4 text-gray-900 font-semibold">Department</th>
                       <th className="text-left py-3 px-4 text-gray-900 font-semibold">Role</th>
                       <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Performance</th>
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -910,23 +908,6 @@ const AdminDashboard = () => {
                           }`}>
                             {emp.status || "N/A"}
                           </span>
-                        </td>
-                        <td className="py-3 px-4 text-gray-900 font-medium">
-                          {emp.emp_id === 999 ? "--" : `${emp.performance_score || "N/A"}/10`}
-                        </td>
-                        <td className="py-3 px-4">
-                          {emp.emp_id !== 999 && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(`/admin/employee/${emp.emp_id}`);
-                              }}
-                              className="p-1 hover:bg-blue-500/20 rounded text-blue-600 hover:text-blue-700 transition-colors"
-                              title="View Employee"
-                            >
-                              <Eye size={18} />
-                            </button>
-                          )}
                         </td>
                       </tr>
                     ))}

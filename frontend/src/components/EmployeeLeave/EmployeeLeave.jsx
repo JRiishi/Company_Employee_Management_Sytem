@@ -218,59 +218,67 @@ const EmployeeLeave = ({ empId, empName }) => {
 
       {/* Leave Records Table */}
       {leaveData && leaveData.leaves && leaveData.leaves.length > 0 && (
-        <Card className="border-gray-200 bg-white overflow-x-auto">
+        <Card className="border-gray-200 bg-white">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Leave Records</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">Leave Type</th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">Start Date</th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">End Date</th>
-                  <th className="text-center py-3 px-4 text-gray-700 font-semibold">Days</th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">Status</th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">Reason</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leaveData.leaves.map((leave, idx) => (
-                  <motion.tr
-                    key={leave.leave_id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="py-3 px-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getLeaveTypeColor(leave.leave_type)}`}>
-                        {leave.leave_type}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 text-sm">
-                      {new Date(leave.start_date).toLocaleDateString()}
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 text-sm">
-                      {new Date(leave.end_date).toLocaleDateString()}
-                    </td>
-                    <td className="py-3 px-4 text-center font-semibold text-gray-900">{leave.duration}</td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`px-3 py-1 rounded text-xs font-semibold ${
-                          leave.status === "Approved"
-                            ? "bg-green-100 text-green-800"
-                            : leave.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {leave.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 text-sm">{leave.reason || "-"}</td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="space-y-3">
+            {leaveData.leaves.map((leave, idx) => (
+              <motion.div
+                key={leave.leave_id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getLeaveTypeColor(leave.leave_type)}`}>
+                          {leave.leave_type}
+                        </span>
+                        <span
+                          className={`px-3 py-1 rounded text-xs font-semibold ${
+                            leave.status === "Approved"
+                              ? "bg-green-100 text-green-800"
+                              : leave.status === "Pending"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {leave.status}
+                        </span>
+                      </div>
+                      <p className="text-gray-700 font-medium text-sm">
+                        {leave.reason || "No reason provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-600 text-xs font-medium">Start Date</p>
+                      <p className="text-gray-900 font-semibold">
+                        {new Date(leave.start_date).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-xs font-medium">End Date</p>
+                      <p className="text-gray-900 font-semibold">
+                        {new Date(leave.end_date).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-xs font-medium">Duration</p>
+                      <p className="text-gray-900 font-semibold">{leave.duration} day{leave.duration > 1 ? 's' : ''}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-xs font-medium">Days Used</p>
+                      <p className="text-gray-900 font-semibold">{leave.duration} of leave</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </Card>
       )}

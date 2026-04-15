@@ -347,71 +347,62 @@ const TaskDashboard = ({ empId, empName }) => {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                    Task Title
-                  </th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                    Status
-                  </th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                    Created
-                  </th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                    Due Date
-                  </th>
-                  <th className="text-left py-3 px-4 text-gray-700 font-semibold">
-                    Completed
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedTasks.map((task, idx) => (
-                  <motion.tr
-                    key={task.task_id || idx}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.02 }}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="py-3 px-4">
-                      <p className="font-medium text-gray-900">
+          <div className="space-y-3">
+            {sortedTasks.map((task, idx) => (
+              <motion.div
+                key={task.task_id || idx}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.02 }}
+                className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 text-base">
                         {task.Title || task.title || "Untitled Task"}
+                      </h4>
+                    </div>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 whitespace-nowrap ${getStatusColor(
+                        task.status
+                      )}`}
+                    >
+                      {getStatusIcon(task.status)}
+                      {task.status?.charAt(0).toUpperCase() +
+                        task.status?.slice(1)}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-600 text-xs font-medium">Created</p>
+                      <p className="text-gray-900 font-semibold">
+                        {task.created_at
+                          ? new Date(task.created_at).toLocaleDateString()
+                          : "-"}
                       </p>
-                    </td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 w-fit ${getStatusColor(
-                          task.status
-                        )}`}
-                      >
-                        {getStatusIcon(task.status)}
-                        {task.status?.charAt(0).toUpperCase() +
-                          task.status?.slice(1)}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 text-sm">
-                      {task.created_at
-                        ? new Date(task.created_at).toLocaleDateString()
-                        : "-"}
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 text-sm">
-                      {task.due_date
-                        ? new Date(task.due_date).toLocaleDateString()
-                        : "-"}
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 text-sm">
-                      {task.completed_at
-                        ? new Date(task.completed_at).toLocaleDateString()
-                        : "-"}
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-xs font-medium">Due Date</p>
+                      <p className="text-gray-900 font-semibold">
+                        {task.due_date
+                          ? new Date(task.due_date).toLocaleDateString()
+                          : "-"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-xs font-medium">Completed</p>
+                      <p className="text-gray-900 font-semibold">
+                        {task.completed_at
+                          ? new Date(task.completed_at).toLocaleDateString()
+                          : "-"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         )}
       </Card>
