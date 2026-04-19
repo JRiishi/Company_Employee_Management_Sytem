@@ -7823,3 +7823,46 @@ INFO:     127.0.0.1:63956 - "GET /api/admin/employees HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63962 - "GET /api/admin/employees HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63967 - "OPTIONS /api/auth/logout HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63967 - "POST /api/auth/logout HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64108 - "GET /api/leaves/summary?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64102 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64108 - "GET /api/leaves/summary?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64102 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64108 - "GET /api/leaves/summary?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64102 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64111 - "GET /api/leaves/summary?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64102 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64111 - "GET /api/leaves/summary?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64102 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64108 - "GET /api/leaves/summary?filter=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64102 - "GET /api/admin/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64100 - "GET /api/admin/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/hr/recommendations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64105 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "GET /api/admin/employees HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64106 - "POST /api/auth/logout HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [28484]
