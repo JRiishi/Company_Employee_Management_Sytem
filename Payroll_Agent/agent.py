@@ -17,7 +17,7 @@ def query_database(sql: str) -> dict:
         db = mysql.connector.connect(
             host='localhost',
             user='root',
-            password='123456789',
+            password='12345678',
             database='DBMS_PROJECT',
             auth_plugin='mysql_native_password'
         )
@@ -47,7 +47,7 @@ def write_database(sql: str) -> dict:
         db = mysql.connector.connect(
             host='localhost',
             user='root',
-            password='123456789',
+            password='12345678',
             database='DBMS_PROJECT',
             auth_plugin='mysql_native_password'
         )
@@ -75,7 +75,7 @@ def calculate_net_salary(emp_id: int, month: int, year: int) -> dict:
         db = mysql.connector.connect(
             host='localhost',
             user='root',
-            password='123456789',
+            password='12345678',
             database='DBMS_PROJECT',
             auth_plugin='mysql_native_password'
         )

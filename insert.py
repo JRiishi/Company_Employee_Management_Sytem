@@ -1,11 +1,16 @@
 import mysql.connector
 from mysql.connector import Error
+from dotenv import load_dotenv
+import os
+
+load_dotenv("backend/.env")
+
 try:
     db=mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='123456789',
-        database='demo_1',
+        host=os.getenv("DB_HOST", "localhost"),
+        user=os.getenv("DB_USER", "root"),
+        password=os.getenv("DB_PASS", "123456789"),
+        database=os.getenv("DB_NAME", "DBMS_PROJECT"),
         auth_plugin='mysql_native_password'
     )
     if db.is_connected():

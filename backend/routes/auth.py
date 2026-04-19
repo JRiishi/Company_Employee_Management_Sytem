@@ -3,8 +3,8 @@ import logging
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends, Request
 from pydantic import BaseModel, EmailStr
-from backend.db.connection import get_db_connection
-from backend.security import create_access_token, create_refresh_token, verify_token, require_role
+from db.connection import get_db_connection
+from security import create_access_token, create_refresh_token, verify_token, require_role
 
 from slowapi import Limiter
 from slowapi.util import get_remote_address

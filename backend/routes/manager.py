@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
-from backend.services.agent_service import AgentService
-from backend.security import require_role
+from services.agent_service import AgentService
+from security import require_role
 
 router = APIRouter()
 

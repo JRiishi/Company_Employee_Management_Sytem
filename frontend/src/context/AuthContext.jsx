@@ -1,15 +1,15 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { login as apiLogin, logoutAPI } from '../services/authApi';
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { login as apiLogin, logoutAPI } from "../services/authApi";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('nexus_user');
+    const savedUser = localStorage.getItem("nexus_user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
-  
-  const [token, setToken] = useState(() => localStorage.getItem('nexus_token'));
+
+  const [token, setToken] = useState(() => localStorage.getItem("nexus_token"));
 
   const login = async (email, password) => {
     try {
@@ -17,11 +17,11 @@ export const AuthProvider = ({ children }) => {
       if (data && data.token && data.user) {
         setToken(data.token);
         setUser(data.user);
-        localStorage.setItem('nexus_token', data.token);
+        localStorage.setItem("nexus_token", data.token);
         if (data.refresh_token) {
-          localStorage.setItem('nexus_refresh_token', data.refresh_token);
+          localStorage.setItem("nexus_refresh_token", data.refresh_token);
         }
-        localStorage.setItem('nexus_user', JSON.stringify(data.user));
+        localStorage.setItem("nexus_user", JSON.stringify(data.user));
         return data.user;
       }
       throw new Error("Invalid server response");
@@ -32,18 +32,39 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      if (localStorage.getItem('nexus_token')) {
+      // Preserve employee and settings data across logout
+      const addedEmployees = localStorage.getItem("addedEmployees");
+      const adminSettings = localStorage.getItem("adminSettings");
+
+      if (localStorage.getItem("nexus_token")) {
         await logoutAPI();
       }
-    } catch(err) {
-      console.warn("Logout endpoint error, but forcing local clear.");
-    } finally {
+
+      // Clear everything
       setToken(null);
       setUser(null);
       localStorage.clear();
       sessionStorage.clear();
-      window.location.hash = '#/login';
+
+      // Restore preserved data
+      if (addedEmployees) {
+        localStorage.setItem("addedEmployees", addedEmployees);
+      }
+      if (adminSettings) {
+        localStorage.setItem("adminSettings", adminSettings);
+      }
+
+      window.location.hash = "#/login";
       window.location.reload(); // Force full app reset
+    } catch (err) {
+      console.warn("Logout error:", err);
+      // Force clear on error anyway
+      setToken(null);
+      setUser(null);
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.hash = "#/login";
+      window.location.reload();
     }
   };
 

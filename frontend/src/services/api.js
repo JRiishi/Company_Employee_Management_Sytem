@@ -4,20 +4,6 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
 });
 
-let isRefreshing = false;
-let failedQueue = [];
-
-const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-  failedQueue = [];
-};
-
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('nexus_token');
@@ -30,56 +16,12 @@ api.interceptors.request.use(
 );
 
 api.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
-  async (error) => {
-    const originalRequest = error.config;
-    const bypassUrls = ['/auth/login', '/auth/set-password', '/auth/refresh'];
-    
-    if (error.response && error.response.status === 401 && !originalRequest._retry && !bypassUrls.includes(originalRequest.url)) {
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        }).then(token => {
-          originalRequest.headers.Authorization = 'Bearer ' + token;
-          return api(originalRequest);
-        }).catch(err => Promise.reject(err));
-      }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        const refreshToken = localStorage.getItem('nexus_refresh_token');
-        if (!refreshToken) throw new Error("No refresh token");
-
-        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'}/auth/refresh`, {
-          refresh_token: refreshToken
-        });
-
-        const data = res.data.data;
-        localStorage.setItem('nexus_token', data.token);
-        localStorage.setItem('nexus_refresh_token', data.refresh_token);
-        
-        api.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
-        originalRequest.headers.Authorization = 'Bearer ' + data.token;
-        
-        processQueue(null, data.token);
-        return api(originalRequest);
-
-      } catch (err) {
-        processQueue(err, null);
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.hash = '#/login';
-        window.location.reload();
-        return Promise.reject(err);
-      } finally {
-        isRefreshing = false;
-      }
+  (response) => response.data,
+  (error) => {
+    // Pass auth errors through for login endpoints to handle
+    if (error.response?.data) {
+      return Promise.reject(error.response.data);
     }
-    
     return Promise.reject(error);
   }
 );
@@ -133,8 +75,6 @@ export const assignTask = async (taskData) => {
   return await api.post('/tasks/assign', taskData);
 };
 
-export default api;
-
 export const fetchUserData = async () => {
   return await api.get('/user/me');
 };
@@ -150,3 +90,5 @@ export const changePassword = async (passwordData) => {
 export const logoutUserAPI = async () => {
   return await api.post('/auth/logout');
 };
+
+export default api;
