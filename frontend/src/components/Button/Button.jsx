@@ -1,5 +1,5 @@
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: Reusable button component with multiple variants and sizes
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Replaced opaque generic backgrounds with dark theme transparency variations.
 
 import React from 'react';
 import { Loader2 } from 'lucide-react';
@@ -20,7 +20,7 @@ const Button = ({
       case 'primary':
         return 'bg-accent hover:bg-accent-hover text-white focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-bg-base';
       case 'secondary':
-        return 'bg-transparent border border-border-default text-text-secondary hover:text-text-primary hover:border-border-strong hover:bg-bg-elevated';
+        return 'bg-transparent border border-white/10 text-gray-300 hover:text-gray-100 hover:border-white/20 hover:bg-white/[0.04]';
       case 'danger':
         return 'bg-danger/10 border border-danger/30 text-danger hover:bg-danger/20 hover:border-danger/50';
       case 'success':
@@ -28,7 +28,7 @@ const Button = ({
       case 'warning':
         return 'bg-warning/10 border border-warning/30 text-warning hover:bg-warning/20 hover:border-warning/50';
       case 'ghost':
-        return 'bg-transparent text-text-secondary hover:bg-bg-elevated hover:text-text-primary';
+        return 'bg-transparent text-gray-300 hover:bg-white/[0.04] hover:text-gray-100';
       default:
         return 'bg-accent hover:bg-accent-hover text-white';
     }

@@ -247,7 +247,7 @@ const SystemOverview = () => {
       onClick={onClick}
       className="h-full"
     >
-      <Card className="border-white/10 bg-[#13131C] h-full flex flex-col justify-between hover:shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-shadow">
+      <Card className="border-white/10  h-full flex flex-col justify-between hover:shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-shadow">
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-text-primary text-sm font-medium">{title}</h3>
           <Icon
@@ -339,7 +339,7 @@ const SystemOverview = () => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#13131C] rounded-xl border border-white/10 p-6 max-w-4xl w-full max-h-96 overflow-y-auto shadow-xl"
+          className=" rounded-xl border border-white/10 p-6 max-w-4xl w-full max-h-96 overflow-y-auto shadow-xl"
         >
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-text-primary">
@@ -362,7 +362,7 @@ const SystemOverview = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 bg-[#13131C]">
+                  <tr className="border-b border-white/10 ">
                     {getTableHeaders().map((header) => (
                       <th
                         key={header}
@@ -380,7 +380,7 @@ const SystemOverview = () => {
                 </thead>
                 <tbody>
                   {detailModal.data.map((item, i) => (
-                    <tr key={i} className="border-b border-white/10 hover:bg-[#13131C]">
+                    <tr key={i} className="border-b border-white/10 hover:">
                       {getTableData(item).map((cell, j) => (
                         <td key={j} className="py-3 px-4 text-text-primary">
                           {cell}
@@ -464,21 +464,28 @@ const SystemOverview = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-white/10 bg-[#13131C]">
+        <Card className="border-white/10 ">
           <h2 className="text-xl font-bold text-text-primary mb-6">
             Department Performance Comparison
           </h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={deptPerformance}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
               <XAxis dataKey="department" stroke="#6b7280" />
               <YAxis stroke="#6b7280" />
               <Tooltip
-                contentStyle={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #e5e7eb",
-                }}
-              />
+  contentStyle={{
+    background: '#1A1A26',
+    border: '1px solid rgba(255,255,255,0.10)',
+    borderRadius: '8px',
+    color: '#F0F0FA',
+    fontSize: '12px',
+    boxShadow: '0 4px 24px rgba(0,0,0,0.5)'
+  }}
+  itemStyle={{ color: '#F0F0FA' }}
+  labelStyle={{ color: '#9090AA', marginBottom: '4px' }}
+  cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+/>
               <Bar
                 dataKey="performance"
                 fill="#3b82f6"
@@ -488,21 +495,28 @@ const SystemOverview = () => {
           </ResponsiveContainer>
         </Card>
 
-        <Card className="border-white/10 bg-[#13131C]">
+        <Card className="border-white/10 ">
           <h2 className="text-xl font-bold text-text-primary mb-6">
             Task Creation Timeline
           </h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={taskTimeline}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
               <XAxis dataKey="day" stroke="#6b7280" />
               <YAxis stroke="#6b7280" />
               <Tooltip
-                contentStyle={{
-                  backgroundColor: "#fff",
-                  border: "1px solid #e5e7eb",
-                }}
-              />
+  contentStyle={{
+    background: '#1A1A26',
+    border: '1px solid rgba(255,255,255,0.10)',
+    borderRadius: '8px',
+    color: '#F0F0FA',
+    fontSize: '12px',
+    boxShadow: '0 4px 24px rgba(0,0,0,0.5)'
+  }}
+  itemStyle={{ color: '#F0F0FA' }}
+  labelStyle={{ color: '#9090AA', marginBottom: '4px' }}
+  cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+/>
               <Line
                 type="monotone"
                 dataKey="created"
@@ -516,15 +530,15 @@ const SystemOverview = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="border-red-200 bg-red-50">
+        <Card className="border-red-500/20 bg-red-500/10">
           <div className="flex items-start gap-3 mb-4">
             <AlertTriangle
               size={24}
-              className="text-red-600 flex-shrink-0"
+              className="text-red-400 flex-shrink-0 drop-shadow-[0_0_8px_rgba(248,113,113,0.5)]"
             />
             <div>
-              <h2 className="text-xl font-bold text-red-900">Risk Panel</h2>
-              <p className="text-sm text-red-700">
+              <h2 className="text-xl font-bold text-red-100">Risk Panel</h2>
+              <p className="text-sm text-red-200/70">
                 Employees requiring attention
               </p>
             </div>
@@ -536,11 +550,11 @@ const SystemOverview = () => {
                   key={i}
                   whileHover={{ translateX: 4, cursor: "pointer" }}
                   onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
-                  className="bg-[#13131C] rounded-lg p-3 border border-red-200 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-shadow"
+                  className="rounded-lg p-3 border border-red-500/20 bg-black/20 hover:border-red-500/40 hover:shadow-[0_4px_24px_rgba(248,113,113,0.15)] transition-all"
                 >
                   <div className="flex justify-between items-start mb-1">
                     <p className="font-semibold text-text-primary">{emp.name}</p>
-                    <span className="text-xs px-2 py-1 bg-red-100 text-red-800 rounded">
+                    <span className="text-xs px-2 py-1 bg-red-500/20 text-red-300 border border-red-500/30 rounded">
                       {emp.issue}
                     </span>
                   </div>
@@ -559,14 +573,14 @@ const SystemOverview = () => {
           </div>
         </Card>
 
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green-500/20 bg-green-500/10">
           <div className="flex items-start gap-3 mb-4">
-            <TrendingUp size={24} className="text-green-600 flex-shrink-0" />
+            <TrendingUp size={24} className="text-green-400 flex-shrink-0 drop-shadow-[0_0_8px_rgba(74,222,128,0.5)]" />
             <div>
-              <h2 className="text-xl font-bold text-green-900">
+              <h2 className="text-xl font-bold text-green-100">
                 Top Performers
               </h2>
-              <p className="text-sm text-green-700">
+              <p className="text-sm text-green-200/70">
                 Based on performance score
               </p>
             </div>
@@ -577,11 +591,11 @@ const SystemOverview = () => {
                 key={i}
                 whileHover={{ translateX: 4, cursor: "pointer" }}
                 onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
-                className="bg-[#13131C] rounded-lg p-3 border border-green-200 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-shadow"
+                className="rounded-lg p-3 border border-green-500/20 bg-black/20 hover:border-green-500/40 hover:shadow-[0_4px_24px_rgba(74,222,128,0.15)] transition-all"
               >
                 <div className="flex justify-between items-start mb-1">
                   <p className="font-semibold text-text-primary">{emp.name}</p>
-                  <span className="text-sm font-bold text-green-700">
+                  <span className="text-sm font-bold text-green-400">
                     {emp.performance}/10
                   </span>
                 </div>
@@ -591,52 +605,53 @@ const SystemOverview = () => {
           </div>
         </Card>
 
-        <Card className="border-blue-200 bg-blue-50">
-          <h2 className="text-xl font-bold text-blue-900 mb-4">
+        <Card className="border-blue-500/20 bg-blue-500/10">
+          <h2 className="text-xl font-bold text-blue-100 mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
             System Status
           </h2>
           <div className="space-y-3">
-            <div className="bg-[#13131C] rounded-lg p-3 border border-blue-200">
+            <div className="rounded-lg p-3 border border-blue-500/20 bg-black/20">
               <p className="text-sm text-text-primary mb-1">Employee Database</p>
               <div className="flex items-center gap-2">
-                <div className="flex-1 h-2 bg-blue-200 rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-blue-950/50 rounded-full overflow-hidden border border-blue-500/20">
                   <div
-                    className="h-full bg-green-500"
+                    className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]"
                     style={{ width: "98%" }}
                   ></div>
                 </div>
-                <span className="text-xs font-semibold text-text-primary">98%</span>
+                <span className="text-xs font-semibold text-blue-300">98%</span>
               </div>
             </div>
-            <div className="bg-[#13131C] rounded-lg p-3 border border-blue-200">
+            <div className="rounded-lg p-3 border border-blue-500/20 bg-black/20">
               <p className="text-sm text-text-primary mb-1">Task Processing</p>
               <div className="flex items-center gap-2">
-                <div className="flex-1 h-2 bg-blue-200 rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-blue-950/50 rounded-full overflow-hidden border border-blue-500/20">
                   <div
-                    className="h-full bg-green-500"
+                    className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]"
                     style={{ width: "92%" }}
                   ></div>
                 </div>
-                <span className="text-xs font-semibold text-text-primary">92%</span>
+                <span className="text-xs font-semibold text-blue-300">92%</span>
               </div>
             </div>
-            <div className="bg-[#13131C] rounded-lg p-3 border border-blue-200">
+            <div className="rounded-lg p-3 border border-blue-500/20 bg-black/20">
               <p className="text-sm text-text-primary mb-1">Leave Processing</p>
               <div className="flex items-center gap-2">
-                <div className="flex-1 h-2 bg-blue-200 rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-blue-950/50 rounded-full overflow-hidden border border-blue-500/20">
                   <div
-                    className="h-full bg-green-500"
+                    className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.6)]"
                     style={{ width: "95%" }}
                   ></div>
                 </div>
-                <span className="text-xs font-semibold text-text-primary">95%</span>
+                <span className="text-xs font-semibold text-blue-300">95%</span>
               </div>
             </div>
           </div>
         </Card>
       </div>
 
-      <Card className="border-white/10 bg-[#13131C]">
+      <Card className="border-white/10 ">
         <h2 className="text-xl font-bold text-text-primary mb-6">
           Employee Status Distribution
         </h2>
@@ -658,7 +673,19 @@ const SystemOverview = () => {
                 <Cell fill="#10b981" />
                 <Cell fill="#f59e0b" />
               </Pie>
-              <Tooltip />
+              <Tooltip
+  contentStyle={{
+    background: '#1A1A26',
+    border: '1px solid rgba(255,255,255,0.10)',
+    borderRadius: '8px',
+    color: '#F0F0FA',
+    fontSize: '12px',
+    boxShadow: '0 4px 24px rgba(0,0,0,0.5)'
+  }}
+  itemStyle={{ color: '#F0F0FA' }}
+  labelStyle={{ color: '#9090AA', marginBottom: '4px' }}
+  cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+/>
               <Legend />
             </PieChart>
           </ResponsiveContainer>

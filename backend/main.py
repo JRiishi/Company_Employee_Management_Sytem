@@ -9,7 +9,7 @@ from fastapi.exceptions import RequestValidationError
 import traceback
 from dotenv import load_dotenv
 
-load_dotenv("backend/.env")
+load_dotenv(".env")
 
 from routes import auth, admin, employee, manager, tasks, hr, user, leave
 

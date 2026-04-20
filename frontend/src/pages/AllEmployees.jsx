@@ -308,7 +308,7 @@ const AllEmployees = () => {
         </motion.div>
       )}
 
-      <Card className="border-white/10 bg-[#13131C]">
+      <Card className="border-white/10 ">
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold flex items-center gap-2 text-text-primary">
@@ -327,7 +327,7 @@ const AllEmployees = () => {
                 placeholder="Search by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 bg-[#13131C] border border-white/10 rounded-lg text-text-primary placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               />
             </div>
             <button
@@ -350,7 +350,7 @@ const AllEmployees = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute right-0 mt-2 bg-[#13131C] border border-white/10 rounded-lg shadow-[0_8px_32px_rgba(0,0,0,0.6)] z-10 min-w-48"
+                    className="absolute right-0 mt-2  border border-white/10 rounded-lg shadow-[0_8px_32px_rgba(0,0,0,0.6)] z-10 min-w-48"
                   >
                     <button
                       onClick={() => bulkAction("active")}
@@ -380,7 +380,7 @@ const AllEmployees = () => {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="bg-[#13131C] p-4 rounded-lg border border-white/10 space-y-4"
+              className=" p-4 rounded-lg border border-white/10 space-y-4"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <select
@@ -388,7 +388,7 @@ const AllEmployees = () => {
                   onChange={(e) =>
                     setFilters({ ...filters, department: e.target.value })
                   }
-                  className="px-3 py-2 bg-[#13131C] border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500"
+                  className="px-3 py-2  border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500"
                 >
                   <option value="">All Departments</option>
                   {departments.map((dept) => (
@@ -403,7 +403,7 @@ const AllEmployees = () => {
                   onChange={(e) =>
                     setFilters({ ...filters, status: e.target.value })
                   }
-                  className="px-3 py-2 bg-[#13131C] border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500"
+                  className="px-3 py-2  border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500"
                 >
                   <option value="">All Status</option>
                   <option value="active">Active</option>
@@ -426,7 +426,7 @@ const AllEmployees = () => {
                         })
                       }
                       placeholder="Min"
-                      className="flex-1 px-2 py-2 bg-[#13131C] border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
+                      className="flex-1 px-2 py-2  border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
                     />
                     <input
                       type="number"
@@ -440,7 +440,7 @@ const AllEmployees = () => {
                         })
                       }
                       placeholder="Max"
-                      className="flex-1 px-2 py-2 bg-[#13131C] border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
+                      className="flex-1 px-2 py-2  border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
                     />
                   </div>
                 </div>
@@ -458,7 +458,7 @@ const AllEmployees = () => {
                         })
                       }
                       placeholder="Min"
-                      className="flex-1 px-2 py-2 bg-[#13131C] border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
+                      className="flex-1 px-2 py-2  border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
                     />
                     <input
                       type="number"
@@ -470,7 +470,7 @@ const AllEmployees = () => {
                         })
                       }
                       placeholder="Max"
-                      className="flex-1 px-2 py-2 bg-[#13131C] border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
+                      className="flex-1 px-2 py-2  border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 text-sm"
                     />
                   </div>
                 </div>
@@ -506,7 +506,7 @@ const AllEmployees = () => {
             <div className="overflow-x-auto border border-white/10 rounded-lg">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-white/10 bg-[#13131C]">
+                  <tr className="border-b border-white/10 ">
                     <th className="text-left p-4 text-text-primary font-semibold w-12">
                       <input
                         type="checkbox"
@@ -549,7 +549,7 @@ const AllEmployees = () => {
                         animate={{ opacity: 1 }}
                         transition={{ delay: idx * 0.02 }}
                         onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
-                        className="border-b border-white/10 hover:bg-[#13131C] transition-colors cursor-pointer"
+                        className="border-b border-white/10 hover: transition-colors cursor-pointer"
                       >
                         <td
                           className="p-4"
@@ -578,10 +578,10 @@ const AllEmployees = () => {
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${
                               emp.performance_score >= 8
-                                ? "bg-green-100 text-green-800"
+                                ? "bg-green-500/10 text-green-400 border border-green-500/20"
                                 : emp.performance_score >= 6
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-red-100 text-red-800"
+                                  ? "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"
+                                  : "bg-red-500/10 text-red-400 border border-red-500/20"
                             }`}
                           >
                             {emp.performance_score || 0}/10
@@ -591,10 +591,10 @@ const AllEmployees = () => {
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-semibold ${
                               emp.status === "active"
-                                ? "bg-green-100 text-green-800"
+                                ? "bg-green-500/10 text-green-400 border border-green-500/20"
                                 : emp.status === "inactive"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-red-100 text-red-800"
+                                  ? "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"
+                                  : "bg-red-500/10 text-red-400 border border-red-500/20"
                             }`}
                           >
                             {emp.status?.charAt(0).toUpperCase() +
@@ -645,7 +645,7 @@ const AllEmployees = () => {
                       </motion.tr>
 
                       {expandedRow === emp.emp_id && expandedData[emp.emp_id] && (
-                        <tr className="bg-[#13131C] border-b border-white/10">
+                        <tr className=" border-b border-white/10">
                           <td colSpan="8" className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                               <div>
@@ -660,7 +660,7 @@ const AllEmployees = () => {
                                       .map((task, i) => (
                                         <div
                                           key={i}
-                                          className="text-sm px-3 py-2 bg-[#13131C] rounded border border-white/10"
+                                          className="text-sm px-3 py-2  rounded border border-white/10"
                                         >
                                           <p className="font-medium text-text-primary">
                                             {task.title || "Untitled"}
@@ -683,7 +683,7 @@ const AllEmployees = () => {
                                   Leave Summary (This Year)
                                 </h4>
                                 <div className="space-y-2 text-sm">
-                                  <div className="flex justify-between bg-[#13131C] rounded border border-white/10 p-2">
+                                  <div className="flex justify-between  rounded border border-white/10 p-2">
                                     <span className="text-text-primary">
                                       Total Leaves:
                                     </span>
@@ -692,7 +692,7 @@ const AllEmployees = () => {
                                         .total_leaves || 0}
                                     </span>
                                   </div>
-                                  <div className="flex justify-between bg-[#13131C] rounded border border-white/10 p-2">
+                                  <div className="flex justify-between  rounded border border-white/10 p-2">
                                     <span className="text-text-primary">
                                       Days Used:
                                     </span>
@@ -701,7 +701,7 @@ const AllEmployees = () => {
                                         .total_days || 0}
                                     </span>
                                   </div>
-                                  <div className="flex justify-between bg-[#13131C] rounded border border-white/10 p-2">
+                                  <div className="flex justify-between  rounded border border-white/10 p-2">
                                     <span className="text-text-primary">
                                       Approved:
                                     </span>
@@ -720,7 +720,7 @@ const AllEmployees = () => {
                                 <h4 className="font-semibold text-text-primary mb-3">
                                   Performance Trend
                                 </h4>
-                                <div className="bg-[#13131C] rounded border border-white/10 p-4">
+                                <div className=" rounded border border-white/10 p-4">
                                   <div className="text-center">
                                     <div className="text-3xl font-bold text-blue-600">
                                       {emp.performance_score}/10
@@ -767,7 +767,7 @@ const AllEmployees = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-[#13131C] rounded-xl border border-white/10 p-6 max-w-md w-full space-y-4 shadow-xl"
+            className=" rounded-xl border border-white/10 p-6 max-w-md w-full space-y-4 shadow-xl"
           >
             <h3 className="text-xl font-bold text-red-600 flex items-center gap-2">
               <AlertCircle size={24} />

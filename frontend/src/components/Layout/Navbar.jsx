@@ -1,5 +1,5 @@
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: Top navigation bar with search, notifications, and user menu
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Glass morphism effect with backdrop blur and dark dropdown styling.
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Bell, LogOut, Settings } from 'lucide-react';
@@ -38,7 +38,14 @@ const Navbar = () => {
   const displayRole = user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Employee";
 
   return (
-    <header className="h-[56px] bg-bg-surface border-b border-border-subtle flex items-center justify-between px-6 flex-shrink-0">
+    <header 
+      className="h-[56px] border-b border-white/[0.06] flex items-center justify-between px-6 flex-shrink-0"
+      style={{
+        background: 'rgba(13, 13, 20, 0.80)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+      }}
+    >
       {/* Left: Page Title */}
       <div>
         <h1 className="text-sm font-semibold text-text-primary">
@@ -49,7 +56,7 @@ const Navbar = () => {
       {/* Right: Actions */}
       <div className="flex items-center gap-4">
         {/* Notification Bell */}
-        <button className="relative p-2 text-text-muted hover:text-text-secondary hover:bg-bg-hover rounded-[7px] transition-all duration-150">
+        <button className="relative p-2 text-text-muted hover:text-text-secondary hover:bg-white/[0.04] rounded-[7px] transition-all duration-150">
           <Bell className="w-4 h-4" />
           {unreadNotifications > 0 && (
             <span className="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full animate-pulse-once" />
@@ -57,12 +64,12 @@ const Navbar = () => {
         </button>
 
         {/* Divider */}
-        <div className="h-6 w-px bg-border-subtle" />
+        <div className="h-6 w-px bg-white/[0.1]" />
 
         {/* User Menu */}
         <div className="relative" ref={dropdownRef}>
           <button
-            className="flex items-center gap-2 px-3 py-1.5 rounded-[7px] hover:bg-bg-hover transition-all duration-150 text-left"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-[7px] hover:bg-white/[0.04] transition-all duration-150 text-left"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
             <div className="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
@@ -78,15 +85,22 @@ const Navbar = () => {
 
           {/* Dropdown Menu */}
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-[200px] bg-bg-elevated border border-border-default rounded-[10px] shadow-floating overflow-hidden z-50">
+            <div 
+              className="absolute right-0 mt-2 w-[200px] border border-white/10 rounded-[10px] overflow-hidden z-50"
+              style={{
+                background: 'rgba(26, 26, 38, 0.95)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+              }}
+            >
               <button
                 onClick={handleSettings}
-                className="w-full text-left px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-bg-hover flex items-center gap-3 transition-colors duration-150"
+                className="w-full text-left px-4 py-2.5 text-sm text-text-secondary hover:text-text-primary hover:bg-white/[0.04] flex items-center gap-3 transition-colors duration-150"
               >
                 <Settings className="w-4 h-4" />
                 Settings
               </button>
-              <div className="border-t border-border-subtle" />
+              <div className="border-t border-white/[0.06]" />
               <button
                 onClick={handleLogout}
                 className="w-full text-left px-4 py-2.5 text-sm text-danger hover:bg-danger/10 flex items-center gap-3 transition-colors duration-150 font-medium"

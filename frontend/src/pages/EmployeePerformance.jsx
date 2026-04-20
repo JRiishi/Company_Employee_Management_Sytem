@@ -112,12 +112,12 @@ const EmployeePerformance = () => {
       {/* SECTION 4 - Main Performance Chart */}
       <section className="w-full">
         {loading ? (
-          <Card className="w-full h-[420px] flex flex-col justify-start border-white/[0.06] overflow-hidden bg-[#13131C] px-6 py-5">
+          <Card className="w-full h-[420px] flex flex-col justify-start border-white/[0.06] overflow-hidden  px-6 py-5">
              <div className="flex justify-between items-center mb-6">
                 <div className="h-5 bg-[#20202F]/50 rounded w-32 animate-pulse" />
                 <div className="h-5 bg-[#1A1A26] rounded w-8 animate-pulse" />
              </div>
-             <div className="w-full flex-1 bg-[#13131C]/50 rounded-xl mb-4 border border-dashed border-white/10 animate-pulse flex items-center justify-center">
+             <div className="w-full flex-1 /50 rounded-xl mb-4 border border-dashed border-white/10 animate-pulse flex items-center justify-center">
              </div>
           </Card>
         ) : error ? (

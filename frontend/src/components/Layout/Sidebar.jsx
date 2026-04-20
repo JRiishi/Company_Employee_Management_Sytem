@@ -1,5 +1,5 @@
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: Left sidebar navigation with role-based menu items
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Glass morphism effect with backdrop blur and role-based transparency.
 
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -69,9 +69,16 @@ const Sidebar = () => {
   const initials = displayName.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
 
   return (
-    <aside className="w-[240px] h-full bg-bg-surface border-r border-border-subtle flex flex-col flex-shrink-0">
+    <aside 
+      className="w-[240px] h-full border-r border-white/[0.06] flex flex-col flex-shrink-0"
+      style={{
+        background: 'rgba(13, 13, 20, 0.85)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+      }}
+    >
       {/* Logo Header */}
-      <div className="h-[56px] flex items-center px-4 border-b border-border-subtle shrink-0">
+      <div className="h-[56px] flex items-center px-4 border-b border-white/[0.06] shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-accent rounded-[6px] flex items-center justify-center flex-shrink-0">
             <span className="text-xs font-bold text-white">NX</span>
@@ -100,7 +107,7 @@ const Sidebar = () => {
                   transition-all duration-150 text-sm font-medium
                   ${isActive
                     ? "bg-accent-subtle text-accent-text border-l-2 border-accent -ml-px"
-                    : "text-text-secondary hover:text-text-primary hover:bg-bg-hover"
+                    : "text-text-secondary hover:text-text-primary hover:bg-white/[0.04]"
                   }
                 `}
               >
@@ -113,8 +120,14 @@ const Sidebar = () => {
       </div>
 
       {/* User Panel at Bottom */}
-      <div className="p-3 border-t border-border-subtle">
-        <div className="flex items-center gap-3 px-3 py-3 bg-bg-elevated rounded-[7px] mb-3">
+      <div className="p-3 border-t border-white/[0.06]">
+        <div 
+          className="flex items-center gap-3 px-3 py-3 rounded-[7px] mb-3"
+          style={{
+            background: 'rgba(255, 255, 255, 0.04)',
+            backdropFilter: 'blur(12px)',
+          }}
+        >
           <div className="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
             <span className="text-xs font-semibold text-accent-text">{initials}</span>
           </div>

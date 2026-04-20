@@ -140,7 +140,7 @@ const EmployeeSalary = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full items-start">
           {/* SECTION 3 - Salary Breakdown */}
           <section className="w-full lg:col-span-1">
-            <Card className="flex flex-col w-full transition-all duration-200 border border-white/10 shadow-sm p-6">
+            <Card className="flex flex-col w-full transition-all duration-200 border border-white/10  p-6">
               <div className="flex items-center gap-2 mb-6">
                 <Receipt className="w-5 h-5 text-text-primary" />
                 <h3 className="text-[15px] font-semibold text-text-primary tracking-tight">Earnings Breakdown</h3>
@@ -188,11 +188,11 @@ const EmployeeSalary = () => {
 
           {/* SECTION 4 - Salary History Table */}
           <section className="w-full lg:col-span-2">
-            <Card className="flex flex-col w-full transition-all duration-200 border border-white/10 shadow-sm">
-              <div className="px-6 py-5 border-b border-white/[0.06] bg-[#13131C] rounded-t-2xl">
+            <Card className="flex flex-col w-full transition-all duration-200 border border-white/10 ">
+              <div className="px-6 py-5 border-b border-white/[0.06]  rounded-t-2xl">
                 <h3 className="text-[15px] font-semibold text-text-primary tracking-tight">Salary History</h3>
               </div>
-              <div className="w-full bg-[#13131C] rounded-b-2xl overflow-hidden">
+              <div className="w-full  rounded-b-2xl overflow-hidden">
                   <Table 
                     columns={columns} 
                     data={salaryHistory} 

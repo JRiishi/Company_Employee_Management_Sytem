@@ -13,13 +13,13 @@
 
   html {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   body {
     background-color: #0D0D14;
     color: #F0F0FA;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   /* Scrollbar styling */

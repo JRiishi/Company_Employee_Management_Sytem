@@ -63,7 +63,7 @@ const EmployeeTasks = () => {
             <>
               <Select 
                 wrapperClassName="w-[130px]"
-                className="!text-[12px] !py-[6px] !pl-3 !pr-8 min-h-0 h-8 hover:bg-[#13131C] cursor-pointer"
+                className="!text-[12px] !py-[6px] !pl-3 !pr-8 min-h-0 h-8 hover: cursor-pointer"
                 value={row.status} 
                 options={[
                   { label: 'Pending', value: 'Pending' },
@@ -103,7 +103,7 @@ const EmployeeTasks = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="bg-red-50 text-red-700 px-4 py-3 rounded-xl shadow-sm text-[13px] font-medium border border-red-200 flex items-center justify-between"
+              className="bg-red-50 text-red-700 px-4 py-3 rounded-xl  text-[13px] font-medium border border-red-200 flex items-center justify-between"
             >
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-red-500" />
@@ -145,7 +145,7 @@ const EmployeeTasks = () => {
               options={STATUS_OPTIONS} 
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="cursor-pointer hover:bg-[#13131C] transition-colors duration-150"
+              className="cursor-pointer hover: transition-colors duration-150"
             />
           </div>
           
@@ -168,8 +168,8 @@ const EmployeeTasks = () => {
 
         {/* SECTION 3 - Tasks Table Container */}
         <section className="w-full">
-          <Card className="flex flex-col overflow-hidden w-full transition-all duration-200 border border-white/10/60 shadow-sm">
-            <div className="w-full bg-[#13131C]">
+          <Card className="flex flex-col overflow-hidden w-full transition-all duration-200 border border-white/10/60 ">
+            <div className="w-full ">
                 <Table 
                   columns={columns} 
                   data={filteredTasks} 

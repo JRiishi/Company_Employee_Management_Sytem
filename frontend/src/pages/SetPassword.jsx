@@ -92,7 +92,7 @@ const SetPassword = () => {
               <input
                 type="password"
                 required
-                className="w-full px-4 py-3 bg-[#0D0D14] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-text-primary placeholder-gray-600 transition-all font-inter"
+                className="w-full px-4 py-3  border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-text-primary placeholder-gray-600 transition-all font-inter"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPwd(e.target.value)}
@@ -105,7 +105,7 @@ const SetPassword = () => {
               <input
                 type="password"
                 required
-                className="w-full px-4 py-3 bg-[#0D0D14] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-text-primary placeholder-gray-600 transition-all font-inter"
+                className="w-full px-4 py-3  border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-text-primary placeholder-gray-600 transition-all font-inter"
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirm(e.target.value)}

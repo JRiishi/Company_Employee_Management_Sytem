@@ -1,5 +1,5 @@
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: KPI statistics card component for dashboards
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Increased stat value typography (text-2xl → text-3xl) for better visual hierarchy.
 
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
@@ -29,7 +29,7 @@ const StatsCard = ({ title, value, icon: Icon, trend, trendDirection = 'up' }) =
       </div>
 
       <div className="flex items-baseline gap-2">
-        <span className="text-2xl font-semibold tracking-tight text-text-primary leading-none">
+        <span className="text-3xl font-semibold tracking-tight text-text-primary leading-none">
           {value}
         </span>
         {trend && (

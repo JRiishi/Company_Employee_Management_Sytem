@@ -478,9 +478,9 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2 px-3 md:px-4 py-2 bg-green-100 border border-green-300 rounded-lg whitespace-nowrap">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-xs md:text-sm text-green-700 font-semibold">
+              <div className="flex items-center gap-2 px-3 md:px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-lg whitespace-nowrap">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.6)]"></div>
+                <span className="text-xs md:text-sm text-green-400 font-semibold">
                   System Healthy
                 </span>
               </div>
@@ -497,8 +497,8 @@ const AdminDashboard = () => {
               className="border-border-default bg-bg-surface hover:border-blue-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="p-2 md:p-3 bg-blue-100 rounded-lg flex-shrink-0">
-                  <Users className="text-blue-600" size={20} />
+                <div className="p-2 md:p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg flex-shrink-0">
+                  <Users className="text-blue-400" size={20} />
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs md:text-sm text-text-secondary">
@@ -519,8 +519,8 @@ const AdminDashboard = () => {
               className="border-border-default bg-bg-surface hover:border-green-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="p-2 md:p-3 bg-green-100 rounded-lg flex-shrink-0">
-                  <Activity className="text-green-600" size={20} />
+                <div className="p-2 md:p-3 bg-green-500/10 border border-green-500/20 rounded-lg flex-shrink-0">
+                  <Activity className="text-green-400" size={20} />
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs md:text-sm text-text-secondary">
@@ -541,8 +541,8 @@ const AdminDashboard = () => {
               className="border-border-default bg-bg-surface hover:border-yellow-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="p-2 md:p-3 bg-yellow-100 rounded-lg flex-shrink-0">
-                  <AlertCircle className="text-yellow-600" size={20} />
+                <div className="p-2 md:p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg flex-shrink-0">
+                  <AlertCircle className="text-yellow-400" size={20} />
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs md:text-sm text-text-secondary">Inactive</p>
@@ -561,8 +561,8 @@ const AdminDashboard = () => {
               className="border-border-default bg-bg-surface hover:border-purple-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="p-2 md:p-3 bg-purple-100 rounded-lg flex-shrink-0">
-                  <Shield className="text-purple-600" size={20} />
+                <div className="p-2 md:p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg flex-shrink-0">
+                  <Shield className="text-purple-400" size={20} />
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs md:text-sm text-text-secondary">Admin Access</p>
@@ -588,13 +588,10 @@ const AdminDashboard = () => {
           ].map((action, idx) => {
             const Icon = action.icon;
             const colorMap = {
-              blue: "bg-blue-100 hover:bg-blue-200 border-blue-300 text-blue-700",
-              purple:
-                "bg-purple-100 hover:bg-purple-200 border-purple-300 text-purple-700",
-              green:
-                "bg-green-100 hover:bg-green-200 border-green-300 text-green-700",
-              yellow:
-                "bg-yellow-100 hover:bg-yellow-200 border-yellow-300 text-yellow-700",
+              blue: "bg-white/[0.04] hover:bg-white/[0.08] border-white/10 text-gray-300 hover:text-gray-100 hover:border-white/20",
+              purple: "bg-white/[0.04] hover:bg-white/[0.08] border-white/10 text-gray-300 hover:text-gray-100 hover:border-white/20",
+              green: "bg-white/[0.04] hover:bg-white/[0.08] border-white/10 text-gray-300 hover:text-gray-100 hover:border-white/20",
+              yellow: "bg-white/[0.04] hover:bg-white/[0.08] border-white/10 text-gray-300 hover:text-gray-100 hover:border-white/20",
             };
             return (
               <motion.button
@@ -635,12 +632,12 @@ const AdminDashboard = () => {
                 >
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-text-primary hover:text-blue-600">
+                      <p className="text-sm font-semibold text-text-primary hover:text-blue-400">
                         {alert.title}
                       </p>
                       <p className="text-text-secondary text-xs mt-1">{alert.detail}</p>
                     </div>
-                    <span className={`inline-block flex-shrink-0 text-xs font-semibold px-2 py-1 rounded whitespace-nowrap mt-2 sm:mt-0 ${alert.severity === "high" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
+                    <span className={`inline-block flex-shrink-0 text-xs font-semibold px-2 py-1 rounded whitespace-nowrap mt-2 sm:mt-0 ${alert.severity === "high" ? "bg-red-500/10 border border-red-500/20 text-red-400" : "bg-yellow-500/10 border border-yellow-500/20 text-yellow-400"}`}>
                       {alert.severity === "high" ? "High" : "Medium"}
                     </span>
                   </div>
@@ -707,13 +704,13 @@ const AdminDashboard = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleApproval(approval.id)}
-                      className="flex-1 px-2 py-1 bg-green-100 hover:bg-green-200 text-green-700 rounded text-xs font-semibold transition-colors"
+                      className="flex-1 px-2 py-1 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-400 rounded text-xs font-semibold transition-colors"
                     >
                       Accept
                     </button>
                     <button
                       onClick={() => handleReject(approval.id)}
-                      className="flex-1 px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-xs font-semibold transition-colors"
+                      className="flex-1 px-2 py-1 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 rounded text-xs font-semibold transition-colors"
                     >
                       Reject
                     </button>

@@ -1,8 +1,5 @@
-// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
-// All logic, functions, props, and API calls are 100% unchanged.
-
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: Data table component with sorting, pagination, and row interactions
+// � UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Glass morphism effect, dark theme table styling, improved row hover states.
 
 import React from 'react';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
@@ -19,15 +16,25 @@ const Table = ({
   error = null
 }) => {
   return (
-    <div className="w-full bg-bg-surface border border-border-default rounded-[10px] overflow-hidden flex flex-col">
+    <div 
+      className="w-full border border-white/10 rounded-[10px] overflow-hidden flex flex-col"
+      style={{
+        background: 'rgba(19, 19, 28, 0.70)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }}
+    >
       <div className="overflow-x-auto flex-grow">
         <table className="w-full text-left border-collapse whitespace-nowrap">
           <thead>
-            <tr className="bg-bg-elevated border-b border-border-default h-[44px]">
+            <tr 
+              className="border-b border-white/[0.06] h-[44px]"
+              style={{ background: 'rgba(255, 255, 255, 0.03)' }}
+            >
               {columns.map((col, index) => (
                 <th 
                   key={index} 
-                  className={`px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none ${col.sortable ? 'cursor-pointer hover:text-text-secondary transition-colors duration-150' : ''}`}
+                  className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-500 select-none ${col.sortable ? 'cursor-pointer hover:text-gray-400 transition-colors duration-150' : ''}`}
                   onClick={() => col.sortable && onSort && onSort(col.accessor)}
                 >
                   <div className="flex items-center gap-1.5">
@@ -47,10 +54,13 @@ const Table = ({
           <tbody>
             {loading ? (
               [...Array(5)].map((_, i) => (
-                <tr key={`skeleton-${i}`} className="h-[44px] border-b border-border-subtle">
+                <tr key={`skeleton-${i}`} className="h-[44px] border-b border-white/[0.04]">
                   {columns.map((col, j) => (
                     <td key={`skeleton-col-${j}`} className="px-4 py-3">
-                      <div className="h-3 bg-bg-elevated rounded animate-pulse w-3/4" />
+                      <div 
+                        className="h-3 rounded animate-pulse w-3/4"
+                        style={{ background: 'rgba(255,255,255,0.05)' }}
+                      />
                     </td>
                   ))}
                 </tr>
@@ -78,10 +88,10 @@ const Table = ({
                 <tr 
                   key={rowIndex} 
                   className={`
-                    border-b border-border-subtle h-[44px]
+                    border-b border-white/[0.04] h-[44px]
                     transition-colors duration-100
-                    ${rowIndex % 2 === 1 ? 'bg-[#13131C]/[0.015]' : 'bg-transparent'}
-                    ${onRowClick ? 'hover:bg-bg-hover cursor-pointer' : 'hover:bg-bg-hover'}
+                    hover:bg-white/[0.04]
+                    ${onRowClick ? 'cursor-pointer' : ''}
                   `}
                   onClick={(e) => {
                     if (!e.target.closest('button')) {

@@ -291,7 +291,7 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <h2 className="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
               <Lock size={20} className="text-blue-600" />
               Role-Based Access Control
@@ -300,7 +300,7 @@ const AdminSettings = () => {
               {rbacData.roles.map((role) => (
                 <div
                   key={role.id}
-                  className="border border-white/10 rounded-lg p-4 flex justify-between items-start hover:bg-[#13131C] transition-colors"
+                  className="border border-white/10 rounded-lg p-4 flex justify-between items-start hover: transition-colors"
                 >
                   <div>
                     <h3 className="font-semibold text-lg text-text-primary">
@@ -332,14 +332,14 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <h2 className="text-xl font-bold text-text-primary mb-6">
               Permissions Matrix
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-white/10 bg-[#13131C]">
+                  <tr className="border-b border-white/10 ">
                     <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Permission
                     </th>
@@ -384,7 +384,7 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <h2 className="text-xl font-bold text-text-primary mb-6">
               Leave Policy Configuration
             </h2>
@@ -402,7 +402,7 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
               <div>
@@ -418,7 +418,7 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
               <div>
@@ -434,7 +434,7 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
               <div>
@@ -450,7 +450,7 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
               <div>
@@ -466,7 +466,7 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
             </div>
@@ -476,7 +476,7 @@ const AdminSettings = () => {
                 {leavePolicy.leaveTypes.map((type, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 px-4 py-2 bg-[#13131C] rounded-lg"
+                    className="flex items-center gap-3 px-4 py-2  rounded-lg"
                   >
                     <span className="text-text-primary">{type}</span>
                     <button className="ml-auto text-sm text-red-600 hover:text-red-700">
@@ -499,7 +499,7 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
               <Clock size={20} className="text-blue-600" />
               Working Hours Configuration
@@ -515,7 +515,7 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleWorkingHoursChange("startTime", e.target.value)
                   }
-                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
               <div>
@@ -528,7 +528,7 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleWorkingHoursChange("endTime", e.target.value)
                   }
-                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full bg-[#1A1A26] px-4 py-2 border border-white/10 rounded-lg text-text-primary focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
             </div>
@@ -581,7 +581,7 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
               <Bell size={20} className="text-blue-600" />
               Notification Settings
@@ -590,7 +590,7 @@ const AdminSettings = () => {
               {Object.keys(notifications).map((setting) => (
                 <div
                   key={setting}
-                  className="flex items-center justify-between p-4 bg-[#13131C] rounded-lg hover:bg-[#1A1A26] transition-colors"
+                  className="flex items-center justify-between p-4  rounded-lg hover:bg-[#1A1A26] transition-colors"
                 >
                   <label className="text-text-primary font-semibold cursor-pointer">
                     {setting.replace(/([A-Z])/g, " $1").trim()}
@@ -614,7 +614,7 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
               <BarChart3 size={20} className="text-blue-600" />
               Audit Logs
@@ -622,7 +622,7 @@ const AdminSettings = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 bg-[#13131C]">
+                  <tr className="border-b border-white/10 ">
                     <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Action
                     </th>

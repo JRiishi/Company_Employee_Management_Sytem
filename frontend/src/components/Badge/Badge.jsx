@@ -1,8 +1,5 @@
-// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
-// All logic, functions, props, and API calls are 100% unchanged.
-
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: Reusable badge/status tag component for labeling
+// � UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Increased badge text size to text-xs and applied dark theme default styling.
 
 import React from 'react';
 
@@ -27,7 +24,7 @@ const Badge = ({ variant = 'default', children, className = '', showDot = true }
       case 'neutral':
       case 'default':
       default:
-        return 'bg-[#13131C]/5 text-text-muted border border-border-default';
+        return 'bg-white/5 text-text-muted border border-white/10';
     }
   };
 
@@ -36,7 +33,7 @@ const Badge = ({ variant = 'default', children, className = '', showDot = true }
       inline-flex items-center gap-1 
       px-2 py-0.5 
       rounded-[5px] 
-      text-[11px] font-semibold
+      text-xs font-semibold
       letter-spacing-wide
       ${getVariantStyles()} 
       ${className}

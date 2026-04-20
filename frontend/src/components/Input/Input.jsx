@@ -1,5 +1,5 @@
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: Reusable form input component with label and validation states
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Glass morphism effect with semi-transparent background and backdrop blur.
 
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
@@ -38,20 +38,24 @@ const Input = ({
           disabled={disabled}
           className={`
             w-full 
-            bg-bg-elevated 
             border rounded-[7px]
             px-3 py-2 h-[38px]
-            text-sm text-text-primary 
-            placeholder-text-muted
+            text-sm text-gray-100 
+            placeholder-gray-600
             transition-all duration-150
             focus:outline-none
             ${Icon ? 'pl-9' : ''}
             ${error ? 'border-danger/50 focus:ring-2 focus:ring-danger/20' : 
               success ? 'border-success/50 focus:ring-2 focus:ring-success/20' :
-              'border-border-default focus:border-border-strong focus:ring-2 focus:ring-accent/20'}
+              'border-white/10 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20'}
             ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
             ${className}
           `}
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+          }}
           {...props}
         />
       </div>

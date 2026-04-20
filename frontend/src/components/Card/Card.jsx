@@ -1,5 +1,5 @@
-// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
-// Original functionality: Reusable card wrapper component for content containers
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Glass morphism effect with semi-transparent background and backdrop blur.
 
 import React from 'react';
 
@@ -17,16 +17,22 @@ const Card = ({
       onClick={onClick}
       className={`
         w-full
-        bg-bg-surface 
-        border border-border-default 
+        border border-white/10
         rounded-[10px]
         overflow-hidden
-        ${hoverable ? 'hover:border-border-strong transition-colors duration-150 cursor-pointer' : ''}
+        ${hoverable ? 'hover:border-white/20 transition-colors duration-150 cursor-pointer' : ''}
         ${className}
       `}
+      style={{
+        background: 'rgba(19, 19, 28, 0.70)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }}
     >
       {header && (
-        <div className="px-5 py-4 border-b border-border-subtle flex items-center justify-between">
+        <div 
+          className="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between"
+        >
           <div>
             <h3 className="text-sm font-semibold text-text-primary">{header}</h3>
             {subtitle && <p className="text-xs text-text-muted mt-0.5">{subtitle}</p>}
@@ -39,7 +45,7 @@ const Card = ({
       </div>
 
       {footer && (
-        <div className="px-5 py-3 border-t border-border-subtle text-sm text-text-secondary">
+        <div className="px-5 py-3 border-t border-white/[0.06] text-sm text-text-secondary">
           {footer}
         </div>
       )}

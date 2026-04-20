@@ -108,7 +108,7 @@ const Settings = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`px-4 py-3 rounded-xl shadow-sm text-[13px] font-medium flex items-center gap-2 ${feedback.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}
+            className={`px-4 py-3 rounded-xl  text-[13px] font-medium flex items-center gap-2 ${feedback.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}
           >
             {feedback.type === 'error' ? <AlertCircle className="w-4 h-4" /> : <CheckCircle className="w-4 h-4" />}
             {feedback.text}
@@ -120,13 +120,13 @@ const Settings = () => {
         {/* Tabs sidebar */}
         <Card className="w-full md:w-64 p-2 flex flex-col gap-1 shrink-0">
           <button 
-            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'profile' ? 'bg-blue-50 text-blue-700' : 'text-text-primary hover:bg-[#13131C]'}`}
+            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'profile' ? 'bg-blue-50 text-blue-700' : 'text-text-primary hover:'}`}
             onClick={() => setActiveTab('profile')}
           >
             Profile Information
           </button>
           <button 
-            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'password' ? 'bg-blue-50 text-blue-700' : 'text-text-primary hover:bg-[#13131C]'}`}
+            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'password' ? 'bg-blue-50 text-blue-700' : 'text-text-primary hover:'}`}
             onClick={() => setActiveTab('password')}
           >
             Security
@@ -161,7 +161,7 @@ const Settings = () => {
                       icon={Mail} 
                       value={profileData.email} 
                       disabled 
-                      className="bg-[#13131C] text-text-primary cursor-not-allowed" 
+                      className=" text-text-primary cursor-not-allowed" 
                     />
                     <span className="text-[11px] text-text-primary ml-1">Contact your administrator to change your email.</span>
                   </div>

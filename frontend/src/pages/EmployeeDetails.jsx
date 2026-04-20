@@ -364,7 +364,7 @@ const EmployeeDetails = () => {
 
         {/* Task List */}
         {tasks.length > 0 ? (
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <div className="space-y-3">
               {tasks.map((task, idx) => (
                 <motion.div
@@ -372,7 +372,7 @@ const EmployeeDetails = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="flex items-start gap-4 p-4 bg-[#13131C] rounded-lg border border-white/10 hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                  className="flex items-start gap-4 p-4  rounded-lg border border-white/10 hover:border-blue-400 hover:bg-blue-50 transition-colors"
                 >
                   <div
                     className={`p-2 rounded-lg shrink-0 ${
@@ -424,7 +424,7 @@ const EmployeeDetails = () => {
             </div>
           </Card>
         ) : (
-          <Card className="border-white/10 bg-[#13131C]">
+          <Card className="border-white/10 ">
             <div className="text-center py-8 text-text-primary">
               No tasks assigned to this employee
             </div>
@@ -443,7 +443,7 @@ const EmployeeDetails = () => {
           Additional Information
         </h2>
 
-        <Card className="border-white/10 bg-[#13131C]">
+        <Card className="border-white/10 ">
           <div>
             <p className="text-sm text-text-primary mb-2 font-medium">
               Joining Date
@@ -507,7 +507,7 @@ const EmployeeDetails = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-[#13131C] rounded-xl border border-white/10 p-6 max-w-md w-full space-y-4 shadow-xl"
+            className=" rounded-xl border border-white/10 p-6 max-w-md w-full space-y-4 shadow-xl"
           >
             <h3 className="text-xl font-bold text-red-600 flex items-center gap-2">
               <AlertCircle size={24} />
