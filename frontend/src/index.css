@@ -1,5 +1,88 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+  }
+
+  body {
+    background-color: #0D0D14;
+    color: #F0F0FA;
+    line-height: 1.5;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(99, 102, 241, 0.3);
+    color: #F0F0FA;
+  }
+}
+
+@layer components {
+  /* Divider */
+  .divider {
+    @apply border-t border-border-subtle my-2;
+  }
+
+  /* Section header */
+  .section-header {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  .section-title {
+    @apply text-sm font-semibold text-text-primary;
+  }
+
+  .section-subtitle {
+    @apply text-xs text-text-muted mt-0.5;
+  }
+
+  /* Empty state */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-16 text-center;
+  }
+
+  .empty-state-icon {
+    @apply w-10 h-10 text-text-muted mb-3;
+  }
+
+  .empty-state-title {
+    @apply text-sm font-medium text-text-secondary;
+  }
+
+  .empty-state-desc {
+    @apply text-xs text-text-muted mt-1 max-w-[240px];
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    @apply bg-bg-elevated animate-pulse rounded-[6px];
+  }
+}

@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Lock, Mail, Briefcase, CheckCircle, AlertCircle } from 'lucide-react';
@@ -95,8 +98,8 @@ const Settings = () => {
       transition={{ duration: 0.3 }}
     >
       <section className="mb-2">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Settings</h2>
-        <p className="text-[14px] text-gray-500 mt-1">Manage your account preferences and security.</p>
+        <h2 className="text-2xl font-bold tracking-tight text-text-primary">Settings</h2>
+        <p className="text-[14px] text-text-primary mt-1">Manage your account preferences and security.</p>
       </section>
 
       <AnimatePresence>
@@ -117,13 +120,13 @@ const Settings = () => {
         {/* Tabs sidebar */}
         <Card className="w-full md:w-64 p-2 flex flex-col gap-1 shrink-0">
           <button 
-            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'profile' ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50'}`}
+            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'profile' ? 'bg-blue-50 text-blue-700' : 'text-text-primary hover:bg-[#13131C]'}`}
             onClick={() => setActiveTab('profile')}
           >
             Profile Information
           </button>
           <button 
-            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'password' ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50'}`}
+            className={`text-left px-4 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${activeTab === 'password' ? 'bg-blue-50 text-blue-700' : 'text-text-primary hover:bg-[#13131C]'}`}
             onClick={() => setActiveTab('password')}
           >
             Security
@@ -134,16 +137,16 @@ const Settings = () => {
         <div className="flex-1 w-full">
           {activeTab === 'profile' && (
             <Card className="p-6 md:p-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Profile Information</h3>
+              <h3 className="text-lg font-semibold text-text-primary mb-6">Profile Information</h3>
               {loading ? (
                  <div className="animate-pulse space-y-4">
-                   <div className="h-10 bg-gray-100 rounded w-full"></div>
-                   <div className="h-10 bg-gray-100 rounded w-full"></div>
+                   <div className="h-10 bg-[#1A1A26] rounded w-full"></div>
+                   <div className="h-10 bg-[#1A1A26] rounded w-full"></div>
                  </div>
               ) : (
                 <form onSubmit={handleProfileSubmit} className="flex flex-col gap-5">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-semibold text-gray-700">Full Name</label>
+                    <label className="text-[13px] font-semibold text-text-primary">Full Name</label>
                     <Input 
                       icon={User} 
                       value={profileData.name} 
@@ -153,18 +156,18 @@ const Settings = () => {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-semibold text-gray-700">Email Address</label>
+                    <label className="text-[13px] font-semibold text-text-primary">Email Address</label>
                     <Input 
                       icon={Mail} 
                       value={profileData.email} 
                       disabled 
-                      className="bg-gray-50 text-gray-500 cursor-not-allowed" 
+                      className="bg-[#13131C] text-text-primary cursor-not-allowed" 
                     />
-                    <span className="text-[11px] text-gray-400 ml-1">Contact your administrator to change your email.</span>
+                    <span className="text-[11px] text-text-primary ml-1">Contact your administrator to change your email.</span>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[13px] font-semibold text-gray-700">Department</label>
+                    <label className="text-[13px] font-semibold text-text-primary">Department</label>
                     <Input 
                       icon={Briefcase} 
                       value={profileData.department} 
@@ -184,10 +187,10 @@ const Settings = () => {
 
           {activeTab === 'password' && (
             <Card className="p-6 md:p-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Change Password</h3>
+              <h3 className="text-lg font-semibold text-text-primary mb-6">Change Password</h3>
               <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold text-gray-700">Current Password</label>
+                  <label className="text-[13px] font-semibold text-text-primary">Current Password</label>
                   <Input 
                     type="password"
                     icon={Lock} 
@@ -198,7 +201,7 @@ const Settings = () => {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold text-gray-700">New Password</label>
+                  <label className="text-[13px] font-semibold text-text-primary">New Password</label>
                   <Input 
                     type="password"
                     icon={Lock} 
@@ -209,7 +212,7 @@ const Settings = () => {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold text-gray-700">Confirm New Password</label>
+                  <label className="text-[13px] font-semibold text-text-primary">Confirm New Password</label>
                   <Input 
                     type="password"
                     icon={Lock} 

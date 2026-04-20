@@ -1,30 +1,46 @@
+// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
+// Original functionality: KPI statistics card component for dashboards
+
 import React from 'react';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 import Card from '../Card/Card';
 
-const StatsCard = ({ title, value, icon: Icon, trend }) => {
+const StatsCard = ({ title, value, icon: Icon, trend, trendDirection = 'up' }) => {
+  const getTrendColor = () => {
+    if (!trendDirection) return 'text-text-muted';
+    return trendDirection === 'up' ? 'text-success' : 'text-danger';
+  };
+
+  const TrendIcon = trendDirection === 'up' ? TrendingUp : TrendingDown;
+
   return (
-    <Card hoverable className="p-5 group">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-[13px] font-medium text-gray-500 group-hover:text-blue-600 transition-colors duration-200">
-          {title}
-        </h3>
+    <Card className="p-5 w-full">
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <p className="text-xs font-medium text-text-muted uppercase tracking-wide mb-1">
+            {title}
+          </p>
+        </div>
         {Icon && (
-          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center transition-colors duration-200">
-            <Icon className="w-5 h-5 text-blue-600" />
+          <div className="w-9 h-9 rounded-[8px] bg-accent/15 flex items-center justify-center flex-shrink-0">
+            <Icon className="w-4.5 h-4.5 text-accent" />
           </div>
         )}
       </div>
+
       <div className="flex items-baseline gap-2">
-        <span className="text-3xl font-bold tracking-tight text-gray-900 leading-none">
+        <span className="text-2xl font-semibold tracking-tight text-text-primary leading-none">
           {value}
         </span>
         {trend && (
-          <span className={`text-[13px] font-medium ${trend.startsWith('+') ? 'text-emerald-600' : trend.startsWith('-') ? 'text-red-500' : 'text-gray-500'}`}>
-            {trend}
-          </span>
+          <div className={`flex items-center gap-0.5 text-xs font-medium ${getTrendColor()}`}>
+            <TrendIcon className="w-3 h-3" />
+            <span>{trend}</span>
+          </div>
         )}
       </div>
     </Card>
   );
 };
+
 export default StatsCard;

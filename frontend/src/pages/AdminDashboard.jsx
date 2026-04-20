@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -413,7 +416,7 @@ const AdminDashboard = () => {
 
   if (loading)
     return (
-      <div className="p-8 text-center text-gray-600 font-inter">
+      <div className="p-8 text-center text-text-secondary font-inter">
         Loading admin data...
       </div>
     );
@@ -442,36 +445,36 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-gray-900">
-          <div className="flex flex-col md:flex-row justify-between md:items-end gap-4">
+    <div className="w-full flex flex-col gap-6 text-text-primary">
+          <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-6 px-6">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">
                 System Administration
               </h1>
-              <p className="text-gray-600 text-sm md:text-base">
+              <p className="text-text-secondary text-sm md:text-base">
                 Manage employees, view details, and handle HR decisions
               </p>
             </div>
           </div>
 
           {/* Admin Header Section */}
-          <Card className="border-gray-200 bg-white">
+          <Card className="border-border-default bg-bg-surface">
             <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
               <div>
-                <p className="text-xs md:text-sm text-gray-600 mb-1">
+                <p className="text-xs md:text-sm text-text-secondary mb-1">
                   System Administrator
                 </p>
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
+                <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-3 md:mb-4">
                   Welcome back, Admin
                 </h2>
                 <div className="flex flex-col md:flex-row gap-4 md:gap-6 text-xs md:text-sm">
                   <div>
-                    <p className="text-gray-600">Last Login</p>
-                    <p className="text-gray-900 font-medium">Today at 09:45 AM</p>
+                    <p className="text-text-secondary">Last Login</p>
+                    <p className="text-text-primary font-medium">Today at 09:45 AM</p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Active Sessions</p>
-                    <p className="text-gray-900 font-medium">1 session</p>
+                    <p className="text-text-secondary">Active Sessions</p>
+                    <p className="text-text-primary font-medium">1 session</p>
                   </div>
                 </div>
               </div>
@@ -491,17 +494,17 @@ const AdminDashboard = () => {
                 setModalEmployeeType("all");
                 setShowEmployeesModal(true);
               }}
-              className="border-gray-200 bg-white hover:border-blue-400 transition-colors cursor-pointer"
+              className="border-border-default bg-bg-surface hover:border-blue-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
                 <div className="p-2 md:p-3 bg-blue-100 rounded-lg flex-shrink-0">
                   <Users className="text-blue-600" size={20} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs md:text-sm text-gray-600">
+                  <p className="text-xs md:text-sm text-text-secondary">
                     Total Employees
                   </p>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                  <h3 className="text-xl md:text-2xl font-bold text-text-primary">
                     {employees.length}
                   </h3>
                 </div>
@@ -513,17 +516,17 @@ const AdminDashboard = () => {
                 setModalEmployeeType("active");
                 setShowEmployeesModal(true);
               }}
-              className="border-gray-200 bg-white hover:border-green-400 transition-colors cursor-pointer"
+              className="border-border-default bg-bg-surface hover:border-green-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
                 <div className="p-2 md:p-3 bg-green-100 rounded-lg flex-shrink-0">
                   <Activity className="text-green-600" size={20} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs md:text-sm text-gray-600">
+                  <p className="text-xs md:text-sm text-text-secondary">
                     Active Employees
                   </p>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                  <h3 className="text-xl md:text-2xl font-bold text-text-primary">
                     {activeEmployees.length}
                   </h3>
                 </div>
@@ -535,15 +538,15 @@ const AdminDashboard = () => {
                 setModalEmployeeType("inactive");
                 setShowEmployeesModal(true);
               }}
-              className="border-gray-200 bg-white hover:border-yellow-400 transition-colors cursor-pointer"
+              className="border-border-default bg-bg-surface hover:border-yellow-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
                 <div className="p-2 md:p-3 bg-yellow-100 rounded-lg flex-shrink-0">
                   <AlertCircle className="text-yellow-600" size={20} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs md:text-sm text-gray-600">Inactive</p>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                  <p className="text-xs md:text-sm text-text-secondary">Inactive</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-text-primary">
                     {inactiveEmployees.length}
                   </h3>
                 </div>
@@ -555,15 +558,15 @@ const AdminDashboard = () => {
                 setModalEmployeeType("admin");
                 setShowEmployeesModal(true);
               }}
-              className="border-gray-200 bg-white hover:border-purple-400 transition-colors cursor-pointer"
+              className="border-border-default bg-bg-surface hover:border-purple-400 transition-colors cursor-pointer"
             >
               <div className="flex items-center space-x-3 md:space-x-4">
                 <div className="p-2 md:p-3 bg-purple-100 rounded-lg flex-shrink-0">
                   <Shield className="text-purple-600" size={20} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs md:text-sm text-gray-600">Admin Access</p>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                  <p className="text-xs md:text-sm text-text-secondary">Admin Access</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-text-primary">
                     {adminAccessEmployees.length}
                   </h3>
                 </div>
@@ -573,7 +576,7 @@ const AdminDashboard = () => {
 
       {/* Quick Actions */}
       <div>
-        <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4">
+        <h3 className="text-lg md:text-xl font-bold text-text-primary mb-3 md:mb-4">
           Quick Actions
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -615,14 +618,14 @@ const AdminDashboard = () => {
       {/* Critical Alerts & Manager Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Critical Alerts */}
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+        <Card className="border-border-default bg-bg-surface">
+          <h3 className="text-base md:text-lg font-bold text-text-primary mb-3 md:mb-4 flex items-center gap-2">
             <AlertTriangle size={18} className="text-red-600 flex-shrink-0" />
             <span>Critical Alerts</span>
           </h3>
           <div className="space-y-3">
             {sampleAlerts.map((alert, idx) => (
-              <div key={idx} className="border-b border-gray-200 pb-3 last:border-b-0 last:pb-0">
+              <div key={idx} className="border-b border-border-default pb-3 last:border-b-0 last:pb-0">
                 <button
                   onClick={() => {
                     setSelectedAlert(alert);
@@ -632,10 +635,10 @@ const AdminDashboard = () => {
                 >
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 hover:text-blue-600">
+                      <p className="text-sm font-semibold text-text-primary hover:text-blue-600">
                         {alert.title}
                       </p>
-                      <p className="text-gray-600 text-xs mt-1">{alert.detail}</p>
+                      <p className="text-text-secondary text-xs mt-1">{alert.detail}</p>
                     </div>
                     <span className={`inline-block flex-shrink-0 text-xs font-semibold px-2 py-1 rounded whitespace-nowrap mt-2 sm:mt-0 ${alert.severity === "high" ? "bg-red-100 text-red-700" : "bg-yellow-100 text-yellow-700"}`}>
                       {alert.severity === "high" ? "High" : "Medium"}
@@ -648,8 +651,8 @@ const AdminDashboard = () => {
         </Card>
 
         {/* Manager Overview */}
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4">
+        <Card className="border-border-default bg-bg-surface">
+          <h3 className="text-base md:text-lg font-bold text-text-primary mb-3 md:mb-4">
             Manager Overview
           </h3>
           <div className="space-y-2">
@@ -657,19 +660,19 @@ const AdminDashboard = () => {
               managers.map((mgr, idx) => (
                 <div
                   key={idx}
-                  className="flex justify-between items-center text-sm p-2 bg-gray-50 rounded border border-gray-200"
+                  className="flex justify-between items-center text-sm p-2 bg-bg-elevated rounded border border-border-default"
                 >
                   <div className="min-w-0">
-                    <p className="text-gray-900 font-medium">{mgr.name}</p>
-                    <p className="text-gray-600 text-xs">{mgr.department}</p>
+                    <p className="text-text-primary font-medium">{mgr.name}</p>
+                    <p className="text-text-secondary text-xs">{mgr.department}</p>
                   </div>
                   <div className="text-right text-xs md:text-sm">
-                    <p className="text-gray-900 font-semibold">1 team</p>
+                    <p className="text-text-primary font-semibold">1 team</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-gray-600 text-sm">No managers assigned</p>
+              <p className="text-text-secondary text-sm">No managers assigned</p>
             )}
           </div>
         </Card>
@@ -678,8 +681,8 @@ const AdminDashboard = () => {
       {/* Pending Approvals & Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Pending Approvals */}
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
+        <Card className="border-border-default bg-bg-surface">
+          <h3 className="text-base md:text-lg font-bold text-text-primary mb-3 md:mb-4 flex items-center gap-2">
             <Clock size={18} className="text-yellow-600" />
             Pending Approvals
           </h3>
@@ -688,16 +691,16 @@ const AdminDashboard = () => {
               approvals.map((approval) => (
                 <div
                   key={approval.id}
-                  className="p-2 md:p-3 bg-gray-50 rounded border border-gray-200 text-sm"
+                  className="p-2 md:p-3 bg-bg-elevated rounded border border-border-default text-sm"
                 >
                   <div className="flex justify-between items-start gap-2 mb-2">
                     <div className="min-w-0">
-                      <p className="text-gray-900 font-medium">{approval.type}</p>
-                      <p className="text-gray-600 text-xs">
+                      <p className="text-text-primary font-medium">{approval.type}</p>
+                      <p className="text-text-secondary text-xs">
                         {approval.employee}
                       </p>
                     </div>
-                    <span className="text-xs text-gray-500 whitespace-nowrap">
+                    <span className="text-xs text-text-muted whitespace-nowrap">
                       {approval.date}
                     </span>
                   </div>
@@ -718,14 +721,14 @@ const AdminDashboard = () => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-600 text-sm">No pending approvals</p>
+              <p className="text-text-secondary text-sm">No pending approvals</p>
             )}
           </div>
         </Card>
 
         {/* Recent Activity */}
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3 md:mb-4">
+        <Card className="border-border-default bg-bg-surface">
+          <h3 className="text-base md:text-lg font-bold text-text-primary mb-3 md:mb-4">
             Recent Activity
           </h3>
           <div className="space-y-2 md:space-y-3 max-h-48 overflow-y-auto">
@@ -734,15 +737,15 @@ const AdminDashboard = () => {
               return (
                 <div
                   key={idx}
-                  className="flex gap-2 md:gap-3 text-sm p-2 bg-gray-50 rounded border border-gray-200"
+                  className="flex gap-2 md:gap-3 text-sm p-2 bg-bg-elevated rounded border border-border-default"
                 >
-                  <Icon size={16} className="text-gray-700 flex-shrink-0 mt-0.5" />
+                  <Icon size={16} className="text-text-secondary flex-shrink-0 mt-0.5" />
                   <div className="min-w-0">
-                    <p className="text-gray-900 font-medium text-xs md:text-sm">
+                    <p className="text-text-primary font-medium text-xs md:text-sm">
                       {activity.action}
                     </p>
-                    <p className="text-gray-600 text-xs">{activity.details}</p>
-                    <p className="text-gray-500 text-xs mt-1">{activity.time}</p>
+                    <p className="text-text-secondary text-xs">{activity.details}</p>
+                    <p className="text-text-muted text-xs mt-1">{activity.time}</p>
                   </div>
                 </div>
               );
@@ -752,8 +755,8 @@ const AdminDashboard = () => {
       </div>
 
       {/* System Health */}
-      <Card className="border-gray-200 bg-white">
-        <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4">
+      <Card className="border-border-default bg-bg-surface">
+        <h3 className="text-lg md:text-xl font-bold text-text-primary mb-3 md:mb-4">
           System Health
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
@@ -766,12 +769,12 @@ const AdminDashboard = () => {
             return (
               <div
                 key={idx}
-                className="p-3 md:p-4 bg-gray-50 rounded border border-gray-200 flex items-start gap-2 md:gap-3"
+                className="p-3 md:p-4 bg-bg-elevated rounded border border-border-default flex items-start gap-2 md:gap-3"
               >
-                <Icon size={20} className="text-gray-700 flex-shrink-0" />
+                <Icon size={20} className="text-text-secondary flex-shrink-0" />
                 <div className="text-sm min-w-0">
-                  <p className="text-gray-600">{item.label}</p>
-                  <p className="text-gray-900 font-semibold text-sm">
+                  <p className="text-text-secondary">{item.label}</p>
+                  <p className="text-text-primary font-semibold text-sm">
                     {item.status}
                   </p>
                 </div>
@@ -806,22 +809,22 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowAlertModal(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-3xl w-full max-h-[80vh] flex flex-col shadow-lg"
+            className="bg-bg-surface rounded-xl border border-border-default p-6 max-w-3xl w-full max-h-[80vh] flex flex-col shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+              <h3 className="text-xl md:text-2xl font-bold text-text-primary">
                 {selectedAlert.title}
               </h3>
               <button
                 onClick={() => setShowAlertModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-text-muted hover:text-text-secondary"
               >
                 <X size={24} />
               </button>
@@ -830,30 +833,30 @@ const AdminDashboard = () => {
             <div className="overflow-x-auto flex-1">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
+                  <tr className="border-b border-border-default bg-bg-elevated">
                     {selectedAlert.type === "overdue" && (
                       <>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Task</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Assigned To</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Due Date</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Days Overdue</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Priority</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Task</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Assigned To</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Due Date</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Days Overdue</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Priority</th>
                       </>
                     )}
                     {selectedAlert.type === "performance" && (
                       <>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Employee</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Department</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Performance Score</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Employee</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Department</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Performance Score</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Status</th>
                       </>
                     )}
                     {selectedAlert.type === "attendance" && (
                       <>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Employee</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Date</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
-                        <th className="text-left py-3 px-4 text-gray-900 font-semibold">Reason</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Employee</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Date</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Status</th>
+                        <th className="text-left py-3 px-4 text-text-primary font-semibold">Reason</th>
                       </>
                     )}
                   </tr>
@@ -861,50 +864,50 @@ const AdminDashboard = () => {
                 <tbody>
                   {selectedAlert.type === "overdue" && (
                     <>
-                      <tr className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-gray-900 font-medium">API Integration with Stripe</td>
-                        <td className="py-3 px-4 text-gray-700">David Chen</td>
-                        <td className="py-3 px-4 text-gray-700">2024-03-15</td>
+                      <tr className="border-b border-border-default hover:bg-bg-elevated">
+                        <td className="py-3 px-4 text-text-primary font-medium">API Integration with Stripe</td>
+                        <td className="py-3 px-4 text-text-secondary">David Chen</td>
+                        <td className="py-3 px-4 text-text-secondary">2024-03-15</td>
                         <td className="py-3 px-4 text-red-600 font-semibold">12 days</td>
                         <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">High</span></td>
                       </tr>
-                      <tr className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-gray-900 font-medium">Database Optimization</td>
-                        <td className="py-3 px-4 text-gray-700">Lisa Wong</td>
-                        <td className="py-3 px-4 text-gray-700">2024-03-20</td>
+                      <tr className="border-b border-border-default hover:bg-bg-elevated">
+                        <td className="py-3 px-4 text-text-primary font-medium">Database Optimization</td>
+                        <td className="py-3 px-4 text-text-secondary">Lisa Wong</td>
+                        <td className="py-3 px-4 text-text-secondary">2024-03-20</td>
                         <td className="py-3 px-4 text-red-600 font-semibold">7 days</td>
                         <td className="py-3 px-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">Medium</span></td>
                       </tr>
-                      <tr className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-gray-900 font-medium">Security Audit</td>
-                        <td className="py-3 px-4 text-gray-700">Mark Johnson</td>
-                        <td className="py-3 px-4 text-gray-700">2024-03-18</td>
+                      <tr className="border-b border-border-default hover:bg-bg-elevated">
+                        <td className="py-3 px-4 text-text-primary font-medium">Security Audit</td>
+                        <td className="py-3 px-4 text-text-secondary">Mark Johnson</td>
+                        <td className="py-3 px-4 text-text-secondary">2024-03-18</td>
                         <td className="py-3 px-4 text-red-600 font-semibold">9 days</td>
                         <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">High</span></td>
                       </tr>
                     </>
                   )}
                   {selectedAlert.type === "performance" && lowPerformanceEmployees.map((emp, idx) => (
-                    <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50">
-                      <td className="py-3 px-4 text-gray-900 font-medium">{emp.name}</td>
-                      <td className="py-3 px-4 text-gray-700">{employees.find(e => e.emp_id === emp.emp_id)?.department || "N/A"}</td>
+                    <tr key={idx} className="border-b border-border-default hover:bg-bg-elevated">
+                      <td className="py-3 px-4 text-text-primary font-medium">{emp.name}</td>
+                      <td className="py-3 px-4 text-text-secondary">{employees.find(e => e.emp_id === emp.emp_id)?.department || "N/A"}</td>
                       <td className="py-3 px-4 text-red-600 font-semibold">{emp.performance_score}/10</td>
                       <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">At Risk</span></td>
                     </tr>
                   ))}
                   {selectedAlert.type === "attendance" && (
                     <>
-                      <tr className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-gray-900 font-medium">Emma Wilson</td>
-                        <td className="py-3 px-4 text-gray-700">2024-04-10</td>
+                      <tr className="border-b border-border-default hover:bg-bg-elevated">
+                        <td className="py-3 px-4 text-text-primary font-medium">Emma Wilson</td>
+                        <td className="py-3 px-4 text-text-secondary">2024-04-10</td>
                         <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">Absent</span></td>
-                        <td className="py-3 px-4 text-gray-700">No notification</td>
+                        <td className="py-3 px-4 text-text-secondary">No notification</td>
                       </tr>
-                      <tr className="border-b border-gray-200 hover:bg-gray-50">
-                        <td className="py-3 px-4 text-gray-900 font-medium">James Martinez</td>
-                        <td className="py-3 px-4 text-gray-700">2024-04-09</td>
+                      <tr className="border-b border-border-default hover:bg-bg-elevated">
+                        <td className="py-3 px-4 text-text-primary font-medium">James Martinez</td>
+                        <td className="py-3 px-4 text-text-secondary">2024-04-09</td>
                         <td className="py-3 px-4"><span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-semibold">Absent</span></td>
-                        <td className="py-3 px-4 text-gray-700">No notification</td>
+                        <td className="py-3 px-4 text-text-secondary">No notification</td>
                       </tr>
                     </>
                   )}
@@ -914,7 +917,7 @@ const AdminDashboard = () => {
 
             <button
               onClick={() => setShowAlertModal(false)}
-              className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm w-full"
+              className="mt-4 px-4 py-2 bg-bg-elevated hover:bg-gray-300 text-text-primary rounded-lg transition-colors font-semibold text-sm w-full"
             >
               Close
             </button>
@@ -925,48 +928,48 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowEmployeesModal(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-5xl w-full max-h-[80vh] flex flex-col shadow-lg"
+            className="bg-bg-surface rounded-xl border border-border-default p-6 max-w-5xl w-full max-h-[80vh] flex flex-col shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+              <h3 className="text-xl md:text-2xl font-bold text-text-primary">
                 {modalTitle}
               </h3>
               <button
                 onClick={() => setShowEmployeesModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-text-muted hover:text-text-secondary"
               >
                 <X size={24} />
               </button>
             </div>
 
             {modalEmployees.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">No employees found</p>
+              <p className="text-center text-text-muted py-8">No employees found</p>
             ) : (
               <div className="overflow-x-auto flex-1">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 bg-gray-50">
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Name</th>
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Email</th>
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Department</th>
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Role</th>
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">Status</th>
+                    <tr className="border-b border-border-default bg-bg-elevated">
+                      <th className="text-left py-3 px-4 text-text-primary font-semibold">Name</th>
+                      <th className="text-left py-3 px-4 text-text-primary font-semibold">Email</th>
+                      <th className="text-left py-3 px-4 text-text-primary font-semibold">Department</th>
+                      <th className="text-left py-3 px-4 text-text-primary font-semibold">Role</th>
+                      <th className="text-left py-3 px-4 text-text-primary font-semibold">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {modalEmployees.map((emp, idx) => (
-                      <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}>
-                        <td className="py-3 px-4 text-gray-900 font-medium">{emp.name}</td>
-                        <td className="py-3 px-4 text-gray-700">{emp.email || "N/A"}</td>
-                        <td className="py-3 px-4 text-gray-700">{emp.department || "N/A"}</td>
-                        <td className="py-3 px-4 text-gray-700">{emp.role || "Employee"}</td>
+                      <tr key={idx} className="border-b border-border-default hover:bg-bg-elevated transition-colors cursor-pointer" onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}>
+                        <td className="py-3 px-4 text-text-primary font-medium">{emp.name}</td>
+                        <td className="py-3 px-4 text-text-secondary">{emp.email || "N/A"}</td>
+                        <td className="py-3 px-4 text-text-secondary">{emp.department || "N/A"}</td>
+                        <td className="py-3 px-4 text-text-secondary">{emp.role || "Employee"}</td>
                         <td className="py-3 px-4">
                           <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
                             emp.status === "active"
@@ -987,7 +990,7 @@ const AdminDashboard = () => {
 
             <button
               onClick={() => setShowEmployeesModal(false)}
-              className="mt-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm w-full"
+              className="mt-4 px-4 py-2 bg-bg-elevated hover:bg-gray-300 text-text-primary rounded-lg transition-colors font-semibold text-sm w-full"
             >
               Close
             </button>
@@ -998,30 +1001,30 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowAddEmployeeModal(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+            className="bg-bg-surface rounded-xl border border-border-default p-6 max-w-md w-full space-y-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
           >
-            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+            <h3 className="text-lg md:text-xl font-bold text-text-primary">
               Add New Employee
             </h3>
             <div className="space-y-3">
               <input
                 type="text"
                 placeholder="Employee Name"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-blue-500"
               />
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-blue-500"
               />
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500">
+              <select className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-blue-500">
                 <option>Select Department</option>
                 <option>Engineering</option>
                 <option>Sales</option>
@@ -1031,13 +1034,13 @@ const AdminDashboard = () => {
               <input
                 type="text"
                 placeholder="Position"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-blue-500"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowAddEmployeeModal(false)}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+                className="flex-1 px-4 py-2 bg-bg-elevated hover:bg-gray-300 text-text-primary rounded-lg transition-colors font-semibold text-sm"
               >
                 Cancel
               </button>
@@ -1060,20 +1063,20 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowAddManagerModal(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+            className="bg-bg-surface rounded-xl border border-border-default p-6 max-w-md w-full space-y-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
           >
-            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+            <h3 className="text-lg md:text-xl font-bold text-text-primary">
               Add New Manager
             </h3>
             <div className="space-y-3">
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500">
+              <select className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-purple-500">
                 <option>Select Employee to Promote</option>
                 {employees.map((emp, idx) => (
                   <option key={idx}>{emp.name}</option>
@@ -1082,18 +1085,18 @@ const AdminDashboard = () => {
               <input
                 type="text"
                 placeholder="Team Name"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-purple-500"
               />
               <input
                 type="number"
                 placeholder="Team Size"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-purple-500"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowAddManagerModal(false)}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+                className="flex-1 px-4 py-2 bg-bg-elevated hover:bg-gray-300 text-text-primary rounded-lg transition-colors font-semibold text-sm"
               >
                 Cancel
               </button>
@@ -1116,16 +1119,16 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowCreateDeptModal(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+            className="bg-bg-surface rounded-xl border border-border-default p-6 max-w-md w-full space-y-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
           >
-            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+            <h3 className="text-lg md:text-xl font-bold text-text-primary">
               Create New Department
             </h3>
             <div className="space-y-3">
@@ -1134,23 +1137,23 @@ const AdminDashboard = () => {
                 placeholder="Department Name"
                 value={newDepartment}
                 onChange={(e) => setNewDepartment(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-green-500"
               />
               <input
                 type="text"
                 placeholder="Department Head"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-green-500"
               />
               <textarea
                 placeholder="Description"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-green-500"
                 rows="3"
               />
             </div>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowCreateDeptModal(false)}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+                className="flex-1 px-4 py-2 bg-bg-elevated hover:bg-gray-300 text-text-primary rounded-lg transition-colors font-semibold text-sm"
               >
                 Cancel
               </button>
@@ -1173,16 +1176,16 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowAssignRolesModal(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+            className="bg-bg-surface rounded-xl border border-border-default p-6 max-w-md w-full space-y-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
           >
-            <h3 className="text-lg md:text-xl font-bold text-gray-900">
+            <h3 className="text-lg md:text-xl font-bold text-text-primary">
               Assign Roles
             </h3>
             <div className="space-y-3">
@@ -1192,7 +1195,7 @@ const AdminDashboard = () => {
                   const emp = employees.find(e => e.emp_id === parseInt(e.target.value));
                   setSelectedRoleEmployee(emp);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-yellow-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-yellow-500"
               >
                 <option value="">Select Employee</option>
                 {employees.map((emp) => (
@@ -1204,7 +1207,7 @@ const AdminDashboard = () => {
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-yellow-500"
+                className="w-full px-3 py-2 border border-border-strong rounded-lg text-sm focus:outline-none focus:border-yellow-500"
               >
                 <option value="">Select New Role</option>
                 <option value="employee">Employee</option>
@@ -1216,7 +1219,7 @@ const AdminDashboard = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowAssignRolesModal(false)}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm"
+                className="flex-1 px-4 py-2 bg-bg-elevated hover:bg-gray-300 text-text-primary rounded-lg transition-colors font-semibold text-sm"
               >
                 Cancel
               </button>
@@ -1243,20 +1246,20 @@ const AdminDashboard = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
           onClick={() => setShowFireConfirm(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-lg"
+            className="bg-bg-surface rounded-xl border border-border-default p-6 max-w-md w-full space-y-4 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
           >
-            <h3 className="text-lg md:text-xl font-bold text-gray-900 flex items-center space-x-2">
+            <h3 className="text-lg md:text-xl font-bold text-text-primary flex items-center space-x-2">
               <AlertCircle size={24} className="text-red-600" />
               <span>Confirm Termination</span>
             </h3>
-            <p className="text-gray-700 text-sm md:text-base">
+            <p className="text-text-secondary text-sm md:text-base">
               Are you sure you want to terminate{" "}
               <strong>{employeeToFire.name}</strong>? This action cannot be
               undone.
@@ -1267,7 +1270,7 @@ const AdminDashboard = () => {
                   setShowFireConfirm(false);
                   setEmployeeToFire(null);
                 }}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg transition-colors font-semibold text-sm md:text-base"
+                className="flex-1 px-4 py-2 bg-bg-elevated hover:bg-gray-300 text-text-primary rounded-lg transition-colors font-semibold text-sm md:text-base"
               >
                 Cancel
               </button>

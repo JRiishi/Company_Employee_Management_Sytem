@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
@@ -63,7 +66,7 @@ const LeaveDashboard = () => {
       case "Paid Time Off (PTO)":
         return "bg-purple-100 text-purple-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-[#1A1A26] text-text-primary";
     }
   };
 
@@ -76,7 +79,7 @@ const LeaveDashboard = () => {
         >
           <Loader className="text-blue-600" size={48} />
         </motion.div>
-        <span className="ml-4 text-gray-600 font-medium">
+        <span className="ml-4 text-text-primary font-medium">
           Loading leave data...
         </span>
       </div>
@@ -93,11 +96,11 @@ const LeaveDashboard = () => {
       >
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-3xl font-bold text-text-primary flex items-center gap-2">
               <Users size={32} className="text-blue-600" />
               Employee Leave Management
             </h1>
-            <p className="text-gray-600">
+            <p className="text-text-primary">
               Track and manage employee leaves across the organization
             </p>
           </div>
@@ -137,8 +140,8 @@ const LeaveDashboard = () => {
               onClick={() => setTimeFilter(period)}
               className={`px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 ${
                 timeFilter === period
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  ? "bg-blue-600 text-white shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+                  : "bg-[#20202F] text-text-primary hover:bg-gray-300"
               }`}
             >
               <Filter size={16} />
@@ -154,9 +157,9 @@ const LeaveDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Card className="border-gray-200 bg-white overflow-x-auto">
+        <Card className="border-white/10 bg-[#13131C] overflow-x-auto">
           {employees.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-text-primary">
               <Calendar size={48} className="mx-auto mb-3 opacity-30" />
               <p className="text-lg font-medium">
                 No leave data found for this period
@@ -166,29 +169,29 @@ const LeaveDashboard = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                  <tr className="border-b border-white/10 bg-[#13131C]">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Name
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Role
                     </th>
-                    <th className="text-center py-3 px-4 text-gray-700 font-semibold">
+                    <th className="text-center py-3 px-4 text-text-primary font-semibold">
                       Total Leaves
                     </th>
-                    <th className="text-center py-3 px-4 text-gray-700 font-semibold">
+                    <th className="text-center py-3 px-4 text-text-primary font-semibold">
                       Total Days
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Sick Leave
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Casual Leave
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Vacation Leave
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-700 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       PTO
                     </th>
                   </tr>
@@ -200,15 +203,15 @@ const LeaveDashboard = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                      className="border-b border-white/[0.06] hover:bg-[#13131C] transition-colors"
                     >
                       <td className="py-3 px-4">
-                        <p className="font-semibold text-gray-900">
+                        <p className="font-semibold text-text-primary">
                           {emp.name}
                         </p>
                       </td>
                       <td className="py-3 px-4">
-                        <p className="text-gray-600 text-sm">{emp.role}</p>
+                        <p className="text-text-primary text-sm">{emp.role}</p>
                       </td>
                       <td className="py-3 px-4 text-center">
                         <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
@@ -255,30 +258,30 @@ const LeaveDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Leave Types</h3>
+        <Card className="border-white/10 bg-[#13131C]">
+          <h3 className="text-lg font-bold text-text-primary mb-4">Leave Types</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded bg-red-100 border-2 border-red-800"></div>
-              <span className="text-gray-700">
+              <span className="text-text-primary">
                 <strong>Sick Leave</strong> - Medical/Health related
               </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded bg-blue-100 border-2 border-blue-800"></div>
-              <span className="text-gray-700">
+              <span className="text-text-primary">
                 <strong>Casual Leave</strong> - Personal time off
               </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded bg-green-100 border-2 border-green-800"></div>
-              <span className="text-gray-700">
+              <span className="text-text-primary">
                 <strong>Vacation Leave</strong> - Planned vacation
               </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded bg-purple-100 border-2 border-purple-800"></div>
-              <span className="text-gray-700">
+              <span className="text-text-primary">
                 <strong>PTO</strong> - Paid Time Off
               </span>
             </div>

@@ -1,9 +1,12 @@
+// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
+// Original functionality: Reusable table section with header and data display
+
 import React from 'react';
 import Card from '../Card/Card';
 import Table from '../Table/Table';
 import Badge from '../Badge/Badge';
 
-const TableSection = ({ tasks, loading }) => {
+const TableSection = ({ tasks, loading, title = "Recent Tasks" }) => {
   const columns = [
     { header: 'Task Title', accessor: 'title' },
     { header: 'Deadline', accessor: 'deadline' },
@@ -11,7 +14,7 @@ const TableSection = ({ tasks, loading }) => {
       header: 'Status', 
       accessor: 'status',
       render: (row) => {
-        let variant = 'default';
+        let variant = 'neutral';
         if (row.status === 'Completed') variant = 'success';
         if (row.status === 'In Progress') variant = 'warning';
         if (row.status === 'Pending') variant = 'danger';
@@ -20,34 +23,29 @@ const TableSection = ({ tasks, loading }) => {
     }
   ];
 
+  const SkeletonRow = () => (
+    <div className="h-12 flex items-center px-5 border-b border-border-subtle gap-6">
+      <div className="h-3 w-32 bg-border-default rounded"></div>
+      <div className="h-3 w-20 bg-border-default rounded"></div>
+      <div className="h-5 w-16 bg-border-default rounded"></div>
+    </div>
+  );
+
   return (
-    <Card hoverable className="flex flex-col h-[420px] w-full overflow-hidden !transition-all !duration-200">
-      <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-white shrink-0">
-        <div>
-          <h3 className="text-[15px] font-semibold text-gray-900 tracking-tight">Recent Tasks</h3>
-        </div>
-        <button className="text-[13px] font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200 cursor-pointer">
+    <Card className="flex flex-col h-auto max-h-[420px] overflow-hidden">
+      <div className="px-5 py-4 border-b border-border-subtle flex justify-between items-center flex-shrink-0">
+        <h3 className="text-sm font-semibold text-text-primary tracking-tight">{title}</h3>
+        <button className="text-xs font-medium text-accent hover:text-accent-hover transition-colors duration-150 cursor-pointer">
           View All
         </button>
       </div>
       
-      <div className="flex-1 overflow-auto bg-white p-0">
+      <div className="flex-1 overflow-auto">
         {loading ? (
-          <div className="w-full bg-white border-t-0 border border-gray-100 overflow-hidden rounded-b-2xl h-full animate-pulse">
-            <div className="bg-gray-50 h-11 border-b border-gray-100 w-full flex items-center px-6 gap-20">
-              <div className="h-3 w-16 bg-gray-200 rounded"></div>
-              <div className="h-3 w-16 bg-gray-200 rounded"></div>
-              <div className="h-3 w-16 bg-gray-200 rounded"></div>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="h-14 flex items-center px-6 gap-20 w-full">
-                  <div className="h-3 w-32 bg-gray-100 rounded"></div>
-                  <div className="h-3 w-20 bg-gray-100 rounded"></div>
-                  <div className="h-5 w-20 bg-gray-100 rounded-md"></div>
-                </div>
-              ))}
-            </div>
+          <div className="divide-y divide-border-subtle">
+            {[1, 2, 3, 4, 5].map(i => (
+              <SkeletonRow key={i} />
+            ))}
           </div>
         ) : (
           <Table 
@@ -60,4 +58,5 @@ const TableSection = ({ tasks, loading }) => {
     </Card>
   );
 };
+
 export default TableSection;

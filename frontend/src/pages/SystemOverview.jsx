@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -244,16 +247,16 @@ const SystemOverview = () => {
       onClick={onClick}
       className="h-full"
     >
-      <Card className="border-gray-200 bg-white h-full flex flex-col justify-between hover:shadow-lg transition-shadow">
+      <Card className="border-white/10 bg-[#13131C] h-full flex flex-col justify-between hover:shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-shadow">
         <div className="flex justify-between items-start mb-3">
-          <h3 className="text-gray-600 text-sm font-medium">{title}</h3>
+          <h3 className="text-text-primary text-sm font-medium">{title}</h3>
           <Icon
             size={20}
             className={isPositive ? "text-green-600" : "text-red-600"}
           />
         </div>
         <div>
-          <div className="text-3xl font-bold text-gray-900 mb-2">{value}</div>
+          <div className="text-3xl font-bold text-text-primary mb-2">{value}</div>
           {change !== undefined && (
             <div className="flex items-center gap-1">
               {isPositive ? (
@@ -329,17 +332,17 @@ const SystemOverview = () => {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
         onClick={() => setDetailModal({ isOpen: false, type: "", data: [] })}
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-white rounded-xl border border-gray-200 p-6 max-w-4xl w-full max-h-96 overflow-y-auto shadow-xl"
+          className="bg-[#13131C] rounded-xl border border-white/10 p-6 max-w-4xl w-full max-h-96 overflow-y-auto shadow-xl"
         >
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-text-primary">
               {detailModal.type === "employees" && "All Employees"}
               {detailModal.type === "active" && "Active Employees"}
               {detailModal.type === "tasks" && "Completed Tasks"}
@@ -347,29 +350,29 @@ const SystemOverview = () => {
             </h2>
             <button
               onClick={() => setDetailModal({ isOpen: false, type: "", data: [] })}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-text-primary hover:text-text-primary"
             >
               <X size={24} />
             </button>
           </div>
 
           {detailModal.data.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">No data available</p>
+            <p className="text-center text-text-primary py-8">No data available</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
+                  <tr className="border-b border-white/10 bg-[#13131C]">
                     {getTableHeaders().map((header) => (
                       <th
                         key={header}
-                        className="text-left py-3 px-4 text-gray-900 font-semibold"
+                        className="text-left py-3 px-4 text-text-primary font-semibold"
                       >
                         {header}
                       </th>
                     ))}
                     {(detailModal.type === "employees" || detailModal.type === "active") && (
-                      <th className="text-left py-3 px-4 text-gray-900 font-semibold">
+                      <th className="text-left py-3 px-4 text-text-primary font-semibold">
                         Action
                       </th>
                     )}
@@ -377,9 +380,9 @@ const SystemOverview = () => {
                 </thead>
                 <tbody>
                   {detailModal.data.map((item, i) => (
-                    <tr key={i} className="border-b border-gray-200 hover:bg-gray-50">
+                    <tr key={i} className="border-b border-white/10 hover:bg-[#13131C]">
                       {getTableData(item).map((cell, j) => (
-                        <td key={j} className="py-3 px-4 text-gray-700">
+                        <td key={j} className="py-3 px-4 text-text-primary">
                           {cell}
                         </td>
                       ))}
@@ -411,18 +414,18 @@ const SystemOverview = () => {
   if (loading) {
     return (
       <div className="p-8 font-inter max-w-7xl mx-auto flex items-center justify-center min-h-screen">
-        <div className="text-gray-600 text-lg">Loading system overview...</div>
+        <div className="text-text-primary text-lg">Loading system overview...</div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-gray-900">
+    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-text-primary">
       <div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+        <h1 className="text-4xl md:text-5xl font-bold text-text-primary mb-3">
           System Overview
         </h1>
-        <p className="text-gray-600 text-lg">
+        <p className="text-text-primary text-lg">
           Executive dashboard with key metrics and insights (click cards for details)
         </p>
       </div>
@@ -461,8 +464,8 @@ const SystemOverview = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-gray-200 bg-white">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">
+        <Card className="border-white/10 bg-[#13131C]">
+          <h2 className="text-xl font-bold text-text-primary mb-6">
             Department Performance Comparison
           </h2>
           <ResponsiveContainer width="100%" height={300}>
@@ -485,8 +488,8 @@ const SystemOverview = () => {
           </ResponsiveContainer>
         </Card>
 
-        <Card className="border-gray-200 bg-white">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">
+        <Card className="border-white/10 bg-[#13131C]">
+          <h2 className="text-xl font-bold text-text-primary mb-6">
             Task Creation Timeline
           </h2>
           <ResponsiveContainer width="100%" height={300}>
@@ -533,23 +536,23 @@ const SystemOverview = () => {
                   key={i}
                   whileHover={{ translateX: 4, cursor: "pointer" }}
                   onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
-                  className="bg-white rounded-lg p-3 border border-red-200 hover:shadow-md transition-shadow"
+                  className="bg-[#13131C] rounded-lg p-3 border border-red-200 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-shadow"
                 >
                   <div className="flex justify-between items-start mb-1">
-                    <p className="font-semibold text-gray-900">{emp.name}</p>
+                    <p className="font-semibold text-text-primary">{emp.name}</p>
                     <span className="text-xs px-2 py-1 bg-red-100 text-red-800 rounded">
                       {emp.issue}
                     </span>
                   </div>
                   {emp.performance && (
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-text-primary">
                       Performance: {emp.performance}/10
                     </p>
                   )}
                 </motion.div>
               ))
             ) : (
-              <p className="text-gray-700 text-center py-4">
+              <p className="text-text-primary text-center py-4">
                 No risks detected
               </p>
             )}
@@ -574,15 +577,15 @@ const SystemOverview = () => {
                 key={i}
                 whileHover={{ translateX: 4, cursor: "pointer" }}
                 onClick={() => navigate(`/admin/employee/${emp.emp_id}`)}
-                className="bg-white rounded-lg p-3 border border-green-200 hover:shadow-md transition-shadow"
+                className="bg-[#13131C] rounded-lg p-3 border border-green-200 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-shadow"
               >
                 <div className="flex justify-between items-start mb-1">
-                  <p className="font-semibold text-gray-900">{emp.name}</p>
+                  <p className="font-semibold text-text-primary">{emp.name}</p>
                   <span className="text-sm font-bold text-green-700">
                     {emp.performance}/10
                   </span>
                 </div>
-                <p className="text-sm text-gray-600">{emp.department}</p>
+                <p className="text-sm text-text-primary">{emp.department}</p>
               </motion.div>
             ))}
           </div>
@@ -593,8 +596,8 @@ const SystemOverview = () => {
             System Status
           </h2>
           <div className="space-y-3">
-            <div className="bg-white rounded-lg p-3 border border-blue-200">
-              <p className="text-sm text-gray-600 mb-1">Employee Database</p>
+            <div className="bg-[#13131C] rounded-lg p-3 border border-blue-200">
+              <p className="text-sm text-text-primary mb-1">Employee Database</p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-2 bg-blue-200 rounded-full overflow-hidden">
                   <div
@@ -602,11 +605,11 @@ const SystemOverview = () => {
                     style={{ width: "98%" }}
                   ></div>
                 </div>
-                <span className="text-xs font-semibold text-gray-700">98%</span>
+                <span className="text-xs font-semibold text-text-primary">98%</span>
               </div>
             </div>
-            <div className="bg-white rounded-lg p-3 border border-blue-200">
-              <p className="text-sm text-gray-600 mb-1">Task Processing</p>
+            <div className="bg-[#13131C] rounded-lg p-3 border border-blue-200">
+              <p className="text-sm text-text-primary mb-1">Task Processing</p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-2 bg-blue-200 rounded-full overflow-hidden">
                   <div
@@ -614,11 +617,11 @@ const SystemOverview = () => {
                     style={{ width: "92%" }}
                   ></div>
                 </div>
-                <span className="text-xs font-semibold text-gray-700">92%</span>
+                <span className="text-xs font-semibold text-text-primary">92%</span>
               </div>
             </div>
-            <div className="bg-white rounded-lg p-3 border border-blue-200">
-              <p className="text-sm text-gray-600 mb-1">Leave Processing</p>
+            <div className="bg-[#13131C] rounded-lg p-3 border border-blue-200">
+              <p className="text-sm text-text-primary mb-1">Leave Processing</p>
               <div className="flex items-center gap-2">
                 <div className="flex-1 h-2 bg-blue-200 rounded-full overflow-hidden">
                   <div
@@ -626,15 +629,15 @@ const SystemOverview = () => {
                     style={{ width: "95%" }}
                   ></div>
                 </div>
-                <span className="text-xs font-semibold text-gray-700">95%</span>
+                <span className="text-xs font-semibold text-text-primary">95%</span>
               </div>
             </div>
           </div>
         </Card>
       </div>
 
-      <Card className="border-gray-200 bg-white">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">
+      <Card className="border-white/10 bg-[#13131C]">
+        <h2 className="text-xl font-bold text-text-primary mb-6">
           Employee Status Distribution
         </h2>
         <div className="flex justify-center">

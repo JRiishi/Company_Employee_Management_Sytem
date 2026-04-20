@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
@@ -205,7 +208,7 @@ const AdminSettings = () => {
       className={`px-6 py-3 font-semibold transition-colors border-b-2 ${
         isActive
           ? "border-blue-600 text-blue-600"
-          : "border-transparent text-gray-600 hover:text-gray-900"
+          : "border-transparent text-text-primary hover:text-text-primary"
       }`}
     >
       {label}
@@ -213,14 +216,14 @@ const AdminSettings = () => {
   );
 
   return (
-    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-gray-900">
+    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 text-text-primary">
       <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
         <div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3 flex items-center gap-3">
+          <h1 className="text-4xl md:text-5xl font-bold text-text-primary mb-3 flex items-center gap-3">
             <Settings size={32} className="text-blue-600" />
             Admin Settings
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-text-primary text-lg">
             Configure system settings, roles, and policies
           </p>
         </div>
@@ -249,7 +252,7 @@ const AdminSettings = () => {
         </motion.div>
       )}
 
-      <div className="flex border-b border-gray-200 overflow-x-auto">
+      <div className="flex border-b border-white/10 overflow-x-auto">
         <TabButton
           label="RBAC"
           isActive={activeTab === "rbac"}
@@ -288,8 +291,8 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-gray-200 bg-white">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <Card className="border-white/10 bg-[#13131C]">
+            <h2 className="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
               <Lock size={20} className="text-blue-600" />
               Role-Based Access Control
             </h2>
@@ -297,16 +300,16 @@ const AdminSettings = () => {
               {rbacData.roles.map((role) => (
                 <div
                   key={role.id}
-                  className="border border-gray-200 rounded-lg p-4 flex justify-between items-start hover:bg-gray-50 transition-colors"
+                  className="border border-white/10 rounded-lg p-4 flex justify-between items-start hover:bg-[#13131C] transition-colors"
                 >
                   <div>
-                    <h3 className="font-semibold text-lg text-gray-900">
+                    <h3 className="font-semibold text-lg text-text-primary">
                       {role.name}
                     </h3>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-text-primary mt-1">
                       {role.description}
                     </p>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-text-primary mt-2">
                       {role.userCount} users assigned
                     </p>
                   </div>
@@ -316,7 +319,7 @@ const AdminSettings = () => {
                 </div>
               ))}
             </div>
-            <button className="w-full mt-6 py-2 border-2 border-dashed border-gray-300 hover:border-blue-600 text-gray-700 hover:text-blue-600 rounded-lg transition-colors font-semibold">
+            <button className="w-full mt-6 py-2 border-2 border-dashed border-white/10 hover:border-blue-600 text-text-primary hover:text-blue-600 rounded-lg transition-colors font-semibold">
               + Add New Role
             </button>
           </Card>
@@ -329,21 +332,21 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-gray-200 bg-white">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
+          <Card className="border-white/10 bg-[#13131C]">
+            <h2 className="text-xl font-bold text-text-primary mb-6">
               Permissions Matrix
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
-                    <th className="text-left py-3 px-4 text-gray-900 font-semibold">
+                  <tr className="border-b border-white/10 bg-[#13131C]">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Permission
                     </th>
                     {Object.keys(permissions).map((role) => (
                       <th
                         key={role}
-                        className="text-center py-3 px-4 text-gray-900 font-semibold"
+                        className="text-center py-3 px-4 text-text-primary font-semibold"
                       >
                         {role}
                       </th>
@@ -352,8 +355,8 @@ const AdminSettings = () => {
                 </thead>
                 <tbody>
                   {Object.keys(permissions.Admin || {}).map((perm) => (
-                    <tr key={perm} className="border-b border-gray-200">
-                      <td className="py-3 px-4 text-gray-900 font-medium">
+                    <tr key={perm} className="border-b border-white/10">
+                      <td className="py-3 px-4 text-text-primary font-medium">
                         {perm}
                       </td>
                       {Object.keys(permissions).map((role) => (
@@ -381,13 +384,13 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-gray-200 bg-white">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
+          <Card className="border-white/10 bg-[#13131C]">
+            <h2 className="text-xl font-bold text-text-primary mb-6">
               Leave Policy Configuration
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
                   Max Leaves Per Year
                 </label>
                 <input
@@ -399,11 +402,11 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
                   Approval Processing Days
                 </label>
                 <input
@@ -415,11 +418,11 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
                   Sick Leaves
                 </label>
                 <input
@@ -431,11 +434,11 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
                   Casual Leaves
                 </label>
                 <input
@@ -447,11 +450,11 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
                   Vacation Leaves
                 </label>
                 <input
@@ -463,26 +466,26 @@ const AdminSettings = () => {
                       parseInt(e.target.value),
                     )
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
             <div className="mt-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Leave Types</h3>
+              <h3 className="font-semibold text-text-primary mb-3">Leave Types</h3>
               <div className="space-y-2">
                 {leavePolicy.leaveTypes.map((type, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-lg"
+                    className="flex items-center gap-3 px-4 py-2 bg-[#13131C] rounded-lg"
                   >
-                    <span className="text-gray-900">{type}</span>
+                    <span className="text-text-primary">{type}</span>
                     <button className="ml-auto text-sm text-red-600 hover:text-red-700">
                       Remove
                     </button>
                   </div>
                 ))}
               </div>
-              <button className="mt-3 w-full py-2 border-2 border-dashed border-gray-300 hover:border-blue-600 text-gray-700 hover:text-blue-600 rounded-lg transition-colors font-semibold">
+              <button className="mt-3 w-full py-2 border-2 border-dashed border-white/10 hover:border-blue-600 text-text-primary hover:text-blue-600 rounded-lg transition-colors font-semibold">
                 + Add Leave Type
               </button>
             </div>
@@ -496,14 +499,14 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-gray-200 bg-white">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <Card className="border-white/10 bg-[#13131C]">
+            <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
               <Clock size={20} className="text-blue-600" />
               Working Hours Configuration
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
                   Start Time
                 </label>
                 <input
@@ -512,11 +515,11 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleWorkingHoursChange("startTime", e.target.value)
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-text-primary mb-2">
                   End Time
                 </label>
                 <input
@@ -525,12 +528,12 @@ const AdminSettings = () => {
                   onChange={(e) =>
                     handleWorkingHoursChange("endTime", e.target.value)
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
             <div className="mt-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Work Days</h3>
+              <h3 className="font-semibold text-text-primary mb-3">Work Days</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {[
                   "Monday",
@@ -563,7 +566,7 @@ const AdminSettings = () => {
                       }}
                       className="w-4 h-4"
                     />
-                    <span className="text-gray-900">{day}</span>
+                    <span className="text-text-primary">{day}</span>
                   </label>
                 ))}
               </div>
@@ -578,8 +581,8 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-gray-200 bg-white">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <Card className="border-white/10 bg-[#13131C]">
+            <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
               <Bell size={20} className="text-blue-600" />
               Notification Settings
             </h2>
@@ -587,9 +590,9 @@ const AdminSettings = () => {
               {Object.keys(notifications).map((setting) => (
                 <div
                   key={setting}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between p-4 bg-[#13131C] rounded-lg hover:bg-[#1A1A26] transition-colors"
                 >
-                  <label className="text-gray-900 font-semibold cursor-pointer">
+                  <label className="text-text-primary font-semibold cursor-pointer">
                     {setting.replace(/([A-Z])/g, " $1").trim()}
                   </label>
                   <input
@@ -611,40 +614,40 @@ const AdminSettings = () => {
           animate={{ opacity: 1 }}
           className="space-y-6"
         >
-          <Card className="border-gray-200 bg-white">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <Card className="border-white/10 bg-[#13131C]">
+            <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
               <BarChart3 size={20} className="text-blue-600" />
               Audit Logs
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
-                    <th className="text-left py-3 px-4 text-gray-900 font-semibold">
+                  <tr className="border-b border-white/10 bg-[#13131C]">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Action
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-900 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       User
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-900 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Timestamp
                     </th>
-                    <th className="text-left py-3 px-4 text-gray-900 font-semibold">
+                    <th className="text-left py-3 px-4 text-text-primary font-semibold">
                       Details
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {auditLogs.map((log) => (
-                    <tr key={log.id} className="border-b border-gray-200">
-                      <td className="py-3 px-4 font-medium text-gray-900">
+                    <tr key={log.id} className="border-b border-white/10">
+                      <td className="py-3 px-4 font-medium text-text-primary">
                         {log.action}
                       </td>
-                      <td className="py-3 px-4 text-gray-700">{log.user}</td>
-                      <td className="py-3 px-4 text-gray-700">
+                      <td className="py-3 px-4 text-text-primary">{log.user}</td>
+                      <td className="py-3 px-4 text-text-primary">
                         {log.timestamp}
                       </td>
-                      <td className="py-3 px-4 text-gray-600">{log.details}</td>
+                      <td className="py-3 px-4 text-text-primary">{log.details}</td>
                     </tr>
                   ))}
                 </tbody>

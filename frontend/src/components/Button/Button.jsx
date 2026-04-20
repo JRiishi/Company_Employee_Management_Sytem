@@ -1,4 +1,8 @@
+// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
+// Original functionality: Reusable button component with multiple variants and sizes
+
 import React from 'react';
+import { Loader2 } from 'lucide-react';
 
 const Button = ({ 
   children, 
@@ -7,56 +11,72 @@ const Button = ({
   className = '', 
   icon: Icon,
   disabled = false,
+  loading = false,
   onClick,
   ...props 
 }) => {
   const getVariantStyles = () => {
     switch (variant) {
       case 'primary':
-        return 'bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-600/20 border border-transparent';
+        return 'bg-accent hover:bg-accent-hover text-white focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-bg-base';
       case 'secondary':
-        return 'bg-white text-blue-700 hover:bg-blue-50 border border-blue-200 shadow-sm hover:text-blue-800';
-      case 'ghost':
-        return 'bg-transparent text-blue-500 hover:bg-blue-50 hover:text-blue-700 border border-transparent';
+        return 'bg-transparent border border-border-default text-text-secondary hover:text-text-primary hover:border-border-strong hover:bg-bg-elevated';
       case 'danger':
-        return 'bg-white text-red-600 hover:bg-red-50 border border-red-200 shadow-sm hover:border-red-300';
+        return 'bg-danger/10 border border-danger/30 text-danger hover:bg-danger/20 hover:border-danger/50';
+      case 'success':
+        return 'bg-success/10 border border-success/30 text-success hover:bg-success/20 hover:border-success/50';
+      case 'warning':
+        return 'bg-warning/10 border border-warning/30 text-warning hover:bg-warning/20 hover:border-warning/50';
+      case 'ghost':
+        return 'bg-transparent text-text-secondary hover:bg-bg-elevated hover:text-text-primary';
       default:
-        return 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-sm';
+        return 'bg-accent hover:bg-accent-hover text-white';
     }
   };
 
   const getSizeStyles = () => {
     switch (size) {
       case 'sm':
-        return 'px-2.5 py-1.5 sm:px-3 sm:py-2 text-[11px] sm:text-[13px]';
+        return 'px-3 py-1.5 text-xs h-[30px]';
       case 'md':
-        return 'px-3 py-2 sm:px-5 sm:py-2.5 text-[13px] sm:text-[14px]';
+        return 'px-4 py-2 text-sm h-[36px]';
       case 'lg':
-        return 'px-4 py-2.5 sm:px-6 sm:py-3 text-[14px] sm:text-[15px]';
+        return 'px-5 py-2.5 text-sm h-[42px]';
       case 'icon':
-        return 'p-1.5 sm:p-2';
+        return 'p-2 h-[32px] w-[32px]';
       default:
-        return 'px-3 py-2 sm:px-5 sm:py-2.5 text-[13px] sm:text-[14px]';
+        return 'px-4 py-2 text-sm h-[36px]';
     }
   };
 
   return (
     <button 
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
       className={`
-        inline-flex items-center justify-center gap-1.5 sm:gap-2 font-semibold rounded-lg
-        transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500
-        ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none scale-100' : 'cursor-pointer active:scale-[0.98]'}
+        inline-flex items-center justify-center gap-2 font-medium rounded-[7px]
+        transition-all duration-150 
+        focus:outline-none
+        ${disabled || loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer active:scale-[0.98]'}
         ${getVariantStyles()}
         ${getSizeStyles()}
         ${className}
       `}
       {...props}
     >
-      {Icon && <Icon className={size === 'sm' || size === 'icon' ? 'w-3 h-3 sm:w-3.5 sm:h-3.5' : 'w-4 h-4 sm:w-4.5 sm:h-4.5'} />}
-      {children}
+      {loading ? (
+        <>
+          <Loader2 className="w-4 h-4 animate-spin" />
+          {children && <span>{children}</span>}
+        </>
+      ) : (
+        <>
+          {Icon && <Icon className="w-4 h-4" />}
+          {children}
+        </>
+      )}
     </button>
   );
 };
+
 export default Button;

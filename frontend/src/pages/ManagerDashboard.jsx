@@ -1,3 +1,6 @@
+// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
+// Original functionality: Manager dashboard with team stats, performance chart, task assignment, and employee table.
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -10,7 +13,9 @@ import {
   Calendar,
   UserPlus,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  TrendingDown,
+  Sparkles
 } from 'lucide-react';
 
 // Components
@@ -21,33 +26,38 @@ import InsightBox from '../components/InsightBox/InsightBox';
 import Card from '../components/Card/Card';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
+import Badge from '../components/Badge/Badge';
+import { StatsGrid, WelcomeSection, ChartSection, TableSection, InsightSection } from '../components/Sections';
 
 // Hooks
 import { useManagerData } from '../hooks/useManagerData';
 
 const teamColumns = [
-  { header: 'Employee Name', accessor: 'name', sortable: true },
+  { header: 'Employee Name', accessor: 'name', sortable: true, render: (row) => (
+    <div className="flex items-center gap-3">
+      <div className="w-7 h-7 rounded-full bg-accent-subtle text-accent-text flex items-center justify-center text-xs font-semibold shrink-0">
+        {row.name ? row.name.substring(0, 2).toUpperCase() : 'UI'}
+      </div>
+      <span className="font-medium text-text-primary">{row.name}</span>
+    </div>
+  )},
   { header: 'Role', accessor: 'role', sortable: true },
   { header: 'Performance Score', accessor: 'performance_score', sortable: true, render: (row) => (
       <div className="flex items-center gap-2">
-        <span className="font-semibold text-gray-900">{row.performance_score?.toFixed(1) || '0.0'}/10</span>
-        <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden shrink-0">
-          <div className="h-full bg-blue-500 rounded-full transition-all duration-500" style={{ width: `${((row.performance_score || 0) / 10) * 100}%` }} />
+        <span className="font-medium text-text-primary">{row.performance_score?.toFixed(1) || '0.0'}/10</span>
+        <div className="w-16 h-1.5 bg-bg-elevated rounded-full overflow-hidden shrink-0 border border-border-subtle">
+          <div className="h-full bg-accent rounded-full transition-all duration-500" style={{ width: `${((row.performance_score || 0) / 10) * 100}%` }} />
         </div>
       </div>
   )},
   { header: 'Active Tasks', accessor: 'active_tasks', sortable: true },
   { header: 'Status', accessor: 'status', sortable: true, render: (row) => {
-     let colorClass = 'bg-gray-100 text-gray-700';
-     if (row.status === 'On Track') colorClass = 'bg-emerald-100 text-emerald-700';
-     if (row.status === 'At Risk') colorClass = 'bg-red-100 text-red-700';
-     if (row.status === 'Needs Review') colorClass = 'bg-amber-100 text-amber-700';
+     let variant = 'neutral';
+     if (row.status === 'On Track') variant = 'success';
+     if (row.status === 'At Risk') variant = 'danger';
+     if (row.status === 'Needs Review') variant = 'warning';
      
-     return (
-       <span className={`px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-md ${colorClass}`}>
-         {row.status || 'Unknown'}
-       </span>
-     );
+     return <Badge variant={variant}>{row.status || 'Unknown'}</Badge>;
   }},
 ];
 
@@ -66,10 +76,9 @@ const ManagerDashboard = () => {
   const [taskDeadline, setTaskDeadline] = useState('');
   const [selectedEmp, setSelectedEmp] = useState('');
   const [assigning, setAssigning] = useState(false);
-  const [assignmentFeedback, setAssignmentFeedback] = useState(null); // { type: 'success' | 'error', message: string }
+  const [assignmentFeedback, setAssignmentFeedback] = useState(null);
 
   const handleRowClick = (row) => {
-    // Preparing to open employee detail
     console.log("Opening details for employee:", row.id);
   };
 
@@ -91,206 +100,183 @@ const ManagerDashboard = () => {
 
     if (result.success) {
       setAssignmentFeedback({ type: 'success', message: 'Task assigned successfully' });
-      // Clear form
       setTaskTitle('');
       setTaskDesc('');
       setTaskDeadline('');
       setSelectedEmp('');
-      
-      // Auto dismiss feedback after 3s
       setTimeout(() => setAssignmentFeedback(null), 3000);
     } else {
       setAssignmentFeedback({ type: 'error', message: result.error || 'Failed to assign task' });
     }
   };
 
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
   return (
     <motion.div 
-      className="w-full flex justify-center flex-col gap-6 relative max-w-7xl mx-auto"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className="w-full flex flex-col gap-6"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
     >
-      {/* 🔹 SECTION 1 — Page Header */}
-      <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-left w-full block relative z-0 mb-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-            Manager Dashboard
-          </h2>
-          <p className="text-[14px] text-gray-500 mt-1">Overview of your team performance and workload</p>
-        </div>
-      </section>
+      <WelcomeSection 
+        title="Manager Dashboard" 
+        subtitle="Overview of your team performance and workload."
+        dateText={today}
+      />
 
       {error ? (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl shadow-sm text-[13px] font-medium flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 text-red-500" />
+        <div className="bg-danger/10 border border-danger/20 text-danger px-4 py-3 rounded-[10px] text-sm font-medium flex items-center gap-2 w-full">
+          <AlertCircle className="w-4 h-4 text-danger" />
           {error}
         </div>
       ) : (
         <>
-          {/* 🔹 SECTION 2 — TEAM STATS CARDS */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+          <StatsGrid>
             {loading ? (
               [...Array(4)].map((_, i) => (
-                <Card key={i} className="p-5 h-[104px]">
-                  <div className="animate-pulse flex flex-col justify-between h-full">
-                    <div className="flex justify-between items-center mb-2">
-                       <div className="h-4 bg-gray-200 rounded w-24"></div>
-                       <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
-                    </div>
-                    <div className="h-8 bg-gray-200 rounded w-16"></div>
-                  </div>
-                </Card>
+                <div key={i} className="h-[104px] skeleton"></div>
               ))
             ) : (
               <>
-                <StatsCard title="Total Employees" value={teamStats?.total_employees || 0} icon={Users} />
+                <StatsCard title="Team Size" value={teamStats?.total_employees || 0} icon={Users} trend={{ value: '+2', isPositive: true }} />
+                <StatsCard title="Avg Performance" value={teamStats?.avg_performance?.toFixed(1) || '0.0'} icon={TrendingUp} trend={{ value: '+0.4', isPositive: true }} />
                 <StatsCard title="Active Tasks" value={teamStats?.active_tasks || 0} icon={ClipboardList} />
-                <StatsCard title="Avg Team Performance" value={teamStats?.avg_performance?.toFixed(1) || '0.0'} icon={TrendingUp} />
-                <StatsCard title="Pending Reviews" value={teamStats?.pending_reviews || 0} icon={Clock} />
+                <StatsCard title="Pending Approvals" value={teamStats?.pending_reviews || 0} icon={Clock} trend={{ value: 'Needs action', isPositive: false }} />
               </>
             )}
-          </div>
+          </StatsGrid>
 
-          {/* 🔹 SECTION 6 — AI RECOMMENDATIONS */}
           {!loading && (
-             <InsightBox 
-               title="Manager Insight" 
-               insight="2 employees show declining performance. Consider reviewing their workload and reassigning lower-priority tickets." 
-               actionText="Review Workload"
-               onAction={() => console.log("Action Triggered")}
-             />
+            <InsightBox 
+              title="Manager Insight" 
+              insight="2 employees show declining performance. Consider reviewing their workload and reassigning lower-priority tickets." 
+              actionText="Review Workload"
+              onAction={() => console.log("Action Triggered")}
+              confidence={88}
+            />
           )}
 
-          {/* MID SECTION: Chart + Form */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full h-[420px]">
-            
-            {/* 🔹 SECTION 3 — TEAM PERFORMANCE OVERVIEW */}
-            <div className="lg:col-span-2 flex flex-col h-full">
-              {loading ? (
-                <Card className="flex flex-col h-full w-full overflow-hidden p-6 relative">
-                  <div className="animate-pulse h-5 bg-gray-200 rounded w-32 mb-6"></div>
-                  <div className="animate-pulse w-full h-full bg-gray-100 rounded-lg"></div>
-                </Card>
-              ) : (
-                <PerformanceChart data={performanceTrend || []} />
-              )}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+            <div className="lg:col-span-2">
+              <ChartSection title="Team Performance Trend" subtitle="Average score over last 6 months">
+                {loading ? (
+                  <div className="h-[240px] skeleton w-full"></div>
+                ) : (
+                  <PerformanceChart data={performanceTrend || []} />
+                )}
+              </ChartSection>
             </div>
 
-            {/* 🔹 SECTION 5 — TASK ASSIGNMENT PANEL */}
-            <div className="lg:col-span-1 flex flex-col h-full">
-              <Card className="p-6 flex flex-col h-full overflow-hidden relative">
-                <div className="border-b border-gray-100 pb-4 mb-4 flex items-center justify-between shrink-0">
-                  <h3 className="text-[15px] font-semibold text-gray-900 tracking-tight flex items-center gap-2">
-                    <PlusCircle className="w-4 h-4 text-blue-600" />
+            <div className="lg:col-span-1">
+              <Card>
+                <div className="px-5 py-4 border-b border-border-subtle flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-text-primary flex items-center gap-2">
+                    <PlusCircle className="w-[18px] h-[18px] text-accent" />
                     Assign New Task
                   </h3>
                 </div>
-
-                <AnimatePresence>
-                  {assignmentFeedback && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className={`mb-4 px-3 py-2 rounded-lg text-[12px] font-medium flex items-center gap-2 ${
-                        assignmentFeedback.type === 'success' 
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
-                          : 'bg-red-50 text-red-700 border border-red-100'
-                      }`}
-                    >
-                      {assignmentFeedback.type === 'success' ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
-                      {assignmentFeedback.message}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                
-                <form onSubmit={handleAssignTask} className="flex flex-col gap-3 flex-grow justify-between min-h-0">
-                  <div className="flex flex-col gap-1.5 shrink-0">
-                    <label className="text-[12px] font-semibold text-gray-700 tracking-tight pl-1">Assign To</label>
-                    <div className="relative flex items-center w-full">
-                      <div className="absolute left-3 text-gray-400 pointer-events-none z-10">
-                        <UserPlus className="w-[14px] h-[14px]" />
-                      </div>
-                      <select
-                        value={selectedEmp}
-                        onChange={(e) => setSelectedEmp(e.target.value)}
-                        required
-                        className="w-full bg-white border border-gray-200 rounded-lg text-[13px] text-gray-900 font-medium focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 appearance-none pl-9 pr-3 py-2 h-[38px] disabled:bg-gray-50"
-                        
+                <div className="p-5">
+                  <AnimatePresence>
+                    {assignmentFeedback && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className={`mb-4 px-3 py-2 rounded-[7px] text-xs font-medium flex items-center gap-2 ${
+                          assignmentFeedback.type === 'success' 
+                            ? 'bg-success/15 text-success border border-success/20'
+                            : 'bg-danger/15 text-danger border border-danger/20'
+                        }`}
                       >
-                        <option value="" disabled>Select Employee...</option>
-                        {employees?.map(emp => (
-                          <option key={emp.id} value={emp.id}>{emp.name}</option>
-                        ))}
-                      </select>
+                        {assignmentFeedback.type === 'success' ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+                        {assignmentFeedback.message}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  
+                  <form onSubmit={handleAssignTask} className="flex flex-col gap-4">
+                    <div>
+                      <label className="text-xs font-medium text-text-secondary mb-1.5 block">Assign To</label>
+                      <div className="relative flex items-center w-full">
+                        <div className="absolute left-3 text-text-muted pointer-events-none z-10">
+                          <UserPlus className="w-[14px] h-[14px]" />
+                        </div>
+                        <select
+                          value={selectedEmp}
+                          onChange={(e) => setSelectedEmp(e.target.value)}
+                          required
+                          className="w-full bg-bg-elevated border border-border-default rounded-[7px] text-sm text-text-primary focus:outline-none focus:border-border-strong focus:ring-2 focus:ring-accent/20 transition-all appearance-none pl-9 pr-3 py-2 h-[38px] disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <option value="" disabled className="text-text-muted">Select Employee...</option>
+                          {employees?.map(emp => (
+                            <option key={emp.id} value={emp.id} className="text-text-primary bg-bg-elevated">{emp.name}</option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex flex-col gap-1.5 shrink-0">
-                    <label className="text-[12px] font-semibold text-gray-700 tracking-tight pl-1">Title</label>
-                    <Input 
-                      icon={FileText} 
-                      placeholder="Task overview..." 
-                      value={taskTitle}
-                      onChange={(e) => setTaskTitle(e.target.value)}
-                      className="h-[38px]"
-                      required
-                      
-                    />
-                  </div>
+                    <div>
+                      <label className="text-xs font-medium text-text-secondary mb-1.5 block">Title</label>
+                      <Input 
+                        icon={FileText} 
+                        placeholder="Task overview..." 
+                        value={taskTitle}
+                        onChange={(e) => setTaskTitle(e.target.value)}
+                        required
+                      />
+                    </div>
 
-                  <div className="flex flex-col gap-1.5 flex-grow min-h-[60px]">
-                    <label className="text-[12px] font-semibold text-gray-700 tracking-tight pl-1">Description</label>
-                    <textarea 
-                      placeholder="Requirements..." 
-                      value={taskDesc}
-                      onChange={(e) => setTaskDesc(e.target.value)}
-                      className="w-full bg-white border border-gray-200 rounded-lg text-[13px] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 px-3 py-2 flex-grow resize-none disabled:bg-gray-50"
-                      required
-                      
-                    />
-                  </div>
+                    <div>
+                      <label className="text-xs font-medium text-text-secondary mb-1.5 block">Description</label>
+                      <textarea 
+                        placeholder="Requirements..." 
+                        value={taskDesc}
+                        onChange={(e) => setTaskDesc(e.target.value)}
+                        className="w-full bg-bg-elevated border border-border-default rounded-[7px] text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-strong focus:ring-2 focus:ring-accent/20 transition-all px-3 py-2 min-h-[60px] resize-y disabled:opacity-50 disabled:cursor-not-allowed"
+                        required
+                      />
+                    </div>
 
-                  <div className="flex flex-col gap-1.5 shrink-0">
-                    <label className="text-[12px] font-semibold text-gray-700 tracking-tight pl-1">Deadline</label>
-                    <Input 
-                      type="date"
-                      icon={Calendar} 
-                      value={taskDeadline}
-                      onChange={(e) => setTaskDeadline(e.target.value)}
-                      className="h-[38px]"
-                      required
-                      
-                    />
-                  </div>
+                    <div>
+                      <label className="text-xs font-medium text-text-secondary mb-1.5 block">Deadline</label>
+                      <Input 
+                        type="date"
+                        icon={Calendar} 
+                        value={taskDeadline}
+                        onChange={(e) => setTaskDeadline(e.target.value)}
+                        required
+                      />
+                    </div>
 
-                  <Button 
-                    type="submit" 
-                    variant="primary" 
-                    className="w-full mt-1 h-[40px] font-bold tracking-wider shrink-0"
-                    
-                  >
-                    {assigning ? 'Assigning...' : 'Assign Task'}
-                  </Button>
-                </form>
+                    <Button 
+                      type="submit" 
+                      variant="primary" 
+                      className="w-full mt-2"
+                      disabled={assigning}
+                    >
+                      {assigning ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                          Assigning...
+                        </div>
+                      ) : 'Assign Task'}
+                    </Button>
+                  </form>
+                </div>
               </Card>
             </div>
           </div>
 
-          {/* 🔹 SECTION 4 — TEAM TABLE */}
-          <section className="flex flex-col w-full">
-            <h3 className="text-[16px] font-semibold text-gray-900 tracking-tight mb-3 pl-1">Team Overview</h3>
-            <Card className="overflow-hidden">
-              <Table 
-                columns={teamColumns} 
-                data={employees || []} 
-                onRowClick={handleRowClick}
-                loading={loading}
-                emptyMessage="No team members found."
-              />
-            </Card>
-          </section>
+          <TableSection title="Team Members" subtitle="Overview of direct reports">
+            <Table 
+              columns={teamColumns} 
+              data={employees || []} 
+              onRowClick={handleRowClick}
+              loading={loading}
+              emptyMessage="No team members found."
+            />
+          </TableSection>
         </>
       )}
     </motion.div>

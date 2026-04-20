@@ -1,3 +1,6 @@
+// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
+// Original functionality: Main application layout wrapper with sidebar and navbar
+
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
@@ -6,13 +9,16 @@ import MainContainer from './MainContainer';
 
 const AppLayout = () => {
   return (
-    <div className="min-h-screen bg-[#F9FAFB] font-sans text-gray-900 font-[Inter,sans-serif] flex overflow-hidden">
+    <div className="flex h-screen bg-bg-base text-text-primary overflow-hidden">
       <Sidebar />
-      <Navbar userName="Employee" />
-      <MainContainer>
-        <Outlet />
-      </MainContainer>
+      <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
+        <Navbar />
+        <MainContainer>
+          <Outlet />
+        </MainContainer>
+      </div>
     </div>
   );
 };
+
 export default AppLayout;

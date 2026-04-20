@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React from "react";
 import {
   BarChart,
@@ -47,8 +50,8 @@ const TaskChart = ({ stats }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
       {/* Bar Chart */}
-      <Card className="border-gray-200 bg-white">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Task Overview</h3>
+      <Card className="border-white/10 bg-[#13131C]">
+        <h3 className="text-lg font-bold text-text-primary mb-4">Task Overview</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={barData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -67,8 +70,8 @@ const TaskChart = ({ stats }) => {
 
       {/* Pie Chart */}
       {pieData.length > 0 && (
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">
+        <Card className="border-white/10 bg-[#13131C]">
+          <h3 className="text-lg font-bold text-text-primary mb-4">
             Task Distribution
           </h3>
           <ResponsiveContainer width="100%" height={300}>
