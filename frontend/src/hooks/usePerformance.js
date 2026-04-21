@@ -21,8 +21,10 @@ export const usePerformance = () => {
         let data = [];
         try {
            // Attempt real API call
-           const response = await api.get('/performance/history');
-           data = response.data || [];
+           const userStr = localStorage.getItem('nexus_user');
+           const user = JSON.parse(userStr);
+           const response = await api.get(`/employee/${user.id}/performance`);
+           data = response.data?.history || response.data || [];
         } catch (e) {
            // Fallback to simulate fetching if API server is not running
            console.warn('API /performance/history not found, falling back to simulated data.');

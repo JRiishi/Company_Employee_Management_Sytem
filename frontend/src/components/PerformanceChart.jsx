@@ -63,7 +63,7 @@ const PerformanceChart = ({ data }) => {
                 axisLine={false} 
                 tickLine={false} 
                 tick={{ fill: '#9090AA', fontSize: 11 }}
-                domain={[0, 10]}
+                domain={[0, 100]}
                 dx={-10}
               />
               <Tooltip 

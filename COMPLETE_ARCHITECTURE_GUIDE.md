@@ -3,8 +3,8 @@
 
 **Project Name**: NexusHR - Comprehensive Employee Management System  
 **Version**: 1.1.0 (Universe UI Era)  
-**Last Updated**: April 20, 2026 — Phase 3: Universe UI Transformation ✨  
-**Status**: Production Ready  
+**Last Updated**: April 20, 2026 — Phase 4: Data Integration & API Alignment ✨  
+**Status**: Production Ready with Real Data Loading  
 **UI Theme**: Dark Mode + Glassmorphism + Sci-Fi Command Center Aesthetic  
 **Build Status**: ✅ All components compiled and validated
 
@@ -17,14 +17,16 @@
 3. [High-Level Architecture](#high-level-architecture)
 4. [Backend Architecture](#backend-architecture)
 5. [Frontend Architecture](#frontend-architecture)
-6. [AI Agent Architecture](#ai-agent-architecture)
-7. [Database Architecture](#database-architecture)
-8. [Authentication & Security](#authentication--security)
-9. [API Documentation](#api-documentation)
-10. [Data Flow Architecture](#data-flow-architecture)
+6. [Data Flow Architecture](#data-flow-architecture)
+7. [AI Agent Architecture](#ai-agent-architecture)
+8. [Database Architecture](#database-architecture)
+9. [Authentication & Security](#authentication--security)
+10. [API Documentation](#api-documentation)
 11. [Integration Points](#integration-points)
 12. [Deployment Architecture](#deployment-architecture)
 13. [Performance & Scalability](#performance--scalability)
+14. [Troubleshooting & Debugging Guide](#troubleshooting--debugging-guide)
+15. [Conclusion](#conclusion)
 
 ---
 
@@ -80,6 +82,48 @@ The frontend underwent a comprehensive visual overhaul to create a **premium, sc
 - Zero React re-renders for cursor glow (CSS variables + rAF)
 
 **Zero Business Logic Changes**: All data fetching, state management, hooks, API calls, and component logic remain 100% identical.
+
+---
+
+### 1.6 Phase 4: Data Integration & API Alignment
+
+**Completion**: April 20, 2026
+
+The system was enhanced to ensure real data from MySQL seamlessly integrates with the React frontend. Critical fixes were implemented to align API response formats with component property expectations.
+
+**Key Updates**:
+
+**Backend SQL Query Optimization**:
+- Task queries now return `deadline` (from `due_date`) instead of raw database field names
+- Status strings are title-cased in SQL (`'In Progress'`, `'Completed'`, `'Pending'`) via CASE statements
+- Date fields formatted using `DATE_FORMAT` for JSON serialization consistency
+- Implemented in both `backend/routes/tasks.py` and `backend/services/agent_service.py`
+
+**API Response Structure Alignment**:
+- `/api/tasks/employee/{emp_id}`: Returns `{ total, completed, pending, ongoing, completionRate, tasks: [...] }`
+- Task object properties: `task_id`, `id`, `title`, `status` (title-cased), `deadline` (YYYY-MM-DD), `created_at`, `completed_at`
+- `/api/employee/{emp_id}/performance`: Returns `{ success, data: { score, trend, history: [...] } }`
+- Performance history properties: `review_date` (YYYY-MM), `score` (0-100 scale)
+
+**Frontend Hook Data Transformations**:
+- `useDashboardData.js`: Maps `payload?.tasks?.tasks` to task array, `payload?.performance?.history` to performance data
+- `useTasks.js`: Updated to fetch from `/tasks/employee/{user.id}`, handles both real API and mock data fallback
+- `usePerformance.js`: Correctly extracts performance history from dashboard endpoint
+
+**Component Property Mappings**:
+- `TableSection.jsx`: Expects `row.title`, `row.deadline`, and title-cased `row.status` for correct rendering
+- `PerformanceChart.jsx`: LineChart plots using `dataKey="score"`, X-axis uses `dataKey="review_date"`
+- `PerformanceChart.jsx`: YAxis domain corrected to `[0, 100]` to properly scale scores up to 100
+
+**Error Handling Enhancements**:
+- Enhanced error logging in `useTasks.js` to show actual failure reasons
+- Fallback mock data for components when API data unavailable
+- Graceful UI degradation with "No data available" messages
+
+**Result**: Employee and Manager dashboards now correctly display:
+- Real task assignments with proper status badges and deadlines
+- Performance history charts with accurate score visualization
+- Task completion metrics and statistics
 
 ---
 
@@ -500,12 +544,59 @@ POST /api/admin/system/backup
 
 ```
 GET /api/employee/dashboard
-    Purpose: Get employee dashboard summary
+    Purpose: Get employee dashboard summary with aggregated data
     Response: {
-        emp_id, name, email, department, role, performance_score,
-        joining_date, recent_tasks, leave_balance, upcoming_events
+        success: boolean,
+        data: {
+            performance: {
+                score: float (0-100),
+                trend: string (e.g., "+0.5"),
+                history: [{
+                    review_date: string (YYYY-MM format),
+                    score: float (0-100)
+                }]
+            },
+            salary: {
+                current: float,
+                next_review: string (YYYY-MM-DD)
+            },
+            tasks: {
+                completed: integer,
+                pending: integer,
+                tasks: [{
+                    task_id: integer,
+                    id: integer,
+                    title: string,
+                    status: string ("Completed" | "In Progress" | "Pending"),
+                    due_date: string (YYYY-MM-DD),
+                    created_at: string (YYYY-MM-DD),
+                    completed_at: string | null
+                }]
+            },
+            insights: string
+        }
     }
     Authentication: Required (employee role)
+
+GET /api/employee/{emp_id}/dashboard
+    Purpose: Get specific employee dashboard (for managers/admins viewing employee)
+    Response: Same structure as /api/employee/dashboard
+    Authentication: Required (manager or admin role)
+
+GET /api/employee/{emp_id}/performance
+    Purpose: Get detailed performance history for an employee
+    Response: {
+        success: boolean,
+        data: {
+            history: [{
+                review_date: string (YYYY-MM format),
+                score: float (0-100)
+            }]
+        }
+    }
+    Authentication: Required (employee for own data, manager/admin for any employee)
+    Notes: Data used by PerformanceChart component via usePerformance hook.
+           LineChart expects dataKey="score", XAxis uses dataKey="review_date"
 
 GET /api/employee/profile
     Purpose: Get complete employee profile
@@ -524,7 +615,7 @@ GET /api/employee/tasks
         - status: "pending" | "in_progress" | "completed"
         - sort_by: "date" | "priority" | "status"
         - time_period: "week" | "month" | "year"
-    Response: Array of task objects
+    Response: Array of task objects (see Tasks Router for structure)
     Authentication: Required (employee role)
 
 GET /api/employee/task/{task_id}
@@ -536,11 +627,6 @@ PUT /api/employee/task/{task_id}
     Purpose: Update task status
     Request: { status: string }
     Response: Updated task object
-    Authentication: Required (employee role)
-
-GET /api/employee/performance
-    Purpose: View own performance reviews
-    Response: Array of performance review objects
     Authentication: Required (employee role)
 
 GET /api/employee/salary
@@ -567,6 +653,32 @@ POST /api/employee/leave/request
     Response: { success: boolean, leave_id: string }
     Authentication: Required (employee role)
 ```
+
+**Data Flow for Dashboard**:
+```
+Frontend: useDashboardData.js
+    ↓
+    Calls: fetchDashboard(emp_id) → GET /api/employee/{emp_id}/dashboard
+    ↓
+    Backend Response: { success, data: { performance, salary, tasks, insights } }
+    ↓
+    useDashboardData processes:
+    - Extracts payload?.tasks?.tasks → setTasks()
+    - Extracts payload?.performance?.history → setPerformanceData()
+    ↓
+    EmployeeDashboard.jsx receives:
+    - tasks prop → TableSection component
+    - performanceData prop → ChartSection → PerformanceChart component
+```
+
+**Performance Chart Data Integration**:
+- API provides: `[{ review_date: "2024-06", score: 65.5 }, ...]`
+- PerformanceChart expects: `data` prop with objects containing `score` and `review_date`
+- Recharts LineChart configuration:
+  - `<XAxis dataKey="review_date" />` displays month/year labels
+  - `<Line dataKey="score" />` plots the score values
+  - `<YAxis domain={[0, 100]} />` scales axis to 0-100 range
+  - Custom tooltip displays: `Score: {payload[0].value}`
 
 #### 4.3.4 Manager Router (/api/manager)
 
@@ -651,6 +763,33 @@ PUT /api/manager/approval/{approval_id}
 **Endpoints**:
 
 ```
+GET /api/tasks/employee/{emp_id}
+    Purpose: Get all tasks assigned to a specific employee with filtering
+    Query Parameters:
+        - filter: "week" | "month" | "year" (default: month)
+    Response: {
+        success: boolean,
+        data: {
+            total: integer,
+            completed: integer,
+            pending: integer,
+            ongoing: integer,
+            completionRate: float,
+            tasks: [{
+                task_id: integer,
+                id: integer (alias for task_id),
+                title: string,
+                status: "Pending" | "In Progress" | "Completed" (title-cased),
+                deadline: string (YYYY-MM-DD format),
+                created_at: string (YYYY-MM-DD format),
+                completed_at: string | null
+            }]
+        }
+    }
+    Authentication: Required
+    Note: Date filtering applies to created_at >= start_date. Status values 
+          are automatically title-cased in database query for UI consistency.
+
 GET /api/tasks
     Purpose: Get tasks (filtered based on user role)
     Query Parameters:
@@ -659,7 +798,7 @@ GET /api/tasks
         - assigned_by: emp_id
         - project: string
         - sort_by: "date" | "priority"
-    Response: Array of task objects
+    Response: Array of task objects (same structure as above)
     Authentication: Required
 
 POST /api/tasks
@@ -693,6 +832,13 @@ POST /api/tasks/{task_id}/status
     Response: { success: boolean, updated_task: object }
     Authentication: Required
 
+PATCH /api/tasks/update
+    Purpose: Batch update task status
+    Request: { task_id: integer, status: string }
+    Response: { success: boolean }
+    Authentication: Required
+    Note: Used by frontend for optimistic UI updates
+
 GET /api/tasks/{task_id}/history
     Purpose: Get task status history
     Response: Array of status change events
@@ -709,6 +855,42 @@ GET /api/tasks/statistics
     }
     Authentication: Required
 ```
+
+**Database Query Implementation**:
+```sql
+-- Query used in backend/routes/tasks.py GET /api/tasks/employee/{emp_id}
+SELECT
+    task_id,
+    task_id AS id,
+    Title AS title,
+    CASE 
+        WHEN LOWER(status) = 'in_progress' THEN 'In Progress'
+        WHEN LOWER(status) = 'completed' THEN 'Completed'
+        ELSE 'Pending' 
+    END AS status,
+    DATE_FORMAT(due_date, '%Y-%m-%d') AS deadline,
+    DATE_FORMAT(created_at, '%Y-%m-%d') AS created_at,
+    DATE_FORMAT(completed_at, '%Y-%m-%d') AS completed_at
+FROM task
+WHERE assign_to = %s
+ORDER BY created_at DESC
+```
+
+**Frontend Integration**:
+- Hook: `useTasks.js` fetches from this endpoint
+- Component: `TableSection.jsx` renders tasks using `title`, `deadline`, `status` properties
+- Expected task object shape:
+  ```javascript
+  {
+    task_id: 101,
+    id: 101,
+    title: "Implement Login Flow",
+    status: "In Progress",        // Matches Status Badge variants
+    deadline: "2024-11-20",       // Matches TableSection deadline accessor
+    created_at: "2026-04-18",
+    completed_at: null
+  }
+  ```
 
 #### 4.3.6 Leave Router (/api/leaves)
 
@@ -1000,7 +1182,332 @@ class AgentService:
 
 ---
 
-## 5. FRONTEND ARCHITECTURE
+## 6. DATA FLOW ARCHITECTURE
+
+### 6.1 End-to-End Data Flow: Task Loading & Display
+
+This section documents how a task flows from the MySQL database through the backend, API, frontend hooks, and finally renders in the UI.
+
+**Database Layer** (MySQL):
+```sql
+-- Table: task
+-- Sample row:
+task_id:     101
+Title:       "Implement Login Flow"
+status:      "in_progress"          (lowercase in DB)
+due_date:    2024-11-20             (DATE type)
+assign_to:   3                       (Employee ID)
+created_at:  2026-04-18
+completed_at: NULL
+```
+
+**Backend API Layer** (FastAPI):
+```
+Route: GET /api/tasks/employee/{emp_id}
+Location: backend/routes/tasks.py (line 184-200)
+
+SQL Query:
+  SELECT
+      task_id,
+      task_id AS id,                         ← Aliases for frontend
+      Title AS title,                        ← From DB
+      CASE 
+          WHEN LOWER(status) = 'in_progress' THEN 'In Progress'
+          WHEN LOWER(status) = 'completed' THEN 'Completed'
+          ELSE 'Pending' 
+      END AS status,                         ← Title-cased
+      DATE_FORMAT(due_date, '%Y-%m-%d') AS deadline,  ← Mapped property name
+      DATE_FORMAT(created_at, '%Y-%m-%d') AS created_at,
+      DATE_FORMAT(completed_at, '%Y-%m-%d') AS completed_at
+  FROM task
+  WHERE assign_to = %s
+  ORDER BY created_at DESC
+
+Response Format:
+  {
+    "success": true,
+    "data": {
+      "total": 4,
+      "completed": 1,
+      "pending": 2,
+      "ongoing": 1,
+      "completionRate": 25.0,
+      "tasks": [
+        {
+          "task_id": 101,
+          "id": 101,
+          "title": "Implement Login Flow",
+          "status": "In Progress",    ← Title-cased
+          "deadline": "2024-11-20",   ← Formatted, renamed from due_date
+          "created_at": "2026-04-18",
+          "completed_at": null
+        },
+        ...
+      ]
+    }
+  }
+```
+
+**Frontend Hook Layer** (React):
+```javascript
+// File: frontend/src/hooks/useTasks.js
+
+const fetchTasks = async () => {
+  const user = JSON.parse(localStorage.getItem('nexus_user'));
+  const response = await api.get(`/tasks/employee/${user.id}`);
+  
+  // Response interceptor (api.js) extracts .data automatically
+  // So response = { success, data: { tasks, total, ... } }
+  
+  setTasks(response.data?.tasks || response.data || []);
+  // Result: tasks = [
+  //   { task_id, id, title, status, deadline, created_at, completed_at },
+  //   ...
+  // ]
+};
+```
+
+**Frontend Component Layer** (React JSX):
+```jsx
+// File: frontend/src/pages/EmployeeDashboard.jsx
+
+const EmployeeDashboard = () => {
+  const { tasks, performanceData, loading, error } = useDashboardData();
+  
+  return (
+    <div>
+      <TableSection 
+        tasks={tasks}              ← Array passed as prop
+        loading={loading}
+        title="Recent Tasks"
+      />
+    </div>
+  );
+};
+
+// TableSection receives tasks and renders them:
+// frontend/src/components/Sections/TableSection.jsx
+
+const TableSection = ({ tasks, loading, title }) => {
+  const columns = [
+    { 
+      header: 'Task Title',
+      accessor: 'title'               ← Property accessor
+    },
+    {
+      header: 'Deadline',
+      accessor: 'deadline'            ← Maps to deadline (not due_date)
+    },
+    {
+      header: 'Status',
+      accessor: 'status',             ← Maps to title-cased status
+      render: (row) => {
+        let variant = 'neutral';
+        if (row.status === 'Completed') variant = 'success';
+        if (row.status === 'In Progress') variant = 'warning';
+        if (row.status === 'Pending') variant = 'danger';
+        return <Badge variant={variant}>{row.status}</Badge>;
+      }
+    }
+  ];
+
+  return (
+    <Table 
+      columns={columns}
+      data={tasks || []}              ← Passed directly to Table
+      loading={loading}
+      emptyMessage="No tasks assigned."
+    />
+  );
+};
+
+// Table component renders rows:
+// frontend/src/components/Table/Table.jsx
+
+const Table = ({ columns, data, loading }) => {
+  return (
+    <tbody>
+      {data.map((row) => (
+        <tr key={row.id}>
+          {columns.map((col) => (
+            <td key={col.accessor}>
+              {col.render ? col.render(row) : row[col.accessor]}
+              {/* Accesses: row.title, row.deadline, row.status */}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  );
+};
+```
+
+**Visual Output** (Browser):
+```
+┌─────────────────────────────────┐
+│      Recent Tasks               │
+├─────────────────────────────────┤
+│ Title              │ Deadline    │ Status        │
+├─────────────────────────────────┤
+│ Implement Login FL │ 2024-11-20 │ ✓ In Progress │
+│ Refactor models    │ 2024-11-20 │ ◆ Pending     │
+│ Write tests        │ 2024-12-15 │ ◆ Pending     │
+└─────────────────────────────────┘
+```
+
+---
+
+### 6.2 End-to-End Data Flow: Performance Score Display
+
+**Database Layer** (MySQL):
+```sql
+-- Table: performance_reviews
+performance_id: 5
+emp_id:         3
+review_date:    2024-06-15
+score:          65.5           (0-100 scale)
+comments:       "Good progress"
+```
+
+**Backend API Layer** (FastAPI):
+```
+Route: GET /api/employee/{emp_id}/dashboard
+Location: backend/services/agent_service.py (line ~95)
+
+Logic:
+  1. Query performance_reviews table ordered by review_date
+  2. Group by month (extract YYYY-MM from review_date)
+  3. Return history array
+
+Response Format:
+  {
+    "success": true,
+    "data": {
+      "performance": {
+        "score": 67.77,              ← Current/avg score
+        "trend": "+0.5",
+        "history": [
+          { "review_date": "2023-06", "score": 7.5 },
+          { "review_date": "2024-06", "score": 65.5 },
+          { "review_date": "2024-12", "score": 67.77 }
+        ]
+      },
+      "salary": { ... },
+      "tasks": { ... },
+      "insights": "..."
+    }
+  }
+```
+
+**Frontend Hook Layer**:
+```javascript
+// File: frontend/src/hooks/useDashboardData.js
+
+const res = await fetchDashboard(user.id);
+// res.data.performance.history = [
+//   { review_date: "2023-06", score: 7.5 },
+//   { review_date: "2024-06", score: 65.5 },
+//   ...
+// ]
+
+setPerformanceData(payload?.performance?.history || []);
+```
+
+**Frontend Component Layer**:
+```jsx
+// EmployeeDashboard.jsx
+const { performanceData, loading } = useDashboardData();
+
+return (
+  <ChartSection 
+    performanceData={performanceData}
+    loading={loading}
+  />
+);
+
+// ChartSection.jsx (wraps PerformanceChart)
+const ChartSection = ({ performanceData, loading }) => {
+  return (
+    <Card>
+      <PerformanceChart data={performanceData} />
+    </Card>
+  );
+};
+
+// PerformanceChart.jsx (Recharts LineChart)
+const PerformanceChart = ({ data }) => {
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={data}>                  {/* data = performanceData */}
+        <XAxis 
+          dataKey="review_date"                {/* e.g., "2024-06" */}
+        />
+        <YAxis 
+          domain={[0, 100]}                    {/* Scale: 0-100 */}
+        />
+        <Line 
+          dataKey="score"                      {/* Plot scores */}
+          stroke="#6366f1"
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
+```
+
+**Visual Output** (Browser):
+```
+Performance Score Chart:
+  100 ┤
+      ├─────────────────────────────────────
+   80 ┤
+      │
+   60 ┤         ╱╲
+      │        ╱  ╲
+   40 ┤       ╱    ╲__
+      │      ╱
+   20 ┤     ╱
+      │    ╱
+    0 └────┴────┴────┴────┴────┴────────────
+       2023-06  2024-06  2024-12  2026-04
+       
+    Data points plotted:
+    - 2023-06: 7.5
+    - 2024-06: 65.5
+    - 2024-12: 67.77
+```
+
+---
+
+### 6.3 Critical Property Mappings (Database → API → UI)
+
+**Task Properties**:
+| Database | SQL Alias | API Response | UI Component | Usage |
+|----------|-----------|--------------|--------------|-------|
+| `task_id` | `id` | `id` | `row.id` | Row key identifier |
+| `Title` | `title` | `title` | `row.title` | Table column display |
+| `status` (lowercase) | `status` (CASE) | `status` (title-cased) | `row.status` | Badge variant mapping |
+| `due_date` | `deadline` | `deadline` | `row.deadline` | Table accessor |
+| `created_at` | `created_at` | `created_at` | `row.created_at` | (optional) Display |
+| `completed_at` | `completed_at` | `completed_at` | `row.completed_at` | (optional) Display |
+
+**Performance Properties**:
+| Database | SQL Extract | API Response | Chart Property | Recharts |
+|----------|------------|--------------|-----------------|----------|
+| `review_date` | `YEAR-MONTH` | `review_date` | x-axis data | `dataKey="review_date"` |
+| `score` | `score` (0-100) | `score` | y-axis data | `dataKey="score"` |
+
+**Status Value Transformation**:
+```
+Database    → SQL CASE         → API          → UI Badge
+'pending'   → ELSE clause      → 'Pending'    → variant="danger"
+'in_progress' → WHEN clause    → 'In Progress' → variant="warning"
+'completed' → WHEN clause      → 'Completed' → variant="success"
+```
+
+---
+
+
 
 ### 5.0 Visual Design & Dark Theme Implementation
 
@@ -1798,7 +2305,155 @@ Dark Theme:
   - XAxis/YAxis: tick={{ fill: '#9090AA' }}
   - Tooltip: Dark background (#1A1A26) with light text
   - Line: stroke="#3b82f6" (indigo)
+
+Props:
+  data → [{review_date: "YYYY-MM", score: number}]
+  
+Configuration:
+  <LineChart data={data} margin={{ top: 10, right: 0, bottom: 0, left: -25 }}>
+    <XAxis dataKey="review_date" />
+    <YAxis domain={[0, 100]} />  {/* Critical: 0-100 scale for percentage scores */}
+    <Line dataKey="score" stroke="#6366f1" strokeWidth={2} />
+  </LineChart>
+
+Data Mapping:
+  Input from API: { review_date: "2024-06", score: 65.5 }
+  XAxis Display:  "2024-06" (from review_date)
+  Line Plot:      Score value (0-100 range)
 ```
+
+#### 5.2.4 Section Components (Dashboard Sections)
+
+These components wrap other components to create reusable dashboard sections with consistent styling and behavior.
+
+**ChartSection.jsx**: Performance chart wrapper
+```jsx
+Purpose: Wrap PerformanceChart with loading states and error handling
+
+Props:
+  performanceData → Array of performance records [{review_date, score}]
+  loading         → Boolean loading state
+  title           → Optional title (default: "Performance Score")
+
+Behavior:
+  - Shows skeleton loader while loading
+  - Renders PerformanceChart when data available
+  - Shows "No performance history available" when data is empty
+  - Glass card styling with dark theme
+
+Implementation:
+  const ChartSection = ({ performanceData, loading }) => {
+    if (loading) {
+      return <SkeletonLoader />;
+    }
+    return <PerformanceChart data={performanceData || []} />;
+  };
+
+Styling:
+  - Container: Glass bg (rgba(19, 19, 28, 0.70)), blur(16px)
+  - Height: h-[240px] fixed height
+  - Title: text-base font-semibold text-gray-100
+  - Border: border-white/10
+```
+
+**TableSection.jsx**: Tasks table wrapper
+```jsx
+Purpose: Display task list with dynamic columns and data transformations
+
+Props:
+  tasks   → Array of task objects
+  loading → Boolean loading state
+  title   → Section title (default: "Recent Tasks")
+  
+Column Configuration (Automatically defined):
+  {
+    header: 'Task Title',
+    accessor: 'title',           // Must match API: task.title
+    render: (row) => row.title
+  },
+  {
+    header: 'Deadline',
+    accessor: 'deadline',        // Must match API: task.deadline (from due_date)
+    render: (row) => formatDate(row.deadline)
+  },
+  {
+    header: 'Status',
+    accessor: 'status',          // Must match API: title-cased status
+    render: (row) => {
+      let variant = 'neutral';
+      if (row.status === 'Completed') variant = 'success';
+      if (row.status === 'In Progress') variant = 'warning';
+      if (row.status === 'Pending') variant = 'danger';
+      return <Badge variant={variant}>{row.status}</Badge>;
+    }
+  }
+
+Critical Property Mapping:
+  ✓ task.title          → table displays in first column
+  ✓ task.deadline       → table displays in second column (formatted)
+  ✓ task.status         → must be "Completed", "In Progress", or "Pending"
+  ✓ task.id or task.task_id → used for row identification
+
+Data Flow:
+  API Response → useDashboardData → tasks state → TableSection props → Table columns
+
+Styling:
+  - Container: Glass card with rounded corners
+  - Header: Dark background with text-gray-100
+  - Rows: Transparent with hover:bg-white/[0.04]
+  - Skeleton: 5 placeholder rows while loading
+  - Empty: "No tasks assigned" message
+  - Error: "Failed to load data" with error details
+```
+
+**Example Task Data Expected**:
+```javascript
+[
+  {
+    task_id: 101,
+    id: 101,
+    title: "Implement Login Flow",
+    status: "In Progress",        // Capitalized!
+    deadline: "2024-11-20",       // YYYY-MM-DD format
+    created_at: "2026-04-18",
+    completed_at: null
+  },
+  {
+    task_id: 102,
+    id: 102,
+    title: "Fix bug in checkout",
+    status: "Pending",            // Title-cased!
+    deadline: "2024-12-01",
+    created_at: "2026-04-18",
+    completed_at: null
+  },
+  {
+    task_id: 103,
+    id: 103,
+    title: "Write unit tests",
+    status: "Completed",          // Title-cased!
+    deadline: "2024-10-30",
+    created_at: "2026-04-15",
+    completed_at: "2026-04-19"
+  }
+]
+```
+
+**Task Distribution Chart**:
+```jsx
+Purpose: Show task counts by status
+Data:
+  { status: "Pending", count: 2 }
+  { status: "In Progress", count: 1 }
+  { status: "Completed", count: 1 }
+
+Dark Theme:
+  - All grid strokes: rgba(255,255,255,0.06)
+  - Labels: text-gray-100
+  - Tooltips: dark background with custom styles
+```
+
+---
 
 **TaskChart.jsx**: Task distribution charts
 ```jsx
@@ -1870,23 +2525,106 @@ isAdmin() / isManager() / isEmployee()
 #### 5.3.2 Custom React Hooks
 
 **useDashboardData.js**: Employee dashboard data aggregation
-```javascript
-Hook: useDashboardData('employee' | 'manager' | 'admin')
 
-Returns:
-  {
-    data: {
-      stats: { pendingTasks, leaveBalance, performanceScore },
-      recentTasks: [...],
-      performanceData: [...],
-      leaveRecords: [...]
-    },
-    loading: boolean,
-    error: string | null,
-    fetchDashboardData: () => Promise,
-    refreshSection: (section: string) => Promise
-  }
+**Purpose**: Fetch and transform dashboard data from `/api/employee/{emp_id}/dashboard`
+
+**Implementation**:
+```javascript
+export const useDashboardData = () => {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [performanceData, setPerformanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem('nexus_user'));
+        const res = await fetchDashboard(user.id);
+        
+        if (!res.success) throw new Error(res.message);
+        
+        const payload = res.data;
+        
+        setDashboardData({
+          tasks_completed: payload?.tasks?.completed || 0,
+          pending_tasks: payload?.tasks?.pending || 0,
+          performance_score: payload?.performance?.score || 0,
+          salary_this_month: payload?.salary?.current || 0,
+          insight: payload?.insights || ''
+        });
+
+        // Extract tasks array from nested structure
+        setTasks(payload?.tasks?.tasks || []);
+        
+        // Extract performance history for chart
+        setPerformanceData(payload?.performance?.history || []);
+        
+      } catch (err) {
+        setError(err.message || 'Failed to load dashboard');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  return {
+    dashboardData,
+    tasks,
+    performanceData,
+    loading,
+    error
+  };
+};
 ```
+
+**Returns**:
+```javascript
+{
+  dashboardData: {
+    tasks_completed: number,
+    pending_tasks: number,
+    performance_score: number (0-100),
+    salary_this_month: number,
+    insight: string
+  },
+  tasks: [{
+    task_id: number,
+    id: number,
+    title: string,
+    status: "Pending" | "In Progress" | "Completed",
+    deadline: "YYYY-MM-DD",
+    created_at: "YYYY-MM-DD",
+    completed_at: string | null
+  }],
+  performanceData: [{
+    review_date: "YYYY-MM",
+    score: number (0-100)
+  }],
+  loading: boolean,
+  error: string | null
+}
+```
+
+**Usage in EmployeeDashboard.jsx**:
+```jsx
+const EmployeeDashboard = () => {
+  const { dashboardData, tasks, performanceData, loading, error } = useDashboardData();
+
+  return (
+    <>
+      <StatsGrid stats={formattedStats} loading={loading} />
+      <ChartSection performanceData={performanceData} loading={loading} />
+      <TableSection tasks={tasks} loading={loading} title="Recent Tasks" />
+    </>
+  );
+};
+```
+
+---
 
 **useAdminData.js**: Admin-specific data
 ```javascript
@@ -1903,6 +2641,8 @@ Returns:
   }
 ```
 
+---
+
 **useManagerData.js**: Manager dashboard data
 ```javascript
 Returns:
@@ -1918,31 +2658,218 @@ Returns:
   }
 ```
 
-**useTasks.js**: Task management
+---
+
+**useTasks.js**: Task management hook
+
+**Purpose**: Fetch and manage employee tasks from `/api/tasks/employee/{emp_id}`
+
+**Implementation**:
 ```javascript
-Returns:
-  {
-    tasks: [...],
-    loading: boolean,
-    error: string | null,
-    fetchTasks: (filters) => Promise,
-    updateTaskStatus: (taskId, status) => Promise,
-    createTask: (taskData) => Promise,
-    deleteTask: (taskId) => Promise
-  }
+export const useTasks = (initialMockData = null) => {
+  const [tasks, setTasks] = useState(initialMockData || []);
+  const [loading, setLoading] = useState(!initialMockData);
+  const [error, setError] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+
+  // Fetch initial tasks
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        setLoading(true);
+        const user = JSON.parse(localStorage.getItem('nexus_user'));
+        const response = await api.get(`/tasks/employee/${user.id}`);
+        
+        // API returns: { success, data: { total, completed, pending, tasks: [...] } }
+        setTasks(response.data?.tasks || response.data || []);
+        setError(null);
+        
+      } catch (err) {
+        setError("Failed to load tasks: " + err.message);
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
+  // Update task status with optimistic UI
+  const updateTaskStatus = async (taskId, newStatus) => {
+    const previousTasks = [...tasks];
+    
+    setTasks(prev => prev.map(task => 
+      task.id === taskId ? { ...task, status: newStatus } : task
+    ));
+    
+    try {
+      await api.patch('/tasks/update', {
+        task_id: taskId,
+        status: newStatus
+      });
+    } catch (err) {
+      setTasks(previousTasks);
+      setErrorMsg("Failed to update task. Please try again.");
+    }
+  };
+
+  // Frontend filtering (no API call)
+  const filteredTasks = useMemo(() => {
+    return tasks.filter((task) => {
+      const matchSearch = searchQuery
+        ? task.title?.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
+      const matchStatus = statusFilter 
+        ? task.status === statusFilter 
+        : true;
+      return matchSearch && matchStatus;
+    });
+  }, [tasks, searchQuery, statusFilter]);
+
+  return {
+    tasks,
+    filteredTasks,
+    loading,
+    error,
+    errorMsg,
+    searchQuery,
+    setSearchQuery,
+    statusFilter,
+    setStatusFilter,
+    updateTaskStatus,
+    clearFilters: () => {
+      setSearchQuery('');
+      setStatusFilter('');
+    }
+  };
+};
 ```
 
-**usePerformance.js**: Performance metrics
+**Returns**:
 ```javascript
-Returns:
-  {
-    performanceData: {...},
-    reviews: [...],
-    loading: boolean,
-    fetchPerformance: () => Promise,
-    submitReview: (empId, reviewData) => Promise
-  }
+{
+  tasks: [{
+    task_id: number,
+    id: number,
+    title: string,
+    status: "Pending" | "In Progress" | "Completed",
+    deadline: "YYYY-MM-DD",
+    created_at: "YYYY-MM-DD",
+    completed_at: string | null
+  }],
+  filteredTasks: [...],  // Frontend filtered version
+  loading: boolean,
+  error: string | null,
+  errorMsg: string | null,
+  searchQuery: string,
+  setSearchQuery: (string) => void,
+  statusFilter: string,
+  setStatusFilter: (string) => void,
+  updateTaskStatus: (taskId, newStatus) => Promise<void>,
+  clearFilters: () => void
+}
 ```
+
+**Usage in EmployeeTasks.jsx**:
+```jsx
+const EmployeeTasks = () => {
+  const {
+    filteredTasks,
+    searchQuery,
+    setSearchQuery,
+    statusFilter,
+    setStatusFilter,
+    loading,
+    error,
+    updateTaskStatus
+  } = useTasks();
+
+  return (
+    <Table 
+      columns={columns}
+      data={filteredTasks}
+      loading={loading}
+      error={error}
+    />
+  );
+};
+```
+
+---
+
+**usePerformance.js**: Performance metrics
+
+**Purpose**: Fetch performance history from `/api/employee/{emp_id}/performance`
+
+**Implementation**:
+```javascript
+export const usePerformance = () => {
+  const [performanceData, setPerformanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPerformance = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem('nexus_user'));
+        const response = await api.get(`/api/employee/${user.id}/performance`);
+        
+        // API returns: { success, data: { history: [...] } }
+        setPerformanceData(response.data?.history || []);
+        setError(null);
+        
+      } catch (err) {
+        setError(err.message);
+        setPerformanceData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPerformance();
+  }, []);
+
+  return {
+    performanceData,
+    loading,
+    error
+  };
+};
+```
+
+**Returns**:
+```javascript
+{
+  performanceData: [{
+    review_date: "YYYY-MM",  // e.g., "2024-06"
+    score: number            // 0-100 scale
+  }],
+  loading: boolean,
+  error: string | null
+}
+```
+
+**Usage in PerformanceChart.jsx**:
+```jsx
+const PerformanceChart = ({ data }) => {
+  const chartData = data || [];
+  
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={chartData}>
+        <XAxis dataKey="review_date" />
+        <YAxis domain={[0, 100]} />
+        <Line dataKey="score" />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
+```
+
+---
 
 **useSalary.js**: Salary information
 ```javascript
@@ -4127,7 +5054,312 @@ Cache Invalidation:
 
 ---
 
-## 14. CONCLUSION
+## 14. TROUBLESHOOTING & DEBUGGING GUIDE
+
+### 14.1 Common Data Loading Issues
+
+#### Issue: "Failed to load data" in TableSection
+
+**Symptom**: Tasks section displays error message, no tasks visible
+
+**Root Causes & Solutions**:
+
+1. **Property Mismatch (Most Common)**
+   - **Problem**: Backend returns `due_date` but component expects `deadline`
+   - **Solution**: Ensure SQL aliases match expected property names
+   - **Code Location**: `backend/routes/tasks.py` line 188
+   - **Fix**: 
+     ```sql
+     DATE_FORMAT(due_date, '%Y-%m-%d') AS deadline  -- Alias critical!
+     ```
+
+2. **Status Value Formatting**
+   - **Problem**: Backend returns lowercase `'pending'` but component expects `'Pending'`
+   - **Solution**: Use SQL CASE statement to title-case status values
+   - **Code Location**: `backend/routes/tasks.py` line 190-194
+   - **Fix**:
+     ```sql
+     CASE 
+         WHEN LOWER(status) = 'in_progress' THEN 'In Progress'
+         WHEN LOWER(status) = 'completed' THEN 'Completed'
+         ELSE 'Pending' 
+     END AS status
+     ```
+
+3. **Wrong API Endpoint**
+   - **Problem**: Hook calls `/tasks` instead of `/tasks/employee/{emp_id}`
+   - **Solution**: Use employee-specific endpoint with user ID
+   - **Code Location**: `frontend/src/hooks/useTasks.js` line 23
+   - **Fix**:
+     ```javascript
+     const user = JSON.parse(localStorage.getItem('nexus_user'));
+     const response = await api.get(`/tasks/employee/${user.id}`);
+     ```
+
+4. **Nested Response Structure**
+   - **Problem**: API wraps tasks in nested object `{ data: { tasks: [...] } }`
+   - **Solution**: Extract inner array correctly
+   - **Code Location**: `frontend/src/hooks/useTasks.js` line 28
+   - **Fix**:
+     ```javascript
+     setTasks(response.data?.tasks || response.data || []);
+     ```
+
+**Debugging Steps**:
+1. Open browser DevTools (F12)
+2. Go to Network tab
+3. Look for `/api/tasks/employee/{id}` request
+4. Check Response tab - verify property names: `title`, `deadline`, `status`
+5. Check Console for any error messages
+6. Verify status values are title-cased (not lowercase)
+
+---
+
+#### Issue: Performance chart not displaying / blank
+
+**Symptom**: ChartSection shows "No performance history available"
+
+**Root Causes & Solutions**:
+
+1. **YAxis Domain Mismatch**
+   - **Problem**: Domain set to `[0, 10]` but scores are 0-100
+   - **Solution**: Update domain to match data scale
+   - **Code Location**: `frontend/src/components/PerformanceChart.jsx` line 66
+   - **Fix**:
+     ```jsx
+     <YAxis domain={[0, 100]} />  // Was [0, 10]
+     ```
+
+2. **Wrong Data Property Names**
+   - **Problem**: Chart expects `score` and `review_date` but API returns different names
+   - **Solution**: Ensure API returns exact property names
+   - **Code Location**: `backend/services/agent_service.py` line ~120
+   - **Expected Response**:
+     ```javascript
+     {
+       "review_date": "2024-06",
+       "score": 65.5
+     }
+     ```
+
+3. **Empty Performance History**
+   - **Problem**: No performance records in database for employee
+   - **Solution**: Insert test performance records
+   - **SQL**:
+     ```sql
+     INSERT INTO performance_reviews (emp_id, review_date, score, comments)
+     VALUES (3, '2024-06-15', 65.5, 'Good progress');
+     ```
+
+**Debugging Steps**:
+1. Check Network tab for `/api/employee/{id}/performance` request
+2. Verify response has `data.history` array
+3. Check individual records have `review_date` and `score`
+4. Verify scores are in 0-100 range (not 0-10)
+5. Console: `> JSON.parse(localStorage.getItem('nexus_user'))` to verify employee ID
+
+---
+
+### 14.2 API Response Debugging
+
+**Check API Responses**:
+
+```javascript
+// In browser console:
+const user = JSON.parse(localStorage.getItem('nexus_user'));
+const token = localStorage.getItem('nexus_token');
+
+// Test tasks endpoint
+fetch(`http://localhost:8000/api/tasks/employee/${user.id}`, {
+  headers: { 'Authorization': `Bearer ${token}` }
+})
+.then(r => r.json())
+.then(d => console.log(JSON.stringify(d, null, 2)));
+
+// Test performance endpoint
+fetch(`http://localhost:8000/api/employee/${user.id}/performance`, {
+  headers: { 'Authorization': `Bearer ${token}` }
+})
+.then(r => r.json())
+.then(d => console.log(JSON.stringify(d, null, 2)));
+```
+
+**Expected Task Response Structure**:
+```json
+{
+  "success": true,
+  "data": {
+    "total": 4,
+    "completed": 1,
+    "pending": 2,
+    "ongoing": 1,
+    "completionRate": 25.0,
+    "tasks": [
+      {
+        "task_id": 101,
+        "id": 101,
+        "title": "Task Name",
+        "status": "In Progress",
+        "deadline": "2024-11-20",
+        "created_at": "2026-04-18",
+        "completed_at": null
+      }
+    ]
+  }
+}
+```
+
+**Expected Performance Response Structure**:
+```json
+{
+  "success": true,
+  "data": {
+    "history": [
+      {
+        "review_date": "2024-06",
+        "score": 65.5
+      },
+      {
+        "review_date": "2024-12",
+        "score": 67.77
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 14.3 Database Verification
+
+**Check Task Records**:
+```bash
+# Login to MySQL
+mysql -u root -p123456789 DBMS_PROJECT
+
+# Verify task table has required columns
+DESCRIBE task;
+
+# Check data for employee
+SELECT task_id, Title, status, due_date, assign_to 
+FROM task 
+WHERE assign_to = 3;
+
+# Verify status values are lowercase in DB
+SELECT DISTINCT status FROM task;
+```
+
+**Check Performance Records**:
+```bash
+mysql -u root -p123456789 DBMS_PROJECT
+
+# Verify performance_reviews table
+DESCRIBE performance_reviews;
+
+# Check records for employee
+SELECT emp_id, review_date, score 
+FROM performance_reviews 
+WHERE emp_id = 3;
+
+# Verify date format
+SELECT DATE_FORMAT(review_date, '%Y-%m') FROM performance_reviews;
+```
+
+---
+
+### 14.4 Hook State Verification
+
+**Debugging useTasks.js**:
+
+```jsx
+// Add to EmployeeTasks.jsx for debugging
+const EmployeeTasks = () => {
+  const { tasks, loading, error, errorMsg } = useTasks();
+  
+  useEffect(() => {
+    console.log('Tasks state updated:', { tasks, loading, error, errorMsg });
+  }, [tasks, loading, error]);
+  
+  if (error) console.error('Error loading tasks:', error);
+  
+  return (
+    // ...
+  );
+};
+```
+
+**Debugging useDashboardData.js**:
+
+```jsx
+// Add to EmployeeDashboard.jsx for debugging
+const EmployeeDashboard = () => {
+  const { dashboardData, tasks, performanceData, loading, error } = useDashboardData();
+  
+  useEffect(() => {
+    console.log('Dashboard data:', { dashboardData, tasks, performanceData });
+  }, [dashboardData, tasks, performanceData]);
+  
+  return (
+    // ...
+  );
+};
+```
+
+---
+
+### 14.5 Component Prop Verification
+
+**Verify TableSection Receives Correct Data**:
+
+```jsx
+// Wrap TableSection temporarily for debugging
+const TableSection = ({ tasks, loading, title }) => {
+  console.log('TableSection received props:', { tasks, loading, title });
+  
+  if (tasks && tasks.length > 0) {
+    console.log('First task structure:', tasks[0]);
+    console.log('Has title?', 'title' in tasks[0]);
+    console.log('Has deadline?', 'deadline' in tasks[0]);
+    console.log('Has status?', 'status' in tasks[0]);
+  }
+  
+  // ... rest of component
+};
+```
+
+**Verify PerformanceChart Receives Correct Data**:
+
+```jsx
+const PerformanceChart = ({ data }) => {
+  console.log('PerformanceChart received data:', data);
+  
+  if (data && data.length > 0) {
+    console.log('First record:', data[0]);
+    console.log('Has review_date?', 'review_date' in data[0]);
+    console.log('Has score?', 'score' in data[0]);
+  }
+  
+  // ... rest of component
+};
+```
+
+---
+
+### 14.6 Quick Reference: Property Names
+
+**CRITICAL**: Ensure exact property name matches in all layers
+
+| Feature | Database | SQL Alias | API Property | Component Accessor |
+|---------|----------|-----------|--------------|-------------------|
+| Task Title | `Title` | `title` | `title` | `row.title` |
+| Task Deadline | `due_date` | `deadline` | `deadline` | `row.deadline` |
+| Task Status | `status` | `status` (CASE) | `status` | `row.status` |
+| Performance Date | `review_date` | - | `review_date` | `dataKey="review_date"` |
+| Performance Score | `score` | - | `score` | `dataKey="score"` |
+
+---
+
+## 15. CONCLUSION
 
 This NexusHR system represents a comprehensive, enterprise-grade employee management platform combining:
 

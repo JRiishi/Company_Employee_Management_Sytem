@@ -8,6 +8,7 @@ import { UniverseBackground, RoleGradientOverlay, CursorGlow } from '../Effects'
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import MainContainer from './MainContainer';
+import { AgentChat } from '../AgentChat';
 
 const AppLayout = () => {
   const { user } = useAuth();
@@ -35,6 +36,7 @@ const AppLayout = () => {
           </MainContainer>
         </div>
       </div>
+      <AgentChat />
     </>
   );
 };
