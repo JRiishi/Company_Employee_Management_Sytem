@@ -1,3 +1,6 @@
+// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
+// Original functionality: Employee home dashboard with stats, charts, tasks, leaves
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
@@ -28,31 +31,36 @@ const EmployeeDashboard = () => {
   return (
     <>
       <motion.div 
-        className="w-full flex justify-center flex-col gap-8 relative"
+        className="w-full flex justify-center flex-col gap-6 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
         {error && (
-          <div className="bg-gray-50 border border-gray-200 text-gray-700 px-4 py-3 rounded-xl shadow-sm text-[13px] font-medium flex items-center gap-2 mb-2">
-            <AlertCircle className="w-4 h-4 text-gray-400" />
+          <div className="bg-danger/10 border border-danger/20 text-danger px-4 py-3 rounded-[10px] text-xs font-medium flex items-center gap-2 mb-2">
+            <AlertCircle className="w-4 h-4" />
             {error}
           </div>
         )}
 
         <WelcomeSection userName="Employee" loading={loading} />
         
-        <InsightSection insight={dashboardData?.insight} loading={loading} />
+        <InsightSection 
+          insight={dashboardData?.insight} 
+          loading={loading}
+          confidence={dashboardData?.confidence}
+        />
         
         <StatsGrid stats={formattedStats} loading={loading} />
         
-        <div className="flex flex-col gap-8 w-full">
-           <ChartSection performanceData={performanceData} loading={loading} />
-           <TableSection tasks={tasks} loading={loading} />
+        <div className="flex flex-col gap-6 w-full">
+          <ChartSection performanceData={performanceData} loading={loading} />
+          <TableSection tasks={tasks} loading={loading} title="Recent Tasks" />
         </div>
         
       </motion.div>
     </>
   );
 };
+
 export default EmployeeDashboard;

@@ -29,7 +29,9 @@ export const useTasks = (initialMockData = null) => {
         setLoading(true);
         // Note: For now, the API endpoint might not exist, 
         // but we structure the call exactly as requested.
-        const response = await api.get('/tasks');
+        const userStr = localStorage.getItem('nexus_user');
+        const user = JSON.parse(userStr);
+        const response = await api.get(`/tasks/employee/${user.id}`);
         if (isMounted) {
           // If real API works, set its data. If not, catching it sets error.
           // Since the prompt asks to connect to a real backend API, we attempt to fetch it.
@@ -41,7 +43,7 @@ export const useTasks = (initialMockData = null) => {
       } catch (err) {
         if (isMounted) {
           // If backend isn't real yet, let's gracefully fail but we might have nothing to show.
-          setError("Failed to load tasks");
+          setError("Failed to load tasks: " + err.message); console.error(err);
         }
       } finally {
         if (isMounted) setLoading(false);

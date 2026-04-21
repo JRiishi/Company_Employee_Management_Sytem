@@ -1,12 +1,19 @@
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Transparent background to show universe through main content area.
+
 import React from 'react';
 
 const MainContainer = ({ children }) => {
   return (
-    <main className="ml-[260px] pt-[72px] min-h-screen pb-12 bg-[#F9FAFB] flex flex-col relative w-[calc(100%-260px)]">
-      <div className="px-8 py-8 w-full space-y-8 flex flex-col flex-1">
+    <main 
+      className="flex-1 overflow-y-auto"
+      style={{ background: 'transparent' }}
+    >
+      <div className="px-6 py-6 space-y-6">
         {children}
       </div>
     </main>
   );
 };
+
 export default MainContainer;

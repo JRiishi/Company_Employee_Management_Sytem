@@ -30,8 +30,8 @@ export const useDashboardData = () => {
         insight: payload?.insights || ''
       });
 
-      setTasks([]);
-      setPerformanceData([]);
+      setTasks(payload?.tasks?.tasks || []);
+      setPerformanceData(payload?.performance?.history || []);
     } catch (err) {
       console.error('Error fetching dashboard:', err);
       setError(err.message || 'Failed to securely load your dashboard context. Please login again.');

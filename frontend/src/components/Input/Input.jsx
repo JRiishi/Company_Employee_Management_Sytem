@@ -1,34 +1,77 @@
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Glass morphism effect with semi-transparent background and backdrop blur.
+
 import React from 'react';
+import { AlertCircle } from 'lucide-react';
 
 const Input = ({ 
   icon: Icon, 
+  label,
+  error,
+  success,
+  helper,
   className = '', 
   wrapperClassName = '',
   onChange,
   value,
+  disabled = false,
   ...props 
 }) => {
   return (
-    <div className={`relative flex items-center w-full ${wrapperClassName}`}>
-      {Icon && (
-        <div className="absolute left-3 text-gray-400 pointer-events-none">
-          <Icon className="w-[15px] h-[15px]" />
+    <div className={`w-full ${wrapperClassName}`}>
+      {label && (
+        <label className="block text-xs font-medium text-text-secondary mb-1.5">
+          {label}
+        </label>
+      )}
+      
+      <div className="relative flex items-center w-full">
+        {Icon && (
+          <div className="absolute left-3 text-text-muted pointer-events-none">
+            <Icon className="w-4 h-4" />
+          </div>
+        )}
+        
+        <input
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
+          className={`
+            w-full 
+            border rounded-[7px]
+            px-3 py-2 h-[38px]
+            text-sm text-gray-100 
+            placeholder-gray-600
+            transition-all duration-150
+            focus:outline-none
+            ${Icon ? 'pl-9' : ''}
+            ${error ? 'border-danger/50 focus:ring-2 focus:ring-danger/20' : 
+              success ? 'border-success/50 focus:ring-2 focus:ring-success/20' :
+              'border-white/10 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20'}
+            ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+            ${className}
+          `}
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+          }}
+          {...props}
+        />
+      </div>
+
+      {error && (
+        <div className="flex items-center gap-1 mt-1 text-xs text-danger">
+          <AlertCircle className="w-3 h-3" />
+          {error}
         </div>
       )}
-      <input
-        value={value}
-        onChange={onChange}
-        className={`
-          w-full bg-white border border-gray-200 rounded-lg 
-          text-[13px] text-gray-900 placeholder-gray-400
-          focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 
-          transition-all duration-200
-          ${Icon ? 'pl-9 pr-3' : 'px-3'} py-2
-          ${className}
-        `}
-        {...props}
-      />
+
+      {helper && !error && (
+        <p className="text-xs text-text-muted mt-1">{helper}</p>
+      )}
     </div>
   );
 };
+
 export default Input;

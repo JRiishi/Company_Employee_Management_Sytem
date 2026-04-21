@@ -5,7 +5,7 @@ from fastapi import Request, Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 
-load_dotenv("backend/.env")
+load_dotenv(".env")
 
 SECRET_KEY = os.getenv("JWT_SECRET", "fallback_secret")
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")

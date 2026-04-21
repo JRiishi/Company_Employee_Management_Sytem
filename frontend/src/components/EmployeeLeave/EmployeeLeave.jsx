@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
@@ -62,7 +65,7 @@ const EmployeeLeave = ({ empId, empName }) => {
       case "Paid Time Off (PTO)":
         return "bg-purple-100 text-purple-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-[#1A1A26] text-text-primary";
     }
   };
 
@@ -72,7 +75,7 @@ const EmployeeLeave = ({ empId, empName }) => {
         <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity }}>
           <Loader className="text-blue-600" size={48} />
         </motion.div>
-        <span className="ml-4 text-gray-600 font-medium">Loading leave data...</span>
+        <span className="ml-4 text-text-primary font-medium">Loading leave data...</span>
       </div>
     );
   }
@@ -83,11 +86,11 @@ const EmployeeLeave = ({ empId, empName }) => {
       <div className="space-y-6">
         <div className="flex items-center justify-between gap-4">
           <div className="space-y-2">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center gap-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-text-primary flex items-center gap-2">
               <Calendar size={32} className="text-blue-600" />
               Leave Records
             </h2>
-            <p className="text-gray-600 text-base">Leave history for {empName}</p>
+            <p className="text-text-primary text-base">Leave history for {empName}</p>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -118,8 +121,8 @@ const EmployeeLeave = ({ empId, empName }) => {
               onClick={() => setTimeFilter(period)}
               className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 text-base ${
                 timeFilter === period
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  ? "bg-blue-600 text-white shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+                  : "bg-[#20202F] text-text-primary hover:bg-gray-300"
               }`}
             >
               <Filter size={18} />
@@ -136,9 +139,9 @@ const EmployeeLeave = ({ empId, empName }) => {
           <motion.div whileHover={{ translateY: -4 }}>
             <Card className="border-blue-200 bg-blue-50 min-h-48 flex flex-col justify-center">
               <div className="text-center space-y-2">
-                <p className="text-gray-600 text-sm font-medium">Total Leave Records</p>
+                <p className="text-text-primary text-sm font-medium">Total Leave Records</p>
                 <p className="text-5xl font-bold text-blue-700">{leaveData.total_leaves || 0}</p>
-                <p className="text-xs text-gray-500 mt-2">In {timeFilter} period</p>
+                <p className="text-xs text-text-primary mt-2">In {timeFilter} period</p>
               </div>
             </Card>
           </motion.div>
@@ -147,7 +150,7 @@ const EmployeeLeave = ({ empId, empName }) => {
           <motion.div whileHover={{ translateY: -4 }}>
             <Card className="border-green-200 bg-green-50 min-h-48 flex flex-col justify-center">
               <div className="text-center space-y-2">
-                <p className="text-gray-600 text-sm font-medium">Approved Leave Days</p>
+                <p className="text-text-primary text-sm font-medium">Approved Leave Days</p>
                 <p className="text-5xl font-bold text-green-700">
                   {leaveData.leaves
                     ? leaveData.leaves
@@ -155,7 +158,7 @@ const EmployeeLeave = ({ empId, empName }) => {
                         .reduce((sum, l) => sum + l.duration, 0)
                     : 0}
                 </p>
-                <p className="text-xs text-gray-500 mt-2">Days approved</p>
+                <p className="text-xs text-text-primary mt-2">Days approved</p>
               </div>
             </Card>
           </motion.div>
@@ -164,7 +167,7 @@ const EmployeeLeave = ({ empId, empName }) => {
           <motion.div whileHover={{ translateY: -4 }}>
             <Card className="border-yellow-200 bg-yellow-50 min-h-48 flex flex-col justify-center">
               <div className="text-center space-y-2">
-                <p className="text-gray-600 text-sm font-medium">Pending Leave Days</p>
+                <p className="text-text-primary text-sm font-medium">Pending Leave Days</p>
                 <p className="text-5xl font-bold text-yellow-700">
                   {leaveData.leaves
                     ? leaveData.leaves
@@ -172,7 +175,7 @@ const EmployeeLeave = ({ empId, empName }) => {
                         .reduce((sum, l) => sum + l.duration, 0)
                     : 0}
                 </p>
-                <p className="text-xs text-gray-500 mt-2">Days pending</p>
+                <p className="text-xs text-text-primary mt-2">Days pending</p>
               </div>
             </Card>
           </motion.div>
@@ -181,7 +184,7 @@ const EmployeeLeave = ({ empId, empName }) => {
           <motion.div whileHover={{ translateY: -4 }}>
             <Card className="border-red-200 bg-red-50 min-h-48 flex flex-col justify-center">
               <div className="text-center space-y-2">
-                <p className="text-gray-600 text-sm font-medium">Rejected Leave Days</p>
+                <p className="text-text-primary text-sm font-medium">Rejected Leave Days</p>
                 <p className="text-5xl font-bold text-red-700">
                   {leaveData.leaves
                     ? leaveData.leaves
@@ -189,7 +192,7 @@ const EmployeeLeave = ({ empId, empName }) => {
                         .reduce((sum, l) => sum + l.duration, 0)
                     : 0}
                 </p>
-                <p className="text-xs text-gray-500 mt-2">Days rejected</p>
+                <p className="text-xs text-text-primary mt-2">Days rejected</p>
               </div>
             </Card>
           </motion.div>
@@ -198,8 +201,8 @@ const EmployeeLeave = ({ empId, empName }) => {
 
       {/* Leave Breakdown */}
       {leaveData && leaveData.leave_breakdown && (
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Leave Breakdown</h3>
+        <Card className="border-white/10 bg-[#13131C]">
+          <h3 className="text-lg font-bold text-text-primary mb-4">Leave Breakdown</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { type: "Sick Leave", color: "bg-red-100 text-red-800" },
@@ -218,8 +221,8 @@ const EmployeeLeave = ({ empId, empName }) => {
 
       {/* Leave Records Table */}
       {leaveData && leaveData.leaves && leaveData.leaves.length > 0 && (
-        <Card className="border-gray-200 bg-white">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Leave Records</h3>
+        <Card className="border-white/10 bg-[#13131C]">
+          <h3 className="text-lg font-bold text-text-primary mb-4">Leave Records</h3>
           <div className="space-y-3">
             {leaveData.leaves.map((leave, idx) => (
               <motion.div
@@ -227,7 +230,7 @@ const EmployeeLeave = ({ empId, empName }) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
+                className="p-4 bg-[#13131C] rounded-lg border border-white/10 hover:border-blue-300 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-all"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-2">
@@ -248,7 +251,7 @@ const EmployeeLeave = ({ empId, empName }) => {
                           {leave.status}
                         </span>
                       </div>
-                      <p className="text-gray-700 font-medium text-sm">
+                      <p className="text-text-primary font-medium text-sm">
                         {leave.reason || "No reason provided"}
                       </p>
                     </div>
@@ -256,24 +259,24 @@ const EmployeeLeave = ({ empId, empName }) => {
 
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600 text-xs font-medium">Start Date</p>
-                      <p className="text-gray-900 font-semibold">
+                      <p className="text-text-primary text-xs font-medium">Start Date</p>
+                      <p className="text-text-primary font-semibold">
                         {new Date(leave.start_date).toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-xs font-medium">End Date</p>
-                      <p className="text-gray-900 font-semibold">
+                      <p className="text-text-primary text-xs font-medium">End Date</p>
+                      <p className="text-text-primary font-semibold">
                         {new Date(leave.end_date).toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-xs font-medium">Duration</p>
-                      <p className="text-gray-900 font-semibold">{leave.duration} day{leave.duration > 1 ? 's' : ''}</p>
+                      <p className="text-text-primary text-xs font-medium">Duration</p>
+                      <p className="text-text-primary font-semibold">{leave.duration} day{leave.duration > 1 ? 's' : ''}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-xs font-medium">Days Used</p>
-                      <p className="text-gray-900 font-semibold">{leave.duration} of leave</p>
+                      <p className="text-text-primary text-xs font-medium">Days Used</p>
+                      <p className="text-text-primary font-semibold">{leave.duration} of leave</p>
                     </div>
                   </div>
                 </div>
@@ -285,8 +288,8 @@ const EmployeeLeave = ({ empId, empName }) => {
 
       {/* No Leave Records */}
       {leaveData && (!leaveData.leaves || leaveData.leaves.length === 0) && (
-        <Card className="border-gray-200 bg-white">
-          <div className="text-center py-12 text-gray-500">
+        <Card className="border-white/10 bg-[#13131C]">
+          <div className="text-center py-12 text-text-primary">
             <Calendar size={48} className="mx-auto mb-3 opacity-30" />
             <p className="text-lg font-medium">No leave records found for this period</p>
           </div>

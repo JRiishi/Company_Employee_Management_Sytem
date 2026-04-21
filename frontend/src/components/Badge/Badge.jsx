@@ -1,30 +1,49 @@
+// � UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Increased badge text size to text-xs and applied dark theme default styling.
+
 import React from 'react';
 
-const Badge = ({ variant = 'default', children, className = '' }) => {
+const Badge = ({ variant = 'default', children, className = '', showDot = true }) => {
   const getVariantStyles = () => {
     switch (variant.toLowerCase()) {
       case 'completed':
       case 'success':
-        return 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20';
+        return 'bg-success/15 text-success border border-success/20';
       case 'in_progress':
       case 'in progress':
-      case 'warning':
-        return 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20';
+      case 'active':
+        return 'bg-info/15 text-info border border-info/20';
       case 'error':
       case 'danger':
-        return 'bg-red-50 text-red-700 ring-1 ring-red-600/20';
+        return 'bg-danger/15 text-danger border border-danger/20';
+      case 'warning':
       case 'pending':
+        return 'bg-warning/15 text-warning border border-warning/20';
+      case 'accent':
+        return 'bg-accent/15 text-accent-text border border-accent/20';
+      case 'neutral':
       case 'default':
       default:
-        return 'bg-gray-50 text-gray-600 ring-1 ring-gray-900/10';
+        return 'bg-white/5 text-text-muted border border-white/10';
     }
   };
 
-  // Strictly NO animations or transitions on badges
   return (
-    <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[11px] font-medium tracking-wide ${getVariantStyles()} ${className}`}>
+    <span className={`
+      inline-flex items-center gap-1 
+      px-2 py-0.5 
+      rounded-[5px] 
+      text-xs font-semibold
+      letter-spacing-wide
+      ${getVariantStyles()} 
+      ${className}
+    `}>
+      {showDot && (
+        <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+      )}
       {children}
     </span>
   );
 };
+
 export default Badge;

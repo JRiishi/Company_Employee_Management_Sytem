@@ -35,7 +35,19 @@ def get_performance(emp_id: int, current_user: dict = Depends(require_role(["emp
     if current_user["role"] == "employee" and current_user["id"] != emp_id:
         raise HTTPException(status_code=403, detail="Not authorized")
     try:
-        data = {"current_score": 8.5, "history": [{"month": "Jan", "score": 8.0}]}
+        from routes.tasks import get_db_connection
+        data = {"current_score": 0, "history": []}
+        conn = get_db_connection()
+        if conn:
+            try:
+                cursor = conn.cursor(dictionary=True)
+                cursor.execute("SELECT score, date FROM performance WHERE emp_id = %s ORDER BY date ASC", (emp_id,))
+                perf_rows = cursor.fetchall()
+                if perf_rows:
+                    data['history'] = [{"review_date": row['date'].strftime("%Y-%m"), "score": row['score']} for row in perf_rows]
+                    data['current_score'] = data['history'][-1]['score']
+            finally:
+                conn.close()
         return {"success": True, "message": "Performance loaded", "data": data}
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to load performance")

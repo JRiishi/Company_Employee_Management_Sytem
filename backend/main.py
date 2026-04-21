@@ -9,9 +9,9 @@ from fastapi.exceptions import RequestValidationError
 import traceback
 from dotenv import load_dotenv
 
-load_dotenv("backend/.env")
+load_dotenv(".env")
 
-from routes import auth, admin, employee, manager, tasks, hr, user, leave
+from routes import auth, admin, employee, manager, tasks, hr, user, leave, chat
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
@@ -58,3 +58,4 @@ app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
 app.include_router(leave.router, prefix="/api/leaves", tags=["leaves"])
 app.include_router(hr.router, prefix="/api/hr", tags=["hr"])
 app.include_router(user.router, prefix="/api/user", tags=["user"])
+app.include_router(chat.router)

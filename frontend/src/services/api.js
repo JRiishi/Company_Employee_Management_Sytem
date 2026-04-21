@@ -18,6 +18,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('nexus_token');
+      localStorage.removeItem('nexus_user');
+      window.location.href = '#/login';
+    }
     // Pass auth errors through for login endpoints to handle
     if (error.response?.data) {
       return Promise.reject(error.response.data);

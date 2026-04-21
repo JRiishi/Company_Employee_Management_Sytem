@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -174,7 +177,7 @@ const EmployeeDetails = () => {
   }
 
   return (
-    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 animate-fade-in text-gray-900">
+    <div className="p-4 md:p-10 lg:p-12 font-inter w-full space-y-8 md:space-y-10 animate-fade-in text-text-primary">
       {/* Back Button */}
       <button
         onClick={() => navigate("/admin/employees")}
@@ -190,8 +193,8 @@ const EmployeeDetails = () => {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-4"
       >
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-900">{employee.name}</h1>
-        <div className="flex items-center gap-2 text-gray-600">
+        <h1 className="text-5xl md:text-6xl font-bold text-text-primary">{employee.name}</h1>
+        <div className="flex items-center gap-2 text-text-primary">
           <span
             className={`px-4 py-2 rounded-full text-base font-semibold ${
               employee.status === "active"
@@ -215,13 +218,13 @@ const EmployeeDetails = () => {
       </motion.div>
 
       {/* Tab Navigation */}
-      <div className="flex gap-3 border-b border-gray-200">
+      <div className="flex gap-3 border-b border-white/10">
         <button
           onClick={() => setActiveTab("overview")}
           className={`px-8 py-4 text-base font-semibold transition-all border-b-2 ${
             activeTab === "overview"
               ? "border-blue-600 text-blue-600"
-              : "border-transparent text-gray-600 hover:text-gray-900"
+              : "border-transparent text-text-primary hover:text-text-primary"
           }`}
         >
           Overview
@@ -231,7 +234,7 @@ const EmployeeDetails = () => {
           className={`px-8 py-4 text-base font-semibold transition-all border-b-2 ${
             activeTab === "tasks"
               ? "border-blue-600 text-blue-600"
-              : "border-transparent text-gray-600 hover:text-gray-900"
+              : "border-transparent text-text-primary hover:text-text-primary"
           }`}
         >
           Tasks
@@ -241,7 +244,7 @@ const EmployeeDetails = () => {
           className={`px-8 py-4 text-base font-semibold transition-all border-b-2 ${
             activeTab === "leave"
               ? "border-blue-600 text-blue-600"
-              : "border-transparent text-gray-600 hover:text-gray-900"
+              : "border-transparent text-text-primary hover:text-text-primary"
           }`}
         >
           Leave
@@ -265,8 +268,8 @@ const EmployeeDetails = () => {
               <Mail className="text-blue-700" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-600 font-medium">Email</p>
-              <p className="text-lg font-semibold text-gray-900 break-all">
+              <p className="text-sm text-text-primary font-medium">Email</p>
+              <p className="text-lg font-semibold text-text-primary break-all">
                 {employee.email}
               </p>
             </div>
@@ -280,8 +283,8 @@ const EmployeeDetails = () => {
               <Briefcase className="text-purple-700" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-600 font-medium">Department</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-text-primary font-medium">Department</p>
+              <p className="text-lg font-semibold text-text-primary">
                 {employee.department || "N/A"}
               </p>
             </div>
@@ -295,8 +298,8 @@ const EmployeeDetails = () => {
               <DollarSign className="text-green-700" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-600 font-medium">Salary</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-text-primary font-medium">Salary</p>
+              <p className="text-lg font-semibold text-text-primary">
                 ${employee.salary?.toLocaleString() || "N/A"}
               </p>
             </div>
@@ -310,8 +313,8 @@ const EmployeeDetails = () => {
               <AlertCircle className="text-amber-700" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-600 font-medium">Performance</p>
-              <p className="text-lg font-semibold text-gray-900">
+              <p className="text-sm text-text-primary font-medium">Performance</p>
+              <p className="text-lg font-semibold text-text-primary">
                 {employee.performance_score || "N/A"}/10
               </p>
             </div>
@@ -326,7 +329,7 @@ const EmployeeDetails = () => {
         transition={{ delay: 0.2 }}
         className="space-y-6"
       >
-        <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-2 text-gray-900">
+        <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-2 text-text-primary">
           <Calendar size={32} className="text-blue-600" />
           Tasks & Assignments
         </h2>
@@ -335,7 +338,7 @@ const EmployeeDetails = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-blue-50 border-blue-200">
             <div className="text-center space-y-2">
-              <p className="text-gray-600 font-medium text-base">Pending</p>
+              <p className="text-text-primary font-medium text-base">Pending</p>
               <p className="text-5xl font-bold text-blue-700">
                 {taskStats.pending}
               </p>
@@ -343,7 +346,7 @@ const EmployeeDetails = () => {
           </Card>
           <Card className="bg-amber-50 border-amber-200">
             <div className="text-center space-y-2">
-              <p className="text-gray-600 font-medium text-base">Ongoing</p>
+              <p className="text-text-primary font-medium text-base">Ongoing</p>
               <p className="text-5xl font-bold text-amber-700">
                 {taskStats.ongoing}
               </p>
@@ -351,7 +354,7 @@ const EmployeeDetails = () => {
           </Card>
           <Card className="bg-green-50 border-green-200">
             <div className="text-center space-y-2">
-              <p className="text-gray-600 font-medium text-base">Completed</p>
+              <p className="text-text-primary font-medium text-base">Completed</p>
               <p className="text-5xl font-bold text-green-700">
                 {taskStats.completed}
               </p>
@@ -361,7 +364,7 @@ const EmployeeDetails = () => {
 
         {/* Task List */}
         {tasks.length > 0 ? (
-          <Card className="border-gray-200 bg-white">
+          <Card className="border-white/10 ">
             <div className="space-y-3">
               {tasks.map((task, idx) => (
                 <motion.div
@@ -369,7 +372,7 @@ const EmployeeDetails = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                  className="flex items-start gap-4 p-4  rounded-lg border border-white/10 hover:border-blue-400 hover:bg-blue-50 transition-colors"
                 >
                   <div
                     className={`p-2 rounded-lg shrink-0 ${
@@ -392,10 +395,10 @@ const EmployeeDetails = () => {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-gray-900 mb-1">
+                    <h4 className="font-semibold text-text-primary mb-1">
                       {task.Title}
                     </h4>
-                    <div className="flex items-center gap-4 text-xs text-gray-600">
+                    <div className="flex items-center gap-4 text-xs text-text-primary">
                       <span
                         className={`px-2 py-1 rounded font-medium ${
                           task.status === "completed"
@@ -421,8 +424,8 @@ const EmployeeDetails = () => {
             </div>
           </Card>
         ) : (
-          <Card className="border-gray-200 bg-white">
-            <div className="text-center py-8 text-gray-500">
+          <Card className="border-white/10 ">
+            <div className="text-center py-8 text-text-primary">
               No tasks assigned to this employee
             </div>
           </Card>
@@ -436,16 +439,16 @@ const EmployeeDetails = () => {
         transition={{ delay: 0.3 }}
         className="space-y-4"
       >
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-text-primary">
           Additional Information
         </h2>
 
-        <Card className="border-gray-200 bg-white">
+        <Card className="border-white/10 ">
           <div>
-            <p className="text-sm text-gray-600 mb-2 font-medium">
+            <p className="text-sm text-text-primary mb-2 font-medium">
               Joining Date
             </p>
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-text-primary">
               {employee.joining_date
                 ? new Date(employee.joining_date).toLocaleDateString()
                 : "N/A"}
@@ -497,22 +500,22 @@ const EmployeeDetails = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           onClick={() => setShowTerminateConfirm(false)}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl border border-gray-200 p-6 max-w-md w-full space-y-4 shadow-xl"
+            className=" rounded-xl border border-white/10 p-6 max-w-md w-full space-y-4 shadow-xl"
           >
             <h3 className="text-xl font-bold text-red-600 flex items-center gap-2">
               <AlertCircle size={24} />
               Confirm Termination
             </h3>
-            <p className="text-gray-700">
+            <p className="text-text-primary">
               Are you sure you want to terminate{" "}
-              <span className="font-bold text-gray-900">
+              <span className="font-bold text-text-primary">
                 {employee.name}
               </span>
               ?
@@ -520,7 +523,7 @@ const EmployeeDetails = () => {
             <div className="flex gap-3 pt-4">
               <button
                 onClick={() => setShowTerminateConfirm(false)}
-                className="flex-1 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-900 rounded-lg transition-colors font-semibold"
+                className="flex-1 px-4 py-2 bg-gray-300 hover:bg-gray-400 text-text-primary rounded-lg transition-colors font-semibold"
               >
                 Cancel
               </button>

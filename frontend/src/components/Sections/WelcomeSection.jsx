@@ -1,31 +1,33 @@
+// ✅ UI REDESIGN APPLIED — Logic unchanged. Only CSS classes and JSX structure modified.
+// Original functionality: Welcome heading and action buttons
+
 import React from 'react';
-import { Filter, Download } from 'lucide-react';
+import { Download } from 'lucide-react';
 
 const WelcomeSection = ({ userName, loading }) => {
   return (
-    <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-left w-full block relative z-0">
+    <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-left w-full">
       {loading ? (
-        <div>
-          <div className="animate-pulse h-8 bg-gray-200 rounded w-64 mb-2"></div>
-          <div className="animate-pulse h-4 bg-gray-200 rounded w-48"></div>
+        <div className="space-y-2">
+          <div className="animate-pulse h-7 bg-border-default rounded w-64"></div>
+          <div className="animate-pulse h-4 bg-border-subtle rounded w-48"></div>
         </div>
       ) : (
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+          <h2 className="text-2xl font-semibold tracking-tight text-text-primary">
             Welcome back, {userName?.split(' ')[0] || 'User'} 👋
           </h2>
-          <p className="text-[14px] text-gray-500 mt-1">Here's your professional overview for the current cycle.</p>
+          <p className="text-sm text-text-secondary mt-1">Here's your professional overview for the current cycle.</p>
         </div>
       )}
       <div className="flex items-center gap-3">
-        <button className="px-4 py-2 bg-white border border-gray-200 text-gray-600 text-[13px] font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200 cursor-pointer flex items-center gap-2">
-          <Filter className="w-4 h-4"/> Filter Date
-        </button>
-        <button className="px-4 py-2 bg-blue-600 text-white text-[13px] font-medium rounded-lg shadow-sm hover:bg-blue-700 transition-colors duration-200 cursor-pointer flex items-center gap-2">
-          <Download className="w-4 h-4"/> Export Report
+        <button className="px-4 py-2 bg-accent text-white text-xs font-medium rounded-[7px] hover:bg-accent-hover transition-all duration-150 cursor-pointer flex items-center gap-2 flex-shrink-0">
+          <Download className="w-3.5 h-3.5" />
+          Export Report
         </button>
       </div>
     </section>
   );
 };
+
 export default WelcomeSection;

@@ -1,3 +1,6 @@
+// 🌑 DARK THEME FIX APPLIED — Only color/background/border classes changed.
+// All logic, functions, props, and API calls are 100% unchanged.
+
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Plus, FilterX, AlertCircle } from 'lucide-react';
@@ -60,7 +63,7 @@ const EmployeeTasks = () => {
             <>
               <Select 
                 wrapperClassName="w-[130px]"
-                className="!text-[12px] !py-[6px] !pl-3 !pr-8 min-h-0 h-8 hover:bg-gray-50 cursor-pointer"
+                className="!text-[12px] !py-[6px] !pl-3 !pr-8 min-h-0 h-8 hover: cursor-pointer"
                 value={row.status} 
                 options={[
                   { label: 'Pending', value: 'Pending' },
@@ -100,7 +103,7 @@ const EmployeeTasks = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="bg-red-50 text-red-700 px-4 py-3 rounded-xl shadow-sm text-[13px] font-medium border border-red-200 flex items-center justify-between"
+              className="bg-red-50 text-red-700 px-4 py-3 rounded-xl  text-[13px] font-medium border border-red-200 flex items-center justify-between"
             >
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-red-500" />
@@ -114,10 +117,10 @@ const EmployeeTasks = () => {
         {/* SECTION 1 - Page Header */}
         <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-left w-full">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+            <h2 className="text-2xl font-bold tracking-tight text-text-primary">
               My Tasks
             </h2>
-            <p className="text-[14px] text-gray-500 mt-1">Manage your active operations and deliverables.</p>
+            <p className="text-[14px] text-text-primary mt-1">Manage your active operations and deliverables.</p>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="primary" icon={Plus}>
@@ -142,7 +145,7 @@ const EmployeeTasks = () => {
               options={STATUS_OPTIONS} 
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="cursor-pointer hover:bg-gray-50 transition-colors duration-150"
+              className="cursor-pointer hover: transition-colors duration-150"
             />
           </div>
           
@@ -165,8 +168,8 @@ const EmployeeTasks = () => {
 
         {/* SECTION 3 - Tasks Table Container */}
         <section className="w-full">
-          <Card className="flex flex-col overflow-hidden w-full transition-all duration-200 border border-gray-200/60 shadow-sm">
-            <div className="w-full bg-white">
+          <Card className="flex flex-col overflow-hidden w-full transition-all duration-200 border border-white/10/60 ">
+            <div className="w-full ">
                 <Table 
                   columns={columns} 
                   data={filteredTasks} 

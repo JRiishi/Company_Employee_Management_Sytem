@@ -1,3 +1,6 @@
+// 🌌 UNIVERSE UI APPLIED — Logic unchanged. Visual layer only.
+// Changes: Glass morphism effect with backdrop blur and role-based transparency.
+
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -61,21 +64,35 @@ const Sidebar = () => {
     await logout();
   };
 
+  const displayName = user?.name || "User";
+  const displayRole = user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Employee";
+  const initials = displayName.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[260px] bg-white border-r border-gray-200 flex flex-col font-sans z-20">
-      <div className="h-[72px] flex items-center px-6 border-b border-gray-100 shrink-0">
+    <aside 
+      className="w-[240px] h-full border-r border-white/[0.06] flex flex-col flex-shrink-0"
+      style={{
+        background: 'rgba(13, 13, 20, 0.85)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+      }}
+    >
+      {/* Logo Header */}
+      <div className="h-[56px] flex items-center px-4 border-b border-white/[0.06] shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
-            <Command className="w-5 h-5 text-white" />
+          <div className="w-8 h-8 bg-accent rounded-[6px] flex items-center justify-center flex-shrink-0">
+            <span className="text-xs font-bold text-white">NX</span>
           </div>
-          <span className="text-[15px] font-semibold text-gray-900 tracking-tight">
-            Nexus HR
+          <span className="text-sm font-semibold text-text-primary tracking-tight letter-spacing-tight">
+            NexusHR
           </span>
         </div>
       </div>
-      <div className="px-4 py-6 flex-grow overflow-y-auto">
-        <div className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3 px-2">
-          Main Menu
+
+      {/* Navigation */}
+      <div className="px-3 py-6 flex-grow overflow-y-auto">
+        <div className="text-xs font-semibold text-text-muted uppercase tracking-widest mb-3 px-2">
+          Workspace
         </div>
         <nav className="space-y-1">
           {menuItems.map((item, idx) => {
@@ -85,15 +102,16 @@ const Sidebar = () => {
               <Link
                 key={idx}
                 to={item.path}
-                className={`w-full flex items-center gap-3 px-3 h-[40px] rounded-md transition-colors duration-150 text-[14px] ${
-                  isActive
-                    ? "bg-blue-50/80 text-blue-700 font-medium"
-                    : "text-gray-600 hover:bg-gray-50/50 hover:text-gray-900 group"
-                }`}
+                className={`
+                  w-full flex items-center gap-3 px-3 h-[36px] rounded-[7px] 
+                  transition-all duration-150 text-sm font-medium
+                  ${isActive
+                    ? "bg-accent-subtle text-accent-text border-l-2 border-accent -ml-px"
+                    : "text-text-secondary hover:text-text-primary hover:bg-white/[0.04]"
+                  }
+                `}
               >
-                <item.icon
-                  className={`w-[18px] h-[18px] ${isActive ? "text-blue-700" : "text-gray-400 group-hover:text-gray-600"}`}
-                />
+                <item.icon className={`w-4 h-4 flex-shrink-0 ${isActive ? "text-accent" : "text-text-muted"}`} />
                 <span>{item.label}</span>
               </Link>
             );
@@ -101,17 +119,34 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      {/* Force Logout Button at Bottom of Sidebar */}
-      <div className="p-4 border-t border-gray-100">
+      {/* User Panel at Bottom */}
+      <div className="p-3 border-t border-white/[0.06]">
+        <div 
+          className="flex items-center gap-3 px-3 py-3 rounded-[7px] mb-3"
+          style={{
+            background: 'rgba(255, 255, 255, 0.04)',
+            backdropFilter: 'blur(12px)',
+          }}
+        >
+          <div className="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
+            <span className="text-xs font-semibold text-accent-text">{initials}</span>
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-text-primary truncate">{displayName}</p>
+            <p className="text-xs text-text-muted truncate">{displayRole}</p>
+          </div>
+        </div>
+
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 rounded-lg text-sm font-semibold transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-danger/10 text-danger hover:bg-danger/20 rounded-[7px] text-xs font-medium transition-all duration-150"
         >
-          <LogOut className="w-4 h-4" />
-          Force Log Out
+          <LogOut className="w-3.5 h-3.5" />
+          Log Out
         </button>
       </div>
     </aside>
   );
 };
+
 export default Sidebar;
